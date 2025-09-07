@@ -1,0 +1,9 @@
+## ¿Por qué no puedo acceder al clúster?
+Si tienes la certeza de que estás ingresando tu contraseña correctamente al conectarte al clúster por SSH pero tu sesión es rechazada, la razón más probable es que hayas excedido la cuota de almacenamiento de tu home. Por favor envía un ticket de soporte TI según lo explicado en el [home de esta wiki](https://github.com/rconcenia/documentacion-cenia/wiki) para explicar tu situación.
+
+## ¿Cómo uso los workspaces?
+Cada nodo de cómputo tiene un disco o discos de almacenamiento local, ubicados en `/workspace1`. Este es el único almacenamiento que se puede usar para tareas de entrenamiento. Está estrictamente prohibido leer y escribir desde tu `home` o `storage` durante tareas de entrenamiento. Por esto, si vas a usar un nodo determinado para un experimento o investigación, el procedimiento correcto es copiar los datos que vayas a utilizar desde tu carpeta `storage` al workspace del nodo y guardar todos los modelos/pesos/outputs en este mismo directorio.
+
+Puedes hacer esto directamente desde `kraken`. Por ejemplo, si vas a entrenar en el nodo `ahsoka`, puedes copiar los datos relevantes desde tu carpeta `storage` al directorio `/workspaces/ahsoka-workspace1/<tu nombre de usuario>` (solo disponible en kraken) con los comandos `cp` o `rsync`. Si este último directorio no existiese, puedes enviar un ticket al [soporte TI](https://github.com/rconcenia/documentacion-cenia/wiki) para solicitar su creación. Si vas a copiar muchos datos, es recomendable dejar el proceso de copia corriendo dentro de una instancia de `tmux`.
+
+Es tu propia responsabilidad desocupar el espacio en los `workspaces` de los nodos de cómputo cuando termines un proyecto y respaldar lo necesario a tu `storage`. Recuerda que la capacidad de los `workspaces` es limitada y compartida, y datos de mucha antigüedad en un workspace pueden estar sujetos a ser eliminados.
