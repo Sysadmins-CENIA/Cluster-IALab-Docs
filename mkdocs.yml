@@ -1,1 +1,16 @@
-site_name: My Docs
+site_name: Cluster IALab
+nav:
+  - Home: index.md
+  - Inducción al Clúster: intro.md
+  - Almacenamiento: storage.md
+  - Uso de SLURM: slurm.md
+  - Asignación de Recursos: resource-policy.md
+  - Ejemplos de SLURM: slurm-examples.md
+  - Uso de SSH: ssh.md
+  - Política de Uso: usage-policy.md
+  - FAQ: faq.md
+
+theme: readthedocs
+
+markdown_extensions:
+  - attr_list

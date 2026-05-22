@@ -1,17 +1,14 @@
-# Welcome to MkDocs
+# ¡Bienvenid@ a la documentación CENIA!
 
-For full documentation visit [mkdocs.org](https://www.mkdocs.org).
+Aquí encontrarás información pertinente al acceso y uso de recursos computacionales disponibles en CENIA.
 
-## Commands
+💡
 
-* `mkdocs new [dir-name]` - Create a new project.
-* `mkdocs serve` - Start the live-reloading docs server.
-* `mkdocs build` - Build the documentation site.
-* `mkdocs -h` - Print help message and exit.
+_Si tienes preguntas o dudas no cubiertas en el material aquí presente puedes escribir a: [sysadmins@cenia.cl](mailto:sysadmins@cenia.cl)_
 
-## Project layout
+_Si necesitas asistencia con una eventualidad puntual puedes crear un ticket de soporte enviando un correo a [soporte@cenia.cl](mailto:soporte@cenia.cl)_
 
-    mkdocs.yml    # The configuration file.
-    docs/
-        index.md  # The documentation homepage.
-        ...       # Other markdown pages, images and other files.
+_Observa las métricas en tiempo real del clúster aquí: https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a_
+
+
+![image](img/banner.png)
