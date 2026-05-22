@@ -12,7 +12,7 @@ El clúster actualmente cuenta con 5 nodos de cómputo (ahsoka, hydra, scylla, v
 
 Para saber cómo utilizarlos puedes seguir las instrucciones presentes en la sección SLURM.
 
-![alt](https://raw.githubusercontent.com/Sysadmins-CENIA/Cluster-IALab-Docs/45b8d419b51146632de6ff135c9ce7696c400d8f/IALAB-CLUSTER.png)
+![Diagrama de la arquitectura del cluster](img/cluster-architecture.png)
 
 **SLURM**
 
