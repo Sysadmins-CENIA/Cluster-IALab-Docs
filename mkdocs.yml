@@ -4,10 +4,10 @@ nav:
   - Inducción al Clúster: intro.md
   - Almacenamiento: storage.md
   - Uso de SLURM: slurm.md
-  - Asignación de Recursos: resource-policy.md
-  - Ejemplos de SLURM: slurm-examples.md
+  - Asignación de Recursos: resource_policy.md
+  - Ejemplos de SLURM: slurm_examples.md
   - Uso de SSH: ssh.md
-  - Política de Uso: usage-policy.md
+  - Política de Uso: usage_policy.md
   - FAQ: faq.md
 
 theme: readthedocs

@@ -29,3 +29,4 @@ Documentation site for the **IALab Cluster** at CENIA (Centro Nacional de Inteli
 - Use `#` for the page title (one per file), `##` for sections, `###` for subsections.
 - Keep language plain and direct — the audience is researchers and engineers onboarding to an HPC cluster.
 - Do not commit the generated `site/` directory.
+- Use **snake_case** for all filenames (`slurm_examples.md`, etc.).
