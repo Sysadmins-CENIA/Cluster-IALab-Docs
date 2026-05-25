@@ -40,7 +40,7 @@ Los usuarios envían trabajos a una partición específica dependiendo de las ne
 
 |Partition|Memoria por nodo<br>(DefMemPerNode)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tareas por nodo<br>(MaxTasksPerNode)|
 |--|--|--|--|
-|ialab|Ilimitada|Ilimitada|512|
+|ialab|4GB|132GB|Ilimitado|
 
 ## Comandos básicos
 
