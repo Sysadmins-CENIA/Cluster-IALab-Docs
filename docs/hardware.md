@@ -11,7 +11,7 @@ El clúster está compuesto por dos tipos de nodos:
 
 ## Nodos de computo disponibles
 
-| Nodo | Cores | RAM | RAM |
+| Nodo | Cores | RAM | GPU |
 |------|-------|-----|-----|
 | Ahsoka | 48 | 256 GB | 3× TITAN 12 GB + 1× 1080Ti 11 GB |
 | Hydra | 40 | 256 GB | 8× TITAN 24 GB |

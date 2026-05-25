@@ -4,7 +4,7 @@
 
 **SLURM** (_Simple Linux Utility for Resource Management_) es el sistema de gestión de recursos y planificación de trabajos (_scheduler_) utilizado en el clúster. Su función principal es administrar las colas de ejecución, asignar recursos de cómputo y coordinar el uso eficiente de los nodos disponibles.
 
-Actualmente, SLURM es utilizado por más del 60% de los supercomputadores listados en el [top500](https://www.top500.org/){:contentReference[oaicite:0]}, convirtiéndose en el estándar de facto en entornos HPC (_High Performance Computing_).
+Actualmente, SLURM es utilizado por más del 60% de los supercomputadores listados en el [top500](https://www.top500.org/), convirtiéndose en el estándar de facto en entornos HPC (_High Performance Computing_).
 
 La versión instalada en el clúster es la [24.05.0](https://slurm.schedmd.com/).
 

@@ -54,4 +54,4 @@
 - Comunicar con los demás usuarios antes de ejecutar experimentos largos que puedan afectar la disponibilidad.
 - El canal oficial para comunicarse con otros usuarios del cluster es el grupo oficial de Telegram.
 - Si un nodo presenta fallos, se debe notificar a los administradores a través del canal oficial para esto (tickets).
-- En caso de consultas, mirar la sección de [Preguntas Frecuentes](https://github.com/Sysadmins-CENIA/Cluster-IALab-Docs/wiki/FAQ-%E2%80%90-Preguntas-Frecuentes) y en caso de no encontrarse ahí la respuesta, consultar en el canal de Telegram.
+- En caso de consultas, mirar la sección de [Preguntas Frecuentes](faq.md) y en caso de no encontrarse ahí la respuesta, consultar en el canal de Telegram.

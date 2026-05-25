@@ -1,4 +1,4 @@
-## Almacenamiento
+# Almacenamiento
 
 Este cluster proporciona múltiples opciones de almacenamiento con diferentes características de rendimiento y propósitos de uso.
 
