@@ -4,7 +4,7 @@ nav:
   - Inducción al Clúster: intro.md
   - Almacenamiento: storage.md
   - Uso de SLURM: slurm.md
-  - Asignación de Recursos: resource_policy.md
+  - Solicitud de Recursos Adicionales: additional_resources.md
   - Ejemplos de SLURM: slurm_examples.md
   - Uso de SSH: ssh.md
   - Política de Uso: usage_policy.md
