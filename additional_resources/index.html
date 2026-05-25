@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>Solicitud de Recursos Adicionales - Cluster IALab</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Solicitud de Recursos Adicionales";
+        var mkdocs_page_input_path = "additional_resources.md";
+        var mkdocs_page_url = null;
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script> 
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../ssh/">SSH</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Solicitud de Recursos Adicionales</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-introduccion-y-marco-general">1. Introducción y Marco General</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#11-proposito">1.1 Propósito</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#12-alcance">1.2 Alcance</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-definiciones-clave">2. Definiciones Clave</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-responsabilidades">3. Responsabilidades</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#31-equipo-solicitante">3.1 Equipo Solicitante</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#32-equipo-sysadmin-administracion-del-cluster">3.2 Equipo Sysadmin (Administración del Cluster)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#4-justificacion-tecnica-requerida">4. Justificación Técnica Requerida</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#41-requisitos-de-hardware-gpuvram">4.1 Requisitos de Hardware (GPU/VRAM)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#42-justificacion-de-metodo">4.2 Justificación de Método</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#5-proceso-de-asignacion-del-sysadmin">5. Proceso de Asignación del Sysadmin</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#6-normas-de-ejecucion-timing-y-extension">6. Normas de Ejecución (Timing y Extensión)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#61-limite-de-tiempo-continuo">6.1 Límite de Tiempo Continuo</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#62-solicitud-de-extension">6.2 Solicitud de Extensión</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#7-monitoreo-y-subutilizacion">7. Monitoreo y Subutilización</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#71-monitoreo-obligatorio">7.1 Monitoreo Obligatorio</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#72-advertencias-por-subutilizacion">7.2 Advertencias por Subutilización</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#8-flexibilidad-y-ventanas-de-mantenimiento">8. Flexibilidad y Ventanas de Mantenimiento</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#81-prioridad-por-flexibilidad">8.1 Prioridad por Flexibilidad</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#82-mantenimiento-planificado">8.2 Mantenimiento Planificado</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Solicitudes</li>
+      <li class="breadcrumb-item active">Solicitud de Recursos Adicionales</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="politicas-de-solicitud-y-asignacion-de-recursos-del-cluster-de-inteligencia-artificial">Políticas de Solicitud y Asignación de Recursos del Cluster de Inteligencia Artificial</h1>
+<h2 id="1-introduccion-y-marco-general">1. Introducción y Marco General</h2>
+<h3 id="11-proposito">1.1 Propósito</h3>
+<p>El presente documento tiene como finalidad establecer los <strong>procedimientos, criterios de elegibilidad y normativas</strong> para la solicitud, evaluación y asignación justa y eficiente de los recursos computacionales de alto rendimiento (<strong>GPU, CPU, RAM, Storage</strong>) que componen el <strong>Cluster de Inteligencia Artificial de CENIA</strong>. Esto asegura la maximización del retorno de inversión del hardware y el soporte prioritario a la investigación estratégica.</p>
+<h3 id="12-alcance">1.2 Alcance</h3>
+<p>Esta política es de <strong>cumplimiento obligatorio</strong> para todo el personal investigador de CENIA (Investigadores Principales, Postdoctorados, Estudiantes de Doctorado) y colaboradores externos formalmente asociados a proyectos de CENIA, que requieran el uso de recursos computacionales del Cluster.</p>
+<hr />
+<h2 id="2-definiciones-clave">2. Definiciones Clave</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Término</th>
+<th style="text-align: left;">Definición</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Cluster de IA</strong></td>
+<td style="text-align: left;">Conjunto de nodos interconectados de alto rendimiento gestionados por CENIA para tareas de IA/HPC.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Nodo (Node)</strong></td>
+<td style="text-align: left;">Una máquina física dentro del Cluster, que contiene un conjunto específico de recursos (ej. 8×A100, 512 GB RAM).</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Job / Tarea</strong></td>
+<td style="text-align: left;">Unidad de trabajo computacional definida y enviada al sistema de cola (scheduler) para su ejecución en el Cluster.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Utilización de GPU (Utilization)</strong></td>
+<td style="text-align: left;">Porcentaje de tiempo que la unidad de procesamiento gráfico está activamente realizando cálculos. Es un indicador clave de eficiencia.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Tiempo Continuo</strong></td>
+<td style="text-align: left;">El periodo de tiempo <strong>ininterrumpido</strong> requerido para la ejecución de una Tarea.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Full Fine-Tuning (Full FT)</strong></td>
+<td style="text-align: left;">Entrenamiento de todos los parámetros de un modelo, lo cual requiere alta capacidad de VRAM y tiempo.</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>PEFT</strong></td>
+<td style="text-align: left;">Parameter-Efficient Fine-Tuning (ej. LoRA). Métodos que modifican solo un subconjunto de parámetros, consumiendo menos recursos que Full FT.</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="3-responsabilidades">3. Responsabilidades</h2>
+<h3 id="31-equipo-solicitante">3.1 Equipo Solicitante</h3>
+<p>Es responsabilidad del <strong>Investigador Principal</strong>:</p>
+<ul>
+<li>Completar el <a href="https://forms.gle/cm7PKZGuexncfa857">Formulario <strong>F-SRCIA-001</strong></a> de manera <strong>veraz, precisa y completa</strong>.</li>
+<li>Asegurar que el código y el job estén <strong>optimizados</strong> antes de la solicitud (pruebas locales, Pruebas de Concepto (PoC)).</li>
+<li><strong>Monitorear activamente</strong> su job una vez asignado y asegurar su terminación o liberación una vez finalizado el proceso.</li>
+<li>Monitorear el uso de recursos.</li>
+<li>Solicitar Hardware ajustado a los requerimientos para <strong>evitar la subutilización</strong>.</li>
+<li>Notificar formalmente al equipo del Cluster inmediatamente después de finalizar mi uso de los recursos, con el fin de liberar el hardware para otros investigadores.</li>
+</ul>
+<h3 id="32-equipo-sysadmin-administracion-del-cluster">3.2 Equipo Sysadmin (Administración del Cluster)</h3>
+<p>Es responsabilidad del <strong>Equipo Sysadmin</strong>:</p>
+<ul>
+<li>Evaluar la <strong>viabilidad técnica</strong> y la <strong>Prioridad</strong> de cada solicitud.</li>
+<li>Asignar el <strong>Nodo específico</strong> y el tiempo en el sistema de cola.</li>
+<li>Garantizar la <strong>estabilidad y disponibilidad</strong> del hardware.</li>
+<li>Monitorear el uso de los recursos y aplicar las normas de <strong>suspensión por subutilización</strong>.</li>
+</ul>
+<hr />
+<h2 id="4-justificacion-tecnica-requerida">4. Justificación Técnica Requerida</h2>
+<h3 id="41-requisitos-de-hardware-gpuvram">4.1 Requisitos de Hardware (GPU/VRAM)</h3>
+<p>El solicitante debe especificar el <strong>Número de Unidades GPU</strong>, el <strong>Modelo Exacto</strong> (ej. A100, A40) y la <strong>Memoria VRAM Mínima</strong> requerida para el job. Esta especificación debe ser <strong>críticamente justificada</strong>.</p>
+<blockquote>
+<p><strong>Ejemplo de Justificación Válida:</strong> "Se requieren 8 ×A100 40GB para acomodar un batch size de 128 utilizando Full FT del modelo LLaMA-70B, lo cual no es posible con tarjetas de 24GB debido a limitaciones de memoria de gradientes."</p>
+</blockquote>
+<h3 id="42-justificacion-de-metodo">4.2 Justificación de Método</h3>
+<p>Si el método solicitado (ej. Full Fine-Tuning) consume significativamente más recursos que un método alternativo (<strong>PEFT</strong>), el solicitante debe adjuntar <strong>evidencia científica o técnica</strong> que demuestre que la alternativa ya ha sido agotada o que introduce limitaciones insuperables.</p>
+<blockquote>
+<p><strong>Cita de Ejemplo:</strong> "Hemos agotado las optimizaciones con LoRA y requerimos el Full FT debido a la evidencia de 'intruder dimensions' que limitan el rendimiento máximo alcanzable, según literatura reciente (Nature 2024)."</p>
+</blockquote>
+<h2 id="5-proceso-de-asignacion-del-sysadmin">5. Proceso de Asignación del Sysadmin</h2>
+<p>El Equipo Sysadmin seguirá estos pasos internos para la asignación:</p>
+<ol>
+<li><strong>Recepción y Validación:</strong> Revisar el Formulario <strong>F-SRCIA-001</strong> y clasificar la Prioridad (P1, P2 o P3).</li>
+<li><strong>Reunión de coordinación</strong></li>
+<li><strong>Mapeo de Hardware:</strong> Identificar un <strong>Nodo Específico</strong> dentro del Cluster (ej. NODO-ALPHA-03 o NODO-BETA-05) cuyas especificaciones (GPU,RAM) cumplan o superen los requisitos del proyecto.</li>
+<li><strong>Posible periodo de prueba</strong></li>
+<li><strong>Programación de Job:</strong> El job será ingresado al sistema de cola (scheduler) con el <strong>Tiempo Continuo máximo solicitado</strong>. Si hay conflicto de tiempo, se aplicará el criterio de Prioridad y Flexibilidad.</li>
+</ol>
+<h2 id="6-normas-de-ejecucion-timing-y-extension">6. Normas de Ejecución (Timing y Extensión)</h2>
+<h3 id="61-limite-de-tiempo-continuo">6.1 Límite de Tiempo Continuo</h3>
+<p>La ejecución del job asignado estará estrictamente limitada al <strong>Tiempo Continuo aprobado</strong>. El scheduler detendrá automáticamente la tarea al alcanzar este límite.</p>
+<h3 id="62-solicitud-de-extension">6.2 Solicitud de Extensión</h3>
+<p>Toda solicitud de extensión debe presentarse al Equipo Sysadmin con un mínimo de <strong>24 horas de antelación</strong> al vencimiento del job. La solicitud debe incluir una justificación técnica precisa del tiempo adicional requerido. Las extensiones están sujetas a la <strong>disponibilidad del Nodo</strong> y no tienen garantía de aprobación inmediata.</p>
+<h2 id="7-monitoreo-y-subutilizacion">7. Monitoreo y Subutilización</h2>
+<h3 id="71-monitoreo-obligatorio">7.1 Monitoreo Obligatorio</h3>
+<p>Todos los jobs en ejecución serán monitoreados activamente por el Equipo Sysadmin para asegurar la estabilidad y el <strong>uso eficiente de los recursos</strong>.</p>
+<h3 id="72-advertencias-por-subutilizacion">7.2 Advertencias por Subutilización</h3>
+<p>Se define la <strong>Subutilización</strong> como el uso promedio de <strong>GPU Utilization &lt; 10%</strong> en el nodo asignado, mantenido de forma continua por un periodo superior a <strong>4 horas</strong>.</p>
+<ul>
+<li>Si se detecta Subutilización, el Sysadmin emitirá una <strong>advertencia</strong>.</li>
+<li>Si el uso no se corrige en las siguientes <strong>2 horas</strong>, el job será <strong>pausado o terminado</strong> sin derecho a reasignación inmediata.</li>
+</ul>
+<h2 id="8-flexibilidad-y-ventanas-de-mantenimiento">8. Flexibilidad y Ventanas de Mantenimiento</h2>
+<h3 id="81-prioridad-por-flexibilidad">8.1 Prioridad por Flexibilidad</h3>
+<p>Los proyectos que indiquen <strong>alta flexibilidad horaria</strong> (disponibilidad para ejecutar en horarios nocturnos, fines de semana, o días feriados) serán <strong>priorizados</strong> en la cola de asignación para optimizar el uso del Cluster fuera del horario laboral (09:00 - 18:00 hrs).</p>
+<h3 id="82-mantenimiento-planificado">8.2 Mantenimiento Planificado</h3>
+<p>El Equipo Sysadmin se reserva el derecho de programar <strong>ventanas de mantenimiento planificado</strong> con <strong>48 horas de aviso</strong>. Todos los jobs deben ser detenidos o migrados por el equipo solicitante antes de este periodo para evitar la corrupción de datos o checkpoints.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../ssh/" class="btn btn-neutral float-left" title="SSH"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../faq/" class="btn btn-neutral float-right" title="FAQ">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../ssh/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../faq/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
