@@ -1,14 +1,22 @@
-# ¡Bienvenid@ a la documentación CENIA!
+# Introducción
 
-Aquí encontrarás información pertinente al acceso y uso de recursos computacionales disponibles en CENIA.
+Bienvenid@ a la documentación del **Clúster IALab** de CENIA // DCC UC.
 
-💡
+Aquí encontrarás toda la información necesaria para acceder y hacer uso eficiente de los recursos computacionales disponibles: desde el proceso de registro hasta las guías de uso de SLURM, pasando por las políticas de almacenamiento, las buenas prácticas del clúster y tutoriales.
 
-_Si tienes preguntas o dudas no cubiertas en el material aquí presente puedes escribir a: [sysadmins@cenia.cl](mailto:sysadmins@cenia.cl)_
+## ¿Qué es el clúster?
 
-_Si necesitas asistencia con una eventualidad puntual puedes crear un ticket de soporte enviando un correo a [soporte@cenia.cl](mailto:soporte@cenia.cl)_
+El clúster IALab es un conjunto de servidores diseñado para ejecutar cargas de trabajo computacionalmente exigentes de forma eficiente. Permite que múltiples usuarios trabajen en paralelo, con acceso a GPUs, CPUs y memoria de alto rendimiento.
 
-_Observa las métricas en tiempo real del clúster aquí: https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a_
+## Canales de comunicación y soporte
 
+**Canal de Telegram — Cluster IALab**
 
-![image](img/banner.png)
+El medio principal de comunicación del clúster es el canal de Telegram.
+
+[Unirse al canal](https://t.me/+C6otxYK7Z5RsX-sW){ .md-button }
+
+**Soporte técnico**
+
+Si necesitas asistencia con una eventualidad puntual, puedes crear un ticket de soporte enviando un correo a [soporte@cenia.cl](mailto:soporte@cenia.cl).
+

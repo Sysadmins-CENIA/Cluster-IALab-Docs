@@ -32,39 +32,7 @@ Este cluster proporciona múltiples opciones de almacenamiento con diferentes ca
 - **Ideal para**: Datos de entrada/salida de jobs que requieren I/O rápido
 - **Nota**: Es Responsabilidad de cada usuario eliminar los datos y liberar el espacio utilizado
 
-## Consejos de Uso
-
-1. **Durante jobs**: Usar `$WORKSPACE` para mejor rendimiento
-2. **Desarrollo**: Usar `$HOME` para scripts y entornos
-3. **Temporal**: Usar `$SCRATCH` para resultados intermedios
-4. **Largo plazo**: Usar `$ARCHIVE` para resultados finales
-
-## Verificar Uso Total de los directorios
-
-`du -hsH $HOME` **(SOLO PARA HOME AÑADIR -H)**
-
-`du -hs $WORKSPACE`
-
-`du -hs $SCRATCH`
-
-`du -hs $ARCHIVE`
-
-`du -hs /workspaces/$NODO-workspaces1/$PI/$USER` **(SOLO EN KRAKEN)**
-
-`du -hs /workspaces/*/` **(SOLO EN KRAKEN)**
-
-## Verificar el Uso por Archivo.
-`ncdu ~`
-
-`ncdu ~/archive`
-
-`ncdu ~/scratch`
-
-`ncdu /workspaces/<NODO-workspaces1>/<PI>/<USERNAME>` **(SOLO EN KRAKEN)**
-
-`ncdu $WORKSPACE` Dentro de otro nodo
-
-### **Home**
+## **Home**
 
 Tiene como ruta absoluta `/home/<PI>/<username>/` y también es accesible por `~/`. Es el directorio en el que te situas por defecto al conectarte al clúster.
 
@@ -78,7 +46,7 @@ El home de cada usuario tiene una cuota de 50GB. Si la sobrepasas no podrás esc
 
 Para salir de este modo puedes utilizar la letra Q
 
-### Workspaces
+## Workspaces
 
 Los workspaces son discos de almacenamiento locales a los nodos de cómputo y son el único almacenamiento que se tiene permitido usar para la carga de datos (datasets, pesos) en tareas de entrenamiento.
 
@@ -92,7 +60,7 @@ Su ruta local en el nodo ahsoka sería `/workspace1`
 
 **Importante:** Una vez que termines de usar un workspace, ya sea porque terminaste de entrenar un modelo, un experimento, magíster o doctorado es TU responsabilidad eliminar los datos y liberar el espacio utilizado.
 
-### Scratch y Archive
+## Scratch y Archive
 
 Dentro de tu directorio home encontrarás dos carpetas especiales llamadas scratch y archive. Cada una tiene un propósito distinto y cuotas de almacenamiento diferentes:
 
@@ -102,7 +70,7 @@ Dentro de tu directorio home encontrarás dos carpetas especiales llamadas scrat
 `archive` → Espacio para almacenamiento permanente, con una cuota de `200 GB`.
 Está pensado para resultados finales, respaldos y datos importantes que necesites conservar a largo plazo.
 
-Buenas prácticas de uso
+## Buenas prácticas de uso
 
 No almacenes datos críticos en scratch.
 
@@ -120,11 +88,8 @@ Mantener un uso ordenado de estos directorios es clave para la convivencia y el 
 
 - `df -h`: Muestra el espacio disponible en los sistemas de archivos `-h` indica que sea legible para humanos (MB GB).
 - `du <ruta>`: Consultar peso de un directorio o archivo si se aplica el `-s` mostrará el summary de este.
-- `btop`: Administrador de tareas con interfaz de terminal.
-- `nvtop`: Muestra el uso de la GPU, memoria, temperatura y los procesos que la están utilizando.
-- `tmux`: Facilita el trabajo multi terminal dentro del directorio base en el que aplicas el comando.
 - `scp`: permite realizar copias a traves de ssh a otra maquina.
 - `mv`: permite mover archivos dentro de los directorios deseados.
 - `cp`: permite copiar archivos dentro de los directorios deseados.
 - `rm`: permite eliminar algun archivo.
-- `rm -rf`: permite eliminar un directorio y su contenido.
+- `rm -r`: permite eliminar un directorio y su contenido.

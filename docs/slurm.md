@@ -1,11 +1,50 @@
-### Comandos creados por el Team Cluster
+# Uso de SLURM
 
-- `sq`: Versión mejorada de `squeue`.
-- `sshow <jobid>`: Versión mejorada de `scontrol show jobid -dd <jobid>`. También se puede utilizar con el nombre de un nodo para ver información del mismo.
-e.g.: `scontrol show ahsoka`
-- `sfree`: Muestra las CPU / RAM / GPU disponibles en el cluster, según las tareas en la cola de SLURM.
-- `serror <jobid>`: Muestra output de errores del job.
-- `stail <jobid>`: Muestra Std Output de job.
+## Introducción
+
+**SLURM** (_Simple Linux Utility for Resource Management_) es el sistema de gestión de recursos y planificación de trabajos (_scheduler_) utilizado en el clúster. Su función principal es administrar las colas de ejecución, asignar recursos de cómputo y coordinar el uso eficiente de los nodos disponibles.
+
+Actualmente, SLURM es utilizado por más del 60% de los supercomputadores listados en el [top500](https://www.top500.org/){:contentReference[oaicite:0]}, convirtiéndose en el estándar de facto en entornos HPC (_High Performance Computing_).
+
+La versión instalada en el clúster es la [24.05.0](https://slurm.schedmd.com/).
+
+
+### Funcionalidades principales
+
+SLURM permite:
+
+- Gestión de colas de trabajos
+- Asignación eficiente de recursos
+- Ejecución distribuida y paralela
+- Monitoreo y control de trabajos
+- Control de uso compartido del clúster
+
+---
+
+## Arquitectura de SLURM en el clúster
+
+SLURM utiliza una arquitectura tipo **controller/worker**:
+
+- El nodo controlador ejecuta el servicio `slurmctld`, encargado de administrar la cola y coordinar los recursos.
+- Los nodos de cómputo ejecutan el servicio `slurmd`, responsable de ejecutar las tareas asignadas.
+
+En este clúster, el controlador principal se encuentra en: `kraken.ing.puc.cl`.
+
+## Particiones
+
+SLURM organiza los nodos en grupos llamados particiones (partitions).
+
+Cada partición define: recursos disponibles, tiempo máximo de ejecución, límites de memoria, cantidad máxima de tareas, y políticas de acceso y prioridad.
+
+Los usuarios envían trabajos a una partición específica dependiendo de las necesidades computacionales de su tarea.
+
+|Partition|Memoria por nodo<br>(DefMemPerNode)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tareas por nodo<br>(MaxTasksPerNode)|
+|--|--|--|--|
+|ialab|Ilimitada|Ilimitada|512|
+
+## Comandos básicos
+
+Existe documentación para cada comando en la página oficial de *SLURM*. Algunos de los comandos básicos para el uso del scheduler se encuentran detallados a continuación.
 
 ### Comandos esenciales de SLURM
 
@@ -23,24 +62,16 @@ e.g.: `scontrol show ahsoka`
 | Ver salida estándar de un job | `stail <jobid>` | Comando personalizado del cluster |
 | Ver historial de trabajos | `sacct -u $USER` | |
 
-## Introducción a Slurm
 
-**SLURM** es el administrador de trabajos o _scheduler_ del cluster. Es el encargado de gestionar las colas. En la actualidad es utilizado en el 60%  de los supercomputadores del [top500](https://www.top500.org/). La versión disponible en el cluster es la [24.05.0](https://slurm.schedmd.com/).
+### Comandos creados por el Team Cluster
 
-#### Principales funciones
-* #### Gestión de tareas en la cola
-* #### Asignación de recursos
-* #### Permite la modificación de tareas durante su ejecución
+- `sq`: Versión mejorada de `squeue`.
+- `sshow <jobid>`: Versión mejorada de `scontrol show jobid -dd <jobid>`. También se puede utilizar con el nombre de un nodo para ver información del mismo.
+e.g.: `scontrol show ahsoka`
+- `sfree`: Muestra las CPU / RAM / GPU disponibles en el cluster, según las tareas en la cola de SLURM.
+- `serror <jobid>`: Muestra output de errores del job.
+- `stail <jobid>`: Muestra Std Output de job.
 
-## ¿Dónde se encuentra?
-
-*SLURM* utiliza una topología _master_/_worker_ donde el nodo principal (_master_), que ejecuta el servicio _slurmctld_ se encuentra en `kraken.ing.puc.cl`.
-
-*SLURM* define grupos de nodos llamados _particiones_. Para cada partición se administra una _cola de trabajos_ con parámetros propios de duración máxima, cantidad de nodos y procesos a utilizar.
-
-## Comandos básicos
-
-Existe documentación para cada comando en la página oficial de *SLURM*. Algunos de los comandos básicos para el uso del scheduler se encuentran detallados a continuación.
 
 ### [sinfo](https://slurm.schedmd.com/sinfo.html)
 Imprime información sobre las particiones del cluster y sus estados.
@@ -228,7 +259,7 @@ StdOut     : /home/username/logs/250-4294967294-dummy.log
 ```
 
 
-### sfree (Comando creado por nosotros en CENIA)
+### sfree
 Es usado para saber qué recursos hay disponibles en el cluster
 
 **Ejemplo:**
@@ -256,7 +287,8 @@ $ sfree
 ```
 
 
-## Variables de entorno
+## Variables de Entorno Relevantes en Trabajos de SLURM
+
 
 Slurm establecera o preestablecerá las variables de entorno que puedan ser usadas en el script. En la siguiente tabla se muestras las mas usadas:
 
@@ -270,7 +302,6 @@ Slurm establecera o preestablecerá las variables de entorno que puedan ser usad
 |User Workspace   |$WORKSPACE                   |
 |Archive Directory|$ARCHIVE                     |
 |Scratch Directory|$SCRATCH                     |
-
 
 
 ## Flags comunes
@@ -318,8 +349,6 @@ El número de nodos que se desea utilizar es definidos con [--nodes o -N](https:
 
 ### Uso de GPU
 
-A pesar que hay muchos cores dentro de la GPU estos no son compatibles con el estándar intel x86, es por esto que el código debe ser escrito utilizando [CUDA](https://www.nvidia.es/object/cuda-parallel-computing-es.html).
-
 Para solicitar el uso de gpu en tu trabajo se utilizan --gres=gpu ó --gres=gpu:N donde N es el número de gpus por nodo.
 
 **Ejemplo:**
@@ -332,14 +361,5 @@ cd /slurm/gpuExamples
 ./run_my_gpu_code
 
 ```
-### Scripts básicos
-En este [documento](/doc/slurm_samples.md) podrás encontrar algunos scripts básicos para el uso de slurm en determinados casos.
-
-#### Valores por defecto en la configuración de SLURM
-|||
-|--|--|
-|Node | available in the partition|
-|Partition| ialab|
-|DefMemPerNode  | UNLIMITED|
-|MaxMemPerNode  | UNLIMITED|
-|MaxTasksPerNode| 512      |
+## Scripts básicos
+[Acá](slurm_examples.md) podrás encontrar algunos scripts básicos para el uso de slurm en determinados casos.

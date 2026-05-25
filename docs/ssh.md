@@ -1,6 +1,8 @@
 # Uso de SSH
 
-Nota: Para las siguientes instrucciones, reemplaza cualquier instancia de `<usuario>` con el nombre de usuario que solicistaste para la creación de tu cuenta en el clúster.
+Puedes conectarte al cluster con el siguiente comando: `ssh <usuario>@kraken.ing.puc.cl`.
+
+**Nota:** Para las siguientes instrucciones, reemplaza cualquier instancia de `<usuario>` con el nombre de usuario que solicistaste para la creación de tu cuenta en el clúster.
 
 ## 1. Obligatorio - Cambio de contraseña
 
@@ -20,8 +22,6 @@ Una vez que tengas un usuario en el clúster, el primer paso es cambiar tu contr
 ## 2. Recomendado - Llave SSH
 
 Este paso es opcional pero altamente recomendado por motivos de seguridad y comodidad para el usuario.
-
-Si ya tienes una llave SSH puedes saltarte al paso 2.2. De lo contrario, sigue leyendo:
 
 ### 2.1 Creando una llave SSH
 
@@ -57,13 +57,13 @@ Se te pedirá la contraseña que configuraste en el paso 1. Una vez terminado el
 Es posible configurar muchos aspectos de SSH para facilitar su uso creando y editando el archivo
 `.ssh/config`
 
-Por ejemplo, puedes definir un “alias” para conectarte a un servidor con un usuario específico sin necesidad de usar la sintaxis completa `<usuario>@servidor`
+Por ejemplo, puedes definir un “alias” para conectarte a un servidor con un usuario específico sin necesidad de usar la sintaxis completa `<usuario>@kraken.ing.puc.cl`
 
 Vamos a usar el clúster como ejemplo. Si no existe, crea el archivo `.ssh/config`
 Agrega las siguientes líneas, reemplazando `<usuario local>` por tu usuario y `<llave pública>` con el archivo .pub que contiene tu llave pública:
 
 ```
-IdentityFile /home/<usuario local>/.ssh/<llave pública>
+IdentityFile /home/<usuario-local>/.ssh/<llave-pública>
 
 Host kraken
     HostName kraken.ing.puc.cl
