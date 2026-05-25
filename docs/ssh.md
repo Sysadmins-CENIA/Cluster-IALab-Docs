@@ -8,7 +8,7 @@ Puedes conectarte al cluster con el siguiente comando: `ssh <usuario>@kraken.ing
 
 Una vez que tengas un usuario en el clúster, el primer paso es cambiar tu contraseña por defecto para evitar el acceso de terceros no autorizados a tu cuenta. Para ello debes conectarte al clúster y ejecutar el comando `passwd` :
 
-```
+```bash
 [pc-personal]$ ssh <usuario>@kraken.ing.puc.cl
 [kraken]$ passwd
 [kraken]Current password:
@@ -27,7 +27,7 @@ Este paso es opcional pero altamente recomendado por motivos de seguridad y como
 
 El procedimiento para generar una llave SSH es el mismo si estás en Linux, Mac o si usas WSL en Windows:
 
-```
+```bash
 [pc-personal]$ ssh-keygen
 [pc-personal]$ Enter passphrase (empty for no passphrase):
 [pc-personal]$ Enter same passphrase again:
@@ -47,7 +47,7 @@ Una vez tengas tus llaves SSH debes copiar tu llave pública al clúster. Este e
 
 Se te pedirá la contraseña que configuraste en el paso 1. Una vez terminado el procedimiento deberías poder conectarte al clúster sin contraseña (o usando el passhprase, si configuraste uno en el paso 2.1) con:
 
-```
+```bash
 [pc-personal]$ ssh <usuario>@kraken.ing.puc.cl
 [kraken]$
 ```
@@ -72,7 +72,7 @@ Host kraken
 
 Ahora deberías poder conectarte al clúster simplemente corriendo:
 
-```
+```bash
 [pc-personal]$ ssh kraken
 ```
 
@@ -80,7 +80,7 @@ Esto le dice al cliente de SSH que intente usar tu llave pública para todas las
 
 Adicionalmente, si quieres conectarte directamente a algún nodo del clúster (por ejemplo, para copiar datos con `scp` o `rsync`) puedes hacerlo usando a kraken como proxy con las siguientes líneas de configuración:
 
-```
+```bash
 Host ahsoka
         HostName ahsoka
         User <usuario>
