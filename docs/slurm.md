@@ -38,9 +38,16 @@ Cada partición define: recursos disponibles, tiempo máximo de ejecución, lím
 
 Los usuarios envían trabajos a una partición específica dependiendo de las necesidades computacionales de su tarea.
 
-|Partition|Memoria por nodo<br>(DefMemPerNode)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tareas por nodo<br>(MaxTasksPerNode)|
-|--|--|--|--|
-|ialab|4GB|132GB|Ilimitado|
+|Partition|Memoria por CPU<br>(DefMemPerCPU)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tiempo de ejecución<br>(MaxTasksPerNode)|
+| -- | -- | -- | -- |
+| ialab | 4 GB | 128 GB | 24 hrs |
+
+### 🔍 Detalle de Parámetros y Políticas
+
+* Memoria por Defecto (DefMemPerNode): Es la cantidad de memoria RAM que el sistema asignará automáticamente si no especificas los flags de memoria en tu script. El mínimo otorgado por defecto es de 4 GB.
+* Máxima Memoria (MaxMemPerNode): Es el tope de memoria permitido sin declaración explícita (equivale a un máximo de 33 CPUs directas). Cualquier trabajo (*Job*) que supere este límite sin usar flags específicos de memoria no entrará en la cola y será rechazado por el sistema.
+* Máximo de Tareas (MaxTasksPerNode): Define el límite de tareas simultáneas que se pueden ejecutar en un mismo nodo dentro de esta partición. Actualmente se encuentra como Ilimitado.
+* Tiempo Límite (MaxTimeLimit): El límite estricto de tiempo para cualquier trabajo en esta partición es de 24 horas (1 día).
 
 ## Comandos básicos
 
@@ -172,6 +179,7 @@ $ cat script.sh
 #SBATCH --nodes 1                    # numero de nodos a usar
 #SBATCH --ntasks-per-node=24         # numero de trabajos (procesos) por nodo
 #SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
+#SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
 
 gcc -o a.out main.c
 echo "Finished with job $SLURM_JOBID"
@@ -189,11 +197,23 @@ $ cat script-array.sh
 #
 #SBATCH --ntasks 1                   # 1 trabajo
 #SBATCH --array 1-100%10             # 100 procesos, 10 simultáneos
+#SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
 
 python3 main.py $SLURM_ARRAY_TASK_ID
 
 $ sbatch script.sh
 Submitted batch job 60
+```
+### 💡 Guía rápida de uso para Scripts (#SBATCH)
+
+Para asegurar que tus trabajos entren en la cola sin problemas, puedes guiarte con estos ejemplos de configuración:
+
+#### 1. Gestión de Memoria
+Si tu trabajo requiere más de los 4 GB por defecto o supera el equivalente a 33 CPUs, es obligatorio declarar la memoria usando uno de estos flags:
+```bash
+#SBATCH --mem=16G               # Solicita 16 GB de RAM en total para el nodo
+# o también:
+#SBATCH --mem-per-cpu=4G       # Solicita 4 GB de RAM por cada CPU requerida
 ```
 
 ### [scancel](https://slurm.schedmd.com/scancel.html)

@@ -15,6 +15,7 @@ nav:
   - Otros:
     - FAQ: faq.md
     - Monitoreo de Recursos 🔗: https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a
+    - Compute Grants: compute_grants.md
 
 theme: readthedocs
 
