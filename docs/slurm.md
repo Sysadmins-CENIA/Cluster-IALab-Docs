@@ -18,7 +18,7 @@ SLURM permite:
 - Ejecución distribuida y paralela
 - Monitoreo y control de trabajos
 - Control de uso compartido del clúster
-HOLAQUETAL
+
 ---
 
 ## Arquitectura de SLURM en el clúster
