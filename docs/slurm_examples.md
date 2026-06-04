@@ -11,7 +11,6 @@ Este script tiene la estructura básica para hacer correr un programa en *SLURM*
 ```bash
 #!/bin/bash
 #SBATCH --job-name=primes           # Nombre del trabajo
-#SBATCH --partition=ialab           # Se tiene que elegir una partición de nodos con GPU
 #SBATCH --mail-type=END,FAIL        # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl   # El mail del usuario
 #SBATCH --ntasks=1                  # Correr una sola tarea
@@ -36,7 +35,6 @@ Este script permite correr programas que requieran más de un thread, como es el
 ```bash
 #!/bin/bash
 #SBATCH --job-name=matrixMul        # Nombre del trabajo
-#SBATCH --partition=ialab            # Se tiene que elegir una partición de nodos con GPU
 #SBATCH --mail-type=END,FAIL        # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl   # El mail del usuario
 #SBATCH --ntasks=1                  # Correr una sola tarea
@@ -44,7 +42,6 @@ Este script permite correr programas que requieran más de un thread, como es el
 #SBATCH --time=0-00:05:00           # Timpo limite d-hrs:min:sec
 #SBATCH --output=test_%j.log        # Nombre del output (%j se reemplaza por el ID del trabajo)
 #SBATCH --cpus-per-task=4           # Numero de CPU cores por tarea
-
 pwd; hostname; date
 
 export OMP_NUM_THREADS=4
@@ -81,7 +78,6 @@ Slurm es muy flexible acerca del manejo de los recursos, permitiendo al usuario 
 ```bash
 #!/bin/bash
 #SBATCH --job-name=nombre_trabajo    # Nombre del trabajo
-#SBATCH --partition=ialab            # Se tiene que elegir una partición de nodos con GPU
 #SBATCH --mail-type=END,FAIL         # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl    # El mail del usuario
 #SBATCH --time=0-00:05:00            # Timpo limite d-hrs:min:sec
@@ -94,7 +90,6 @@ Slurm es muy flexible acerca del manejo de los recursos, permitiendo al usuario 
 #SBATCH --ntasks-per-node=12         # Numero de tareas por nodo
 #SBATCH --ntasks-per-socket=6        # Numero de tareas por socket
 #SBATCH --distribution=cyclic:cyclic # Distribuir las tareas de modo ciclico sobre los nodos y sockets
-
 pwd; hostname; date
 
 echo "Corriendo un programa con $SLURM_JOB_NUM_NODES nodos, con $SLURM_NTASKS tareas, cada una con $SLURM_CPUS_PER_TASK cores."
@@ -115,7 +110,6 @@ Para más información se recomienda leer el wiki de "University of Florida" sob
 ```bash
 #!/bin/bash
 #SBATCH --job-name=average_random         # Nombre del trabajo
-#SBATCH --partition=ialab            # Se tiene que elegir una partición de nodos con GPU
 #SBATCH --mail-type=END,FAIL              # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl         # El mail del usuario
 #SBATCH --ntasks=1                        # Correr una sola tarea
@@ -123,7 +117,6 @@ Para más información se recomienda leer el wiki de "University of Florida" sob
 #SBATCH --time=0-00:05:00                 # Timpo limite d-hrs:min:sec
 #SBATCH --output=results/array_%A-%a.log  # Output (%A se reemplaza por el ID del trabajo maestro, %a se reemplaza por el indice del arreglo)
 #SBATCH --array=1-100%10                  # 100 procesos, 10 simultáneos
-
 pwd; hostname; date
 
 python3 /user/slurm/samples/array/average.py $SLURM_ARRAY_TASK_ID
@@ -137,7 +130,6 @@ Este es un script para correr programas en CUDA o OpenCL que necesiten GPU. El s
 ```bash
 #!/bin/bash
 #SBATCH --job-name=MutiplyBy2        # Nombre del trabajo
-#SBATCH --partition=ialab            # Se tiene que elegir una partición de nodos con GPU
 #SBATCH --output=test_%j.log         # Nombre del output (%j se reemplaza por el ID del trabajo)
 #SBATCH --error=test_%j.err          # Output de errores (opcional)
 #SBATCH --ntasks=2                   # Correr 2 tareas
@@ -147,6 +139,7 @@ Este es un script para correr programas en CUDA o OpenCL que necesiten GPU. El s
 #SBATCH --mem-per-cpu=2000mb         # Memoria por proceso
 #SBATCH --mail-type=END,FAIL         # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl    # El mail del usuario
+#SBATCH --partition=ialab-low        # Se tiene que elegir una partición de nodos con GPU
 #SBATCH --gres=gpu:2                 # Usar 2 GPUs (se pueden usar N GPUs de marca especifica de la manera --gres=gpu:marca:N)
 date;hostname;pwd
 
