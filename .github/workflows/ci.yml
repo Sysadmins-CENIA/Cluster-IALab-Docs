@@ -21,7 +21,9 @@ jobs:
           path: .cache
 
       - name: Install dependencies
-        run: pip install mkdocs
+        run: |
+          pip install mkdocs
+          pip install mkdocs-open-in-new-tab
 
       - name: Deploy Docs
         run: mkdocs gh-deploy --force --clean --verbose
