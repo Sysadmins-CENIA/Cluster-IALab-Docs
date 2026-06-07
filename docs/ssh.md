@@ -1,12 +1,12 @@
 # Uso de SSH
 
-Puedes conectarte al cluster con el siguiente comando: `ssh <usuario>@kraken.ing.puc.cl`.
+Puedes conectarte al clúster con el comando `ssh <usuario>@kraken.ing.puc.cl`.
 
-**Nota:** Para las siguientes instrucciones, reemplaza cualquier instancia de `<usuario>` con el nombre de usuario que solicistaste para la creación de tu cuenta en el clúster.
+**Nota:** En las siguientes instrucciones, reemplaza `<usuario>` por el nombre de usuario que solicitaste al crear tu cuenta.
 
 ## 1. Obligatorio - Cambio de contraseña
 
-Una vez que tengas un usuario en el clúster, el primer paso es cambiar tu contraseña por defecto para evitar el acceso de terceros no autorizados a tu cuenta. Para ello debes conectarte al clúster y ejecutar el comando `passwd` :
+Lo primero es cambiar tu contraseña por defecto para evitar accesos no autorizados. Conéctate al clúster y ejecuta el comando `passwd`:
 
 ```bash
 [pc-personal]$ ssh <usuario>@kraken.ing.puc.cl
@@ -21,74 +21,83 @@ Una vez que tengas un usuario en el clúster, el primer paso es cambiar tu contr
 
 ## 2. Recomendado - Llave SSH
 
-Este paso es opcional pero altamente recomendado por motivos de seguridad y comodidad para el usuario.
+Este paso es opcional, pero muy recomendado por seguridad y comodidad.
 
 ### 2.1 Creando una llave SSH
 
-El procedimiento para generar una llave SSH es el mismo si estás en Linux, Mac o si usas WSL en Windows:
+El procedimiento es el mismo en Linux, Mac o WSL en Windows:
 
 ```bash
-[pc-personal]$ ssh-keygen
-[pc-personal]$ Enter passphrase (empty for no passphrase):
-[pc-personal]$ Enter same passphrase again:
+ssh-keygen -t ed25519 -C "tu@email.com"
+
+# Acepta la ubicación por defecto: ~/.ssh/id_ed25519
+# Puedes agregar una passphrase (recomendado) o dejarla vacía
+
+# Ver las claves generadas
+ls ~/.ssh/
+# id_ed25519       ← clave privada (NUNCA compartas esto)
+# id_ed25519.pub   ← clave pública (ésta la compartes)
 ```
 
-Puedes ingresar un passphrase durante la creación de la llave para que se te solicite al momento de conectarte por SSH, o dejarlo en blanco para poder conectarte sin ingresar una contraseña.
-
-Esto creará un par público/privado de llaves en el directorio `.ssh` en tu carpeta de usuario. El output de `ssh-keygen` te dirá el nombre de los archivos de las llaves.
+!!! alert "Nunca compartas tu llave privada"
+    La llave privada (el archivo **sin** la extensión `.pub`) es secreta y solo debe permanecer en tu computador. Nunca la envíes por correo, chat ni la subas a ningún repositorio.
 
 ### 2.2 Copiando la llave SSH al clúster
 
-Una vez tengas tus llaves SSH debes copiar tu llave pública al clúster. Este es el archivo terminado en .pub creado en el paso anterior. Suponiendo que la llave está en `.ssh/id_ed25519.pub` solo debes correr:
+Copia tu llave **pública** al clúster. Si tu llave está en `.ssh/id_ed25519.pub`, ejecuta:
 
 ```
-[pc-personal]$ ssh-copy-id -i .ssh/id_ed25519.pub <usuario>@kraken.ing.puc.cl
+# Opción 1: usar ssh-copy-id (la forma más simple)
+
+ssh-copy-id -i ~/.ssh/id_ed25519.pub usuario@kraken.ing.puc.cl
+
+
+# Opción 2: copiar manualmente (si no tienes ssh-copy-id)
+
+cat ~/.ssh/id_ed25519.pub
+
+# Copia el output y pégalo en ~/.ssh/authorized_keys en el servidor
+
+# En el servidor, el archivo queda así:
+# ~/.ssh/authorized_keys
+# ssh-ed25519 AAAA...clave... tu@email.com
 ```
 
-Se te pedirá la contraseña que configuraste en el paso 1. Una vez terminado el procedimiento deberías poder conectarte al clúster sin contraseña (o usando el passhprase, si configuraste uno en el paso 2.1) con:
-
-```bash
-[pc-personal]$ ssh <usuario>@kraken.ing.puc.cl
-[kraken]$
-```
+Luego podrás conectarte sin contraseña (o usando tu passphrase, si configuraste uno).
 
 ## 3. Opcional - Configuración de SSH
 
-Es posible configurar muchos aspectos de SSH para facilitar su uso creando y editando el archivo
-`.ssh/config`
+Puedes facilitar el uso de SSH creando y editando el archivo `.ssh/config`. Por ejemplo, puedes definir un "alias" para conectarte sin escribir la sintaxis completa `<usuario>@kraken.ing.puc.cl`.
 
-Por ejemplo, puedes definir un “alias” para conectarte a un servidor con un usuario específico sin necesidad de usar la sintaxis completa `<usuario>@kraken.ing.puc.cl`
+Si no existe, crea el archivo `.ssh/config` y agrega las siguientes líneas, reemplazando `<usuario-local>` por tu usuario local y `<llave-pública>` por el archivo `.pub` de tu llave pública:
 
-Vamos a usar el clúster como ejemplo. Si no existe, crea el archivo `.ssh/config`
-Agrega las siguientes líneas, reemplazando `<usuario local>` por tu usuario y `<llave pública>` con el archivo .pub que contiene tu llave pública:
-
-```
-IdentityFile /home/<usuario-local>/.ssh/<llave-pública>
-
+```bash
+# Nodo de entrada
 Host kraken
     HostName kraken.ing.puc.cl
     User <usuario>
+    IdentityFile ~/.ssh/id_ed25519.pub
+
+# Con salto intermedio o proxy jump
+Host <nodo>
+    HostName <nodo> # Por ejemplo hydra
+    User <usuario>
+    IdentityFile ~/.ssh/id_ed25519.pub
+    ProxyJump <usuario>@kraken.ing.puc.cl
 ```
 
-Ahora deberías poder conectarte al clúster simplemente corriendo:
+Ahora puedes conectarte simplemente con:
 
 ```bash
-[pc-personal]$ ssh kraken
+ssh kraken
 ```
 
-Esto le dice al cliente de SSH que intente usar tu llave pública para todas las conexiones y que `kraken` es una abreviación de `<usuario>@kraken.ing.puc.cl`
+Esto le indica al cliente SSH que use tu llave pública y que `kraken` es una abreviación de `<usuario>@kraken.ing.puc.cl`.
 
-Adicionalmente, si quieres conectarte directamente a algún nodo del clúster (por ejemplo, para copiar datos con `scp` o `rsync`) puedes hacerlo usando a kraken como proxy con las siguientes líneas de configuración:
+Si quieres conectarte directamente a un nodo de computo del clúster (por ejemplo, para copiar datos con `scp` o `rsync`), puedes usar el clúster como proxy.
 
-```bash
-Host ahsoka
-        HostName ahsoka
-        User <usuario>
-        ProxyJump <usuario>@kraken
-```
-
-Ahora deberías poder conectarte al nodo (en este caso ahsoka) simplemente corriendo:
+Y puedes conectarte con:
 
 ```bash
-[pc-personal]$ ssh ahsoka
+ssh <nodo>
 ```
