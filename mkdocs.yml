@@ -14,7 +14,7 @@ nav:
     - Solicitud de Recursos Adicionales: additional_resources.md
   - Otros:
     - FAQ: faq.md
-    - Recursos adicionales: compute_grants.md
+    - Recursos de cómputo adicionales: compute_grants.md
     - Monitoreo de Recursos 🔗: https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a
 
 theme: readthedocs
