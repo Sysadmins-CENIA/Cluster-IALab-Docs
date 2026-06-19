@@ -38,9 +38,9 @@ Cada partición define: recursos disponibles, tiempo máximo de ejecución, lím
 
 Los usuarios envían trabajos a una partición específica dependiendo de las necesidades computacionales de su tarea.
 
-|Partition|Memoria por nodo<br>(DefMemPerNode)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tareas por nodo<br>(MaxTasksPerNode)|
+|Partition|Memoria por CPU<br>(DefMemPerCPU)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tiempo por tarea<br>(MaxTime)|
 |--|--|--|--|
-|ialab|4GB|132GB|Ilimitado|
+|ialab|4 GB|128 GB|24 hrs|
 
 ## Comandos básicos
 
@@ -172,6 +172,7 @@ $ cat script.sh
 #SBATCH --nodes 1                    # numero de nodos a usar
 #SBATCH --ntasks-per-node=24         # numero de trabajos (procesos) por nodo
 #SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
+#SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
 
 gcc -o a.out main.c
 echo "Finished with job $SLURM_JOBID"
@@ -189,6 +190,7 @@ $ cat script-array.sh
 #
 #SBATCH --ntasks 1                   # 1 trabajo
 #SBATCH --array 1-100%10             # 100 procesos, 10 simultáneos
+#SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
 
 python3 main.py $SLURM_ARRAY_TASK_ID
 
