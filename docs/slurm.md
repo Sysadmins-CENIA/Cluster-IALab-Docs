@@ -52,7 +52,7 @@ Existe documentación para cada comando en la página oficial de *SLURM*. Alguno
 | `squeue` | Ver trabajos en la cola | [link](https://slurm.schedmd.com/squeue.html) |
 | `sq` | Versión mejorada de `squeue` | — |
 | `sfree` | Ver recursos disponibles | — |
-| `scontrol show <node>` | Ver detalles de un nodo | [link](https://slurm.schedmd.com/scontrol.html) |
+| `scontrol show node <node>` | Ver detalles de un nodo | [link](https://slurm.schedmd.com/scontrol.html) |
 | `sbatch script.sh` | Enviar un script batch | [link](https://slurm.schedmd.com/sbatch.html) |
 | `srun --pty bash` | Enviar trabajo interactivo | [link](https://slurm.schedmd.com/srun.html) |
 | `scancel <jobid>` | Cancelar un trabajo | [link](https://slurm.schedmd.com/scancel.html) |
@@ -65,9 +65,9 @@ Existe documentación para cada comando en la página oficial de *SLURM*. Alguno
 
 ### Ejemplos de uso:
 ```bash
-# Ver particiones disponibles y sus GPUs
+# Ver particiones disponibles
 sinfo
-sinfo -s # vista resumida 
+sinfo -s # vista resumida
 
 # Ver jobs en cola
 squeue -u $USER        # solo los tuyos
@@ -83,7 +83,7 @@ sfree
 scontrol show <node>
 
 # Comandos para interactuar con trabajos en SLURM
-# Ejecutar un trabajo SLURM bloqueando tu terminal con 2 CPUs
+# Ejecutar un trabajo SLURM bloqueando tu terminal con 2 tareas o procesos
 srun -n 2 python main.py
 
 # Enviar un trabajo SLURM utilizando un script de bash
@@ -108,16 +108,43 @@ serror <jobid>
 stail <jobid> 
 ```
 
-## Enviar un trabajo a SLURM
+## Ejecutar trabajos en SLURM
 
-### Scripts para sbatch
-Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los parámeros de la ejecución en el inicio del script. Abajo hay un ejemplo de como se deben indicar las opciones, y en la sección [Ejemplos de SLURM](slurm_examples.md) puedes encontrar scripts de ejemplos útiles para distintas situaciones:
+### Ejecución interactiva con `srun`
+
+`srun` ejecuta un trabajo de manera **interactiva**, bloqueando tu terminal hasta que termine y mostrando la salida directamente en pantalla. Es útil para pruebas rápidas, depuración o sesiones interactivas. A diferencia de `sbatch` (descrito más abajo), no envía un script a la cola para ejecutarse de forma desatendida.
+
+```bash
+# Ejecutar un comando directamente en un nodo de cómputo
+srun python main.py
+
+# Solicitar 2 CPUs para la tarea
+srun --cpus-per-task=2 python main.py
+
+# Solicitar una GPU
+srun --gres=gpu python train.py
+```
+
+Para abrir una **shell interactiva** dentro de un nodo de cómputo (por ejemplo, para inspeccionar el entorno o ejecutar comandos manualmente):
+
+```bash
+# Abrir una terminal interactiva en un nodo
+srun --pty bash
+
+# Terminal interactiva con una GPU asignada
+srun --gres=gpu --pty bash
+```
+
+`srun` acepta los mismos flags de solicitud de recursos que se describen en la sección [Flags comunes](#flags-comunes) (por ejemplo `--cpus-per-task`, `--mem`, `--gres`, `--nodelist`). Ten en cuenta que la sesión termina y los recursos se liberan al cerrar la terminal o al finalizar el comando.
+
+### Ejecución batch con `sbatch`
+Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los parámetros de la ejecución en el inicio del script. Abajo hay un ejemplo de como se deben indicar las opciones, y en la sección [Ejemplos de SLURM](slurm_examples.md) puedes encontrar scripts de ejemplos útiles para distintas situaciones:
 
 ```
 #!/bin/bash
 #SBATCH --job-name=compile
 #SBATCH -t 0-2:00                    # tiempo maximo en el cluster (D-HH:MM)
-#SBATCH -o c_job.out                 # STDOUT (A = )
+#SBATCH -o c_job.out                 # STDOUT
 #SBATCH -e c_job.err                 # STDERR
 #SBATCH --mail-type=END,FAIL         # notificacion cuando el trabajo termine o falle
 #SBATCH --mail-user=usuario@uc.cl    # mail donde mandar las notificaciones
@@ -144,13 +171,13 @@ A continuación se muestra una lista de los flags más comunes que un usuario pu
 |Copia las variables de entorno del usuario  |`#SBATCH --export=[ALL\|NONE\|Variables]`  |
 |Restricción de tiempo |`#SBATCH --time=24:0:0`   |
 |Reiniciar un trabajo en caso de falla|`#SBATCH --requeue`  |
-|Compartir los nodos |`#SBATCH --shared` |
+|Compartir los nodos |`#SBATCH --oversubscribe` |
 |Reservar los nodos para uso exclusivo|`#SBATCH --exclusive` |
 |Uso de un recurso específico |`#SBATCH --constraint="XXX"`|
 |Uso de memoria |`#SBATCH --mem=[mem \|M\|G\|T]` o `--mem-per-cpu` |
 |Email usuario |`#SBATCH --mail-user=username@uc.cl` |
 |Notifica al usuario por evento |`#SBATCH --mail-type=ALL / BEGIN / END or FAIL` |
-|Solicitud nodo específico |`#SBATCH --nodelist=Antuco` |
+|Solicitud nodo específico |`#SBATCH --nodelist=hydra` |
 
 #### Uso de GPU
 
@@ -163,6 +190,15 @@ Para solicitar el uso de gpu en tu trabajo se utilizan `--gres=gpu` ó `--gres=g
 #SBATCH -N 4
 #SBATCH --gres=gpu
 ```
+
+El clúster es **heterogéneo**: distintos nodos tienen distintos modelos de GPU (revisa el [Hardware del Clúster](hardware.md)). Si tu trabajo necesita un modelo concreto, puedes pedirlo con la opción `--gres=gpu:<modelo>:N`:
+
+```bash
+#SBATCH --gres=gpu:a40:1        # 1 GPU A40
+#SBATCH --gres=gpu:2080ti:2     # 2 GPUs RTX 2080Ti
+```
+
+Para ver los modelos (GRES) disponibles en cada nodo usa `sfree` o `sinfo -o "%n %G"` o `scontrol show node <node>`.
 
 ### Variables de entorno relevantes en trabajos de SLURM
 
