@@ -105,7 +105,7 @@ scontrol release <jobid>    # la retoma
 serror <jobid>
 
 # Mostrar output del trabajo.
-stail <jobid> 
+stail <jobid>
 ```
 
 ## Ejecutar trabajos en SLURM
@@ -140,7 +140,7 @@ srun --gres=gpu --pty bash
 ### Ejecución batch con `sbatch`
 Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los parámetros de la ejecución en el inicio del script. Abajo hay un ejemplo de como se deben indicar las opciones, y en la sección [Ejemplos de SLURM](slurm_examples.md) puedes encontrar scripts de ejemplos útiles para distintas situaciones:
 
-```
+```bash
 #!/bin/bash
 #SBATCH --job-name=compile
 #SBATCH -t 0-2:00                    # tiempo maximo en el cluster (D-HH:MM)
@@ -155,7 +155,7 @@ Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los
 #SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
 #SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
 
-gcc -o a.out main.c
+python main.py
 echo "Finished with job $SLURM_JOBID"
 ```
 
