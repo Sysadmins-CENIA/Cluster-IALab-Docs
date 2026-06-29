@@ -191,7 +191,7 @@ Para solicitar el uso de gpu en tu trabajo se utilizan `--gres=gpu` ó `--gres=g
 #SBATCH --gres=gpu
 ```
 
-El clúster es **heterogéneo**: distintos nodos tienen distintos modelos de GPU (revisa el [Hardware del Clúster](hardware.md)). Si tu trabajo necesita un modelo concreto, puedes pedirlo con la opción `--gres=gpu:<modelo>:N`:
+El clúster es **heterogéneo**: distintos nodos tienen distintos modelos de GPU (revisa el [Hardware del Clúster](../hardware.md)). Si tu trabajo necesita un modelo concreto, puedes pedirlo con la opción `--gres=gpu:<modelo>:N`:
 
 ```bash
 #SBATCH --gres=gpu:a40:1        # 1 GPU A40

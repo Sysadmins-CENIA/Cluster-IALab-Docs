@@ -33,8 +33,8 @@ Al conectarte por primera vez debes cambiar tu contraseña por defecto:
 
 ### ¿Ya tienes acceso?
 
-Para configurar llaves SSH, alias de conexión u otras opciones avanzadas, consulta la guía completa en [Uso de SSH](ssh.md).
+Para configurar llaves SSH, alias de conexión u otras opciones avanzadas, consulta la guía completa en [Uso de SSH](instructions-and-guides/ssh.md).
 
 ### ¿Cómo envío mis trabajos?
 
-Este cluser funciona utilizando SLURM como sistema de cola de tareas, para ver más detalles de como correr tus trabajos, puedes ir la guía completa en [Uso de SLURM](slurm.md).
+Este cluser funciona utilizando SLURM como sistema de cola de tareas, para ver más detalles de como correr tus trabajos, puedes ir la guía completa en [Uso de SLURM](instructions-and-guides/slurm.md).

@@ -7,9 +7,9 @@ nav:
     - Almacenamiento: storage.md
     - Política de Uso: usage_policy.md
   - Instrucciones y Guías:
-    - SSH: ssh.md
-    - SLURM: slurm.md
-    - Ejemplos de SLURM: slurm_examples.md
+    - SSH: instructions-and-guides/ssh.md
+    - SLURM: instructions-and-guides/slurm.md
+    - Ejemplos de SLURM: instructions-and-guides/slurm_examples.md
   - Solicitudes:
     - Solicitud de Recursos Adicionales: additional_resources.md
   - Otros:

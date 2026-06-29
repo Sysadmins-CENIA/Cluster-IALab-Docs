@@ -46,7 +46,7 @@ ls ~/.ssh/
 
 Copia tu llave **pública** al clúster. Si tu llave está en `.ssh/id_ed25519.pub`, ejecuta:
 
-```
+```bash
 # Opción 1: usar ssh-copy-id (la forma más simple)
 
 ssh-copy-id -i ~/.ssh/id_ed25519.pub usuario@kraken.ing.puc.cl
