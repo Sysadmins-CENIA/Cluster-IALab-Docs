@@ -37,4 +37,4 @@ Para configurar llaves SSH, alias de conexión u otras opciones avanzadas, consu
 
 ### ¿Cómo envío mis trabajos?
 
-Este cluser funciona utilizando SLURM como sistema de cola de tareas, para ver más detalles de como correr tus trabajos, puedes ir la guía completa en [Uso de SLURM](instructions-and-guides/slurm.md).
+Este clúster funciona utilizando SLURM como sistema de cola de tareas, para ver más detalles de como correr tus trabajos, puedes ir la guía completa en [Uso de SLURM](instructions-and-guides/slurm.md).
