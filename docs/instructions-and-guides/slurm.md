@@ -181,7 +181,7 @@ A continuación se muestra una lista de los flags más comunes que un usuario pu
 
 #### Uso de GPU
 
-Para solicitar el uso de gpu en tu trabajo se utilizan `--gres=gpu` ó `--gres=gpu:N` donde `N` es el número de gpus por nodo.
+Para solicitar el uso de GPU en tu trabajo se utilizan `--gres=gpu` ó `--gres=gpu:N` donde `N` es el número de GPUs por nodo.
 
 **Por ejemplo:**
 ```bash

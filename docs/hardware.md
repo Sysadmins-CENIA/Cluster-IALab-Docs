@@ -9,7 +9,7 @@ El clúster está compuesto por dos tipos de nodos:
 
 ![Diagrama de la arquitectura del cluster](img/cluster-architecture.png)
 
-## Nodos de computo disponibles
+## Nodos de cómputo disponibles
 
 | Nodo | Cores | RAM | GPU |
 |------|-------|-----|-----|

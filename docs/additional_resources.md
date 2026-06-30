@@ -3,7 +3,7 @@
 ## 1. Introducción y Marco General
 
 ### 1.1 Propósito
-El presente documento tiene como finalidad establecer los **procedimientos, criterios de elegibilidad y normativas** para la solicitud, evaluación y asignación justa y eficiente de los recursos computacionales de alto rendimiento (**GPU, CPU, RAM, Storage**) que componen el **Cluster de Inteligencia Artificial de CENIA**. Esto asegura la maximización del retorno de inversión del hardware y el soporte prioritario a la investigación estratégica.
+El presente documento tiene como finalidad establecer los **procedimientos, criterios de elegibilidad y normativas** para la solicitud, evaluación y asignación justa y eficiente de los recursos computacionales de alto rendimiento (**GPU, CPU, RAM, Almacenamiento**) que componen el **Cluster de Inteligencia Artificial de CENIA**. Esto asegura la maximización del retorno de inversión del hardware y el soporte prioritario a la investigación estratégica.
 
 ### 1.2 Alcance
 Esta política es de **cumplimiento obligatorio** para todo el personal investigador de CENIA (Investigadores Principales, Postdoctorados, Estudiantes de Doctorado) y colaboradores externos formalmente asociados a proyectos de CENIA, que requieran el uso de recursos computacionales del Cluster.
@@ -33,8 +33,8 @@ Es responsabilidad del **Investigador Principal**:
 * Asegurar que el código y el job estén **optimizados** antes de la solicitud (pruebas locales, Pruebas de Concepto (PoC)).
 * **Monitorear activamente** su job una vez asignado y asegurar su terminación o liberación una vez finalizado el proceso.
 * Monitorear el uso de recursos.
-* Solicitar Hardware ajustado a los requerimientos para **evitar la subutilización**.
-* Notificar formalmente al equipo del Cluster inmediatamente después de finalizar mi uso de los recursos, con el fin de liberar el hardware para otros investigadores.
+* Solicitar hardware ajustado a los requerimientos para **evitar la subutilización**.
+* Notificar formalmente al equipo del Cluster inmediatamente después de finalizar su uso de los recursos, con el fin de liberar el hardware para otros investigadores.
 
 ### 3.2 Equipo Sysadmin (Administración del Cluster)
 Es responsabilidad del **Equipo Sysadmin**:
