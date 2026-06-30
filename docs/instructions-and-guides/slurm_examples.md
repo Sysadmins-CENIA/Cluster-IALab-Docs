@@ -84,7 +84,7 @@ El siguiente script reserva 2 GPUs (`--gres=gpu:2`) y ejecuta `python main.py`. 
 #SBATCH --gres=gpu:2                 # Usar 2 GPUs (se pueden usar N GPUs de marca específica de la manera --gres=gpu:marca:N)
 date;hostname;pwd
 
-srun --gres=gpu:1 -n 1 python main.py
+srun --gres=gpu:2 -n 2 python main.py
 
 date
 ```
