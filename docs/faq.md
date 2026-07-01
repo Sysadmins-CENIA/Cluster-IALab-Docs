@@ -94,77 +94,77 @@ Cada nodo tiene almacenamiento local en `/workspace1`. Es el **único** lugar ma
 
 Es almacenamiento temporal de alto rendimiento. Úsalo para cálculos, pero mueve los resultados a tu `/home` al finalizar.
 
-**21-. ¿Qué es el directorio `/archive` de mi home y cómo lo uso?**
+**22-. ¿Qué es el directorio `/archive` de mi home y cómo lo uso?**
 
 Almacenamiento a largo plazo para resultados importantes,
 Ideal para: Almacenar backups importantes, Resultados finales, datos de publicaciones.
 
-**22-. ¿Cómo transfiero archivos desde mi PC local al cluster?**
+**23-. ¿Cómo transfiero archivos desde mi PC local al cluster?**
 
 Usa `scp` o `rsync`. Ejemplo: `rsync -avz mi_proyecto/ usuario@kraken:/home/usuario/`.
 
-**23-. ¿Qué hago si me quedo sin espacio en disco?**
+**24-. ¿Qué hago si me quedo sin espacio en disco?**
 
 Revisa tu uso con `du -sh *` y elimina archivos temporales o logs antiguos.
 
-**24-. ¿Los archivos en el cluster están respaldados?**
+**25-. ¿Los archivos en el cluster están respaldados?**
 
 No existe backup automático. Mantén copias de resultados críticos fuera del cluster.
 
-**25-. ¿Puedo compartir datos con otros usuarios?**
+**26-. ¿Puedo compartir datos con otros usuarios?**
 
 Sí, utiliza directorios de grupo con permisos de lectura (`chmod g+r`).
 
 ## Entorno de Software y Contenedores
 
-**26-. ¿Puedo usar Docker?**
+**27-. ¿Puedo usar Docker?**
 
 Sí, pero el uso de Docker en nodos de cómputo debe ser autorizado previamente. Envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) para evaluar tu caso.
 
-**27-. ¿Por qué debo ejecutar mis contenedores a través de Slurm?**
+**28-. ¿Por qué debo ejecutar mis contenedores a través de Slurm?**
 
 Es estrictamente obligatorio porque Slurm garantiza que tu contenedor tenga acceso exclusivo y seguro al hardware (GPU/CPU/RAM) asignado. Ejecutar fuera de Slurm compromete la estabilidad del sistema, causa conflictos de memoria con otros usuarios y evita que el clúster balancee la carga correctamente.
 
 ## Optimización y Rendimiento
 
-**28-. ¿Qué son los "nodos de cómputo" vs "headnode"?**
+**29-. ¿Qué son los "nodos de cómputo" vs "headnode"?**
 
 Kraken coordina; los otros ejecutan. No entrenes en Kraken.
 
-**29-. ¿Cómo sé cuánta memoria RAM requiere mi trabajo?**
+**30-. ¿Cómo sé cuánta memoria RAM requiere mi trabajo?**
 
 Prueba y revisa con el comando `seff <job_id>` al terminar.
 
-**30-. ¿Por qué mis resultados son inconsistentes?**
+**31-. ¿Por qué mis resultados son inconsistentes?**
 
 Asegúrate de configurar semillas (seeds) aleatorias si tu código es estocástico.
 
-**31-. ¿Es mejor enviar muchos trabajos pequeños o uno grande?**
+**32-. ¿Es mejor enviar muchos trabajos pequeños o uno grande?**
 
 Usa arreglos de tareas (*job arrays*) si tienes muchos archivos pequeños.
 
-**32-. ¿Qué significa "Hyperthreading"?**
+**33-. ¿Qué significa "Hyperthreading"?**
 
 Considera que un núcleo físico ejecuta dos hilos al solicitar `--cpus-per-task`.
 
 ## Resolución de Problemas Avanzada
 
-**33-. ¿Cómo depuro un error de segmentación (segfault)?**
+**34-. ¿Cómo depuro un error de segmentación (segfault)?**
 
 Ejecuta interactivamente con `srun --pty bash`.
 
-**34-. ¿Qué hago si olvido cancelar un trabajo en bucle?**
+**35-. ¿Qué hago si olvido cancelar un trabajo en bucle?**
 
 Usa `scancel -u <tu_usuario>`.
 
-**35-. ¿Por qué Antuco me da errores de librerías CUDA?**
+**36-. ¿Por qué Antuco me da errores de librerías CUDA?**
 
 Es un nodo AMD; usa contenedores compatibles con **ROCm**.
 
-**36-. ¿Qué es el "OOM Killer"?**
+**37-. ¿Qué es el "OOM Killer"?**
 
 El sistema mata tu proceso porque se quedó sin RAM. Solicita más memoria con `--mem=...`.
 
-**37-. ¿Cómo reporto un problema de infraestructura?**
+**38-. ¿Cómo reporto un problema de infraestructura?**
 
 Envía un correo detallando: nodo, job ID, comando y error exacto a [soporte@cenia.cl](mailto:soporte@cenia.cl)
