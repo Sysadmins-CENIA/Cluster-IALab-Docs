@@ -1,11 +1,11 @@
-# Guía de Uso de para Compartir datos usando ACL (Access Control Lists) en Linux
+# Compartir datos usando ACL en Linux
 
 Las ACL (Access Control Lists) permiten definir permisos detallados para usuarios y grupos específicos de forma individual, superando la limitación de los permisos tradicionales de Linux (usuario, grupo, otros).
 
 Esta guía muestra cómo gestionar estos permisos utilizando ejemplos prácticos adaptados a nuestras rutas de almacenamiento.
 
 !!! note
-    En los siguientes ejemplos se asume el uso de la variable de entorno **`$WORKSPACE`**, la cual apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (`/workspace1/$PI/$USER`).
+    En los siguientes ejemplos se asume el uso de la variable de entorno **`$WORKSPACE`**, la cual apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (`/workspace1/$PI/$USER`). Para más detalles sobre el funcionamiento y las características de este espacio, consulta la sección de [Almacenamiento](../storage.md)
 
 ---
 
@@ -20,13 +20,15 @@ Para administrar las ACL utilizaremos dos comandos principales:
 
 ## Consultar permisos con getfacl
 
-Para inspeccionar los permisos de un archivo o carpeta:
+El comando `getfacl` (get file access control list) permite leer y mostrar las listas de control de acceso de cualquier archivo o directorio. Su objetivo es diagnosticar de forma clara qué usuarios o grupos adicionales tienen permisos específicos y cuáles son sus permisos efectivos actuales.
+
+La sintaxis básica del comando es:
 
 ```bash
-getfacl $WORKSPACE/mi_proyecto
+getfacl <directorio_o_archivo>
 ```
 
-**Salida ejemplo:**
+Al ejecutar este comando sobre un elemento (por ejemplo, `$WORKSPACE/mi_proyecto`), se obtiene una salida estructurada similar a la siguiente:
 
 ```text
 # file: workspace1/$PI/$USER/mi_proyecto
@@ -36,6 +38,16 @@ user::rwx
 group::r-x
 other::---
 ```
+
+Cada línea de la salida proporciona información clave sobre la seguridad del objeto:
+
+* **`# file`**: indica la ruta del archivo o directorio consultado.
+* **`# owner` y `# group`**: identifican al usuario propietario y al grupo principal del archivo.
+* **`user::`**: muestra los permisos tradicionales del propietario (en este caso, `rwx`).
+* **`group::`**: muestra los permisos tradicionales del grupo propietario (en este caso, `r-x`).
+* **`other::`**: muestra los permisos tradicionales para cualquier otro usuario del sistema (en este caso, sin acceso: `---`).
+
+Si el archivo o directorio tiene reglas de ACL extendidas, estas aparecerán en líneas adicionales especificando el nombre del usuario o grupo correspondiente (por ejemplo, `user:usuario_colaborador:rwx`).
 
 ---
 
@@ -54,7 +66,6 @@ setfacl -m <tipo_entrada>:<nombre>:<permisos> <directorio_o_archivo>
 ```
 
 ### Dar acceso de lectura y escritura a un colaborador en tu $WORKSPACE
-
 Si deseas permitir que un colaborador (`usuario_colaborador`) trabaje en tu espacio de alto rendimiento:
 
 ```bash
@@ -62,11 +73,10 @@ Si deseas permitir que un colaborador (`usuario_colaborador`) trabaje en tu espa
 setfacl -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
 ```
 
-!!! note "Consejo"
-    El permiso de ejecución (`x`) en un directorio es necesario para que el usuario pueda entrar en él (usando `cd`) y listar su contenido.
+!!! note
+    Es importante recordar que el permiso de ejecución (`x`) en un directorio es un requisito indispensable en Linux para que cualquier usuario pueda acceder a su interior (usando el comando `cd`) y listar o interactuar con los elementos que contiene.
 
 ### Compartir un directorio con permisos de solo lectura
-
 Si solo quieres que un colaborador pueda visualizar y copiar tus resultados en tu almacenamiento `/home` (ej. en tu archivo):
 
 ```bash
@@ -75,7 +85,6 @@ setfacl -m u:usuario_colaborador:rx /home/$USER/archive/mis_resultados
 ```
 
 ### Dar acceso a un grupo completo de usuarios
-
 Para que todos los miembros del grupo de investigación `grupo_bioinfo` puedan leer tu directorio:
 
 ```bash
@@ -89,7 +98,6 @@ setfacl -m g:grupo_bioinfo:rx $WORKSPACE/mi_proyecto
 Por defecto, los archivos y subcarpetas que se creen dentro de un directorio no heredan las reglas de ACL. Para configurar la herencia automática de permisos para elementos futuros, se utiliza el flag `-d` (default).
 
 ### Combinación recomendada (recursivo y por defecto)
-
 Si quieres que tu colaborador tenga acceso tanto a lo que **ya existe** en el directorio, como a todo lo que se **cree en el futuro**:
 
 ```bash
@@ -106,27 +114,30 @@ setfacl -d -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
 
 Uno de los conceptos más importantes y que suele causar confusión es la **máscara (`mask::`)**.
 
-### ¿Qué es la máscara?
+En ACL la máscara actúa como un **"techo" o límite máximo** de permisos aplicable para todos los usuarios y grupos específicos añadidos (no afecta al propietario del archivo ni a la sección de "otros").
 
-La máscara actúa como un **"techo" o límite máximo** de permisos aplicable para todos los usuarios y grupos específicos añadidos (no afecta al propietario del archivo ni a "otros").
+Los permisos reales que tendrá un usuario o grupo (llamados **permisos efectivos**) se calculan realizando una operación lógica `AND` entre los permisos otorgados por la regla de ACL y la máscara actual. Si una regla de ACL otorga permisos que superan a la máscara, el usuario solo obtendrá la intersección de ambos.
 
-Si una regla de ACL otorga permisos que superan a la máscara, el usuario **solo obtendrá la intersección de ambos** (esto se conoce como **permiso efectivo**).
+Por ejemplo, si un usuario tiene permisos de lectura y escritura (`rw-`), pero la máscara se establece en solo lectura (`r--`), el permiso efectivo real de ese usuario será únicamente de lectura (`r--`).
+
+!!! note
+    Ciertos comandos estándar de Linux, como `chmod`, recalculan automáticamente la máscara de las ACL extendidas para que coincida con los permisos de grupo tradicionales del archivo. Esto significa que si ejecutas un comando como `chmod g-w archivo.txt`, el sistema podría reducir la máscara de ACL, limitando inesperadamente los accesos de escritura que habías configurado previamente para tus colaboradores.
 
 ### Ejemplo de restricción por máscara
 
-Si otorgas acceso total a tu colaborador:
+A continuación, se muestra de manera práctica cómo se aplica esta restricción en el sistema.
 
+Si primero otorgas acceso de lectura, escritura y ejecución a tu colaborador en un directorio:
 ```bash
 setfacl -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
 ```
 
-Y luego reduces la máscara del directorio para que sea solo de lectura (`r--`):
-
+Y luego reduces la máscara del mismo directorio para limitar los permisos a solo lectura (`r--`):
 ```bash
 setfacl -m m::r-- $WORKSPACE/mi_proyecto
 ```
 
-Al inspeccionar con `getfacl` verás lo siguiente:
+Al inspeccionar el directorio con `getfacl $WORKSPACE/mi_proyecto`, verás lo siguiente:
 
 ```text
 # file: workspace1/$PI/$USER/mi_proyecto
@@ -139,11 +150,10 @@ other::---
 ```
 
 !!! warning
-    Como la máscara es `r--`, el permiso real o efectivo de `usuario_colaborador` es reducido a solo lectura (`#effective:r--`), a pesar de tener `rwx` explícito.
-    Si un colaborador tiene problemas para escribir en una carpeta donde supuestamente tiene permisos, **revisa siempre la máscara**.
+    Como la máscara se redujo a `r--`, el permiso real o efectivo de `usuario_colaborador` queda restringido a solo lectura (`#effective:r--`), a pesar de que su regla individual de usuario sigue diciendo `rwx`.
+    Si un colaborador tiene problemas para escribir en una carpeta donde supuestamente tiene permisos asignados, **revisa siempre el valor de la máscara**.
 
-Para restaurar la máscara y permitir la escritura:
-
+Para restaurar los accesos y permitir de nuevo la escritura, debes restablecer la máscara a un nivel superior:
 ```bash
 setfacl -m m::rwx $WORKSPACE/mi_proyecto
 ```
@@ -161,7 +171,6 @@ Imagina que el usuario **Aldo** es el propietario del script `gpt.py` dentro de 
 A continuación, se muestran dos formas de realizar esta configuración.
 
 ### Opción A: mediante comandos individuales (paso a paso)
-
 Esta forma es ideal si vas agregando colaboradores de manera progresiva.
 
 ```bash
@@ -176,7 +185,6 @@ setfacl -m u:diego:--- $WORKSPACE/gpt.py
 ```
 
 ### Opción B: en una sola línea (comando combinado)
-
 Si quieres aplicar todas las reglas al mismo tiempo, puedes separar las instrucciones con comas:
 
 ```bash
@@ -184,7 +192,6 @@ setfacl -m u:david:r--,u:jose:rw-,u:diego:--- $WORKSPACE/gpt.py
 ```
 
 ### Comprobación del resultado (getfacl)
-
 Una vez ejecutados los comandos, Aldo ejecuta `getfacl $WORKSPACE/gpt.py` para verificar los accesos. La salida esperada es:
 
 ```text
@@ -206,21 +213,21 @@ other::---
 
 ## Eliminar permisos de ACL
 
-### Eliminar permisos de un usuario específico
+El comando `setfacl` también permite revocar los accesos especiales previamente otorgados.
+
+Para eliminar los permisos de acceso de un usuario específico en un archivo o directorio, se puede utilizar el flag `-x` (remove) seguido del identificador del usuario:
 
 ```bash
 setfacl -x u:usuario_colaborador $WORKSPACE/mi_proyecto
 ```
 
-### Eliminar permisos por defecto de un usuario específico
+Si necesitas eliminar la herencia de permisos (ACL por defecto) asociada a un usuario específico en un directorio sin afectar sus permisos sobre los archivos existentes, se combina el flag `-d` con `-x`:
 
 ```bash
 setfacl -d -x u:usuario_colaborador $WORKSPACE/mi_proyecto
 ```
 
-### Limpiar todas las ACLs (restaurar permisos tradicionales)
-
-Si quieres revocar todas las reglas de ACL y volver al esquema estándar de permisos de Linux:
+En caso de que desees finalizar la colaboración en su totalidad y restaurar el comportamiento de seguridad nativo de Linux, puedes remover todas las ACLs extendidas (tanto de usuarios como de grupos) y limpiar el archivo usando el flag `-b` (remove all):
 
 ```bash
 setfacl -b $WORKSPACE/mi_proyecto
@@ -229,6 +236,10 @@ setfacl -b $WORKSPACE/mi_proyecto
 ---
 
 ## Preservar ACLs al copiar o sincronizar
+
+Por defecto, los comandos de transferencia estándar de Linux (como `cp` o `rsync` sin argumentos adicionales) no copian los atributos extendidos del sistema de archivos. Esto significa que si copias un archivo o directorio con ACLs configuradas a otra ubicación, el nuevo archivo perderá todos los accesos especiales que habías definido, volviendo al esquema básico de permisos del usuario que realiza la copia.
+
+Para mantener la colaboración activa y evitar la pérdida de estos permisos durante traslados o copias de respaldo, es fundamental indicar explícitamente a las herramientas que preserven estos metadatos utilizando los flags correctos.
 
 **Con `cp`**: Utiliza el flag `-p` para conservar los atributos y ACLs:
 
