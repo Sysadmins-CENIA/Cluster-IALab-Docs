@@ -5,7 +5,7 @@ Las ACL (Access Control Lists) permiten definir permisos detallados para usuario
 Esta guía muestra cómo gestionar estos permisos utilizando ejemplos prácticos adaptados a nuestras rutas de almacenamiento.
 
 !!! note
-    En los siguientes ejemplos se asume el uso de la variable de entorno **`$WORKSPACE`** y **`$ARCHIVE`**, la primera apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (`/workspace1/$PI/$USER`) y la segunda a uno de almacenamiento de largo plazo (`/home/$PI/$USER/archive`). Para más detalles sobre el funcionamiento y las características de esto espacios, consulta la sección de [Almacenamiento](../storage.md).
+    En los siguientes ejemplos se asume el uso de la variable de entorno **`$WORKSPACE`** y **`$ARCHIVE`**, la primera apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (`/workspace1/$PI/$USER`) y la segunda a uno de almacenamiento de largo plazo (`/home/$PI/$USER/archive`). Para más detalles sobre el funcionamiento y las características de estos espacios, consulta la sección de [Almacenamiento](../storage.md).
 
 ---
 
