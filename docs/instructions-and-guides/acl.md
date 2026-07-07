@@ -5,7 +5,7 @@ Las ACL (Access Control Lists) permiten definir permisos detallados para usuario
 Esta guía muestra cómo gestionar estos permisos utilizando ejemplos prácticos adaptados a nuestras rutas de almacenamiento.
 
 !!! note
-    En los siguientes ejemplos se asume el uso de la variable de entorno **`$WORKSPACE`**, la cual apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (`/workspace1/$PI/$USER`). Para más detalles sobre el funcionamiento y las características de este espacio, consulta la sección de [Almacenamiento](../storage.md)
+    En los siguientes ejemplos se asume el uso de la variable de entorno **`$WORKSPACE`** y **`$ARCHIVE`**, la primera apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (`/workspace1/$PI/$USER`) y la segunda a uno de almacenamiento de largo plazo (`/home/$PI/$USER/archive`). Para más detalles sobre el funcionamiento y las características de esto espacios, consulta la sección de [Almacenamiento](../storage.md).
 
 ---
 
@@ -47,7 +47,7 @@ Cada línea de la salida proporciona información clave sobre la seguridad del o
 * **`group::`**: muestra los permisos tradicionales del grupo propietario (en este caso, `r-x`).
 * **`other::`**: muestra los permisos tradicionales para cualquier otro usuario del sistema (en este caso, sin acceso: `---`).
 
-Si el archivo o directorio tiene reglas de ACL extendidas, estas aparecerán en líneas adicionales especificando el nombre del usuario o grupo correspondiente (por ejemplo, `user:usuario_colaborador:rwx`).
+Si el archivo o directorio tiene reglas de ACL extendidas, estas aparecerán en líneas adicionales especificando el nombre del usuario o grupo correspondiente. Por ejemplo: `user:usuario_colaborador:rwx`.
 
 ---
 
@@ -77,11 +77,11 @@ setfacl -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
     Es importante recordar que el permiso de ejecución (`x`) en un directorio es un requisito indispensable en Linux para que cualquier usuario pueda acceder a su interior (usando el comando `cd`) y listar o interactuar con los elementos que contiene.
 
 ### Compartir un directorio con permisos de solo lectura
-Si solo quieres que un colaborador pueda visualizar y copiar tus resultados en tu almacenamiento `/home` (ej. en tu archivo):
+Si solo quieres que un colaborador pueda visualizar y copiar tus resultados en tu almacenamiento `/home`. Por ejemplo en tu archivo en el directorio `$ARCHIVE/mis_resultados`:
 
 ```bash
 # Otorga lectura (r) y ejecución (x)
-setfacl -m u:usuario_colaborador:rx /home/$USER/archive/mis_resultados
+setfacl -m u:usuario_colaborador:rx $ARCHIVE/mis_resultados
 ```
 
 ### Dar acceso a un grupo completo de usuarios
@@ -244,11 +244,11 @@ Para mantener la colaboración activa y evitar la pérdida de estos permisos dur
 **Con `cp`**: Utiliza el flag `-p` para conservar los atributos y ACLs:
 
 ```bash
-cp -p archivo.txt /home/$USER/archive/
+cp -p archivo.txt $ARCHIVE
 ```
 
 **Con `rsync`**: Utiliza el flag `-A` (o `--acls`) para transferir las ACLs:
 
 ```bash
-rsync -avA $WORKSPACE/mi_proyecto /home/$USER/archive/
+rsync -avA $WORKSPACE/mi_proyecto $ARCHIVE
 ```
