@@ -1,4 +1,6 @@
 site_name: Cluster IALab
+site_url: https://sysadmins-cenia.github.io/Cluster-IALab-Docs/
+site_description: Documentación técnica del Clúster IALab de CENIA // DCC UC
 nav:
   - Introducción: index.md
   - Primeros Pasos:
@@ -18,7 +20,9 @@ nav:
     - Recursos de cómputo adicionales: compute_grants.md
     - Monitoreo de Recursos 🔗: https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a
 
-theme: readthedocs
+theme:
+  name: readthedocs
+  custom_dir: overrides
 
 plugins:
   - open-in-new-tab
