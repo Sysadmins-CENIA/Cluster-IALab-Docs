@@ -82,7 +82,33 @@ Libera espacio cuando termines una simulación o análisis moviendo únicamente 
 
 Mantener un uso ordenado de estos directorios es clave para la convivencia y el rendimiento general del clúster. Recuerda que el almacenamiento compartido es un recurso común: ¡tu organización beneficia a todo el equipo!
 
+## **Chequeo de cuotas**
 
+Es importante que tengas noción de cuánto espacio tienes ocupado y el restante según la cuota asignada.
+
+Para revisar esto, ejecuta en la terminal `cluster-quota`, que te mostrará una vista similar a esto:
+
+```
+=== Wapol (NAS) ===
+
+Dataset     Host                Used       Quota        Free   Use %
+------------------------------------------------------------------------
+homes       -               15.06 GB    50.00 GB    34.94 GB  30.11%
+archive     -              138.25 GB   200.00 GB    61.75 GB  69.13%
+scratch     -              341.17 KB   500.00 GB   500.00 GB   0.00%
+
+=== Workspace (ext4) ===
+
+Filesystem  Host                Used       Quota        Free   Use %
+------------------------------------------------------------------------
+workspace1  ahsoka          11.37 GB   200.00 GB   188.63 GB   5.69%
+workspace1  antuco           4.00 KB   200.00 GB   200.00 GB   0.00%
+workspace1  hydra           72.80 GB   200.00 GB   127.20 GB  36.40%
+workspace1  llaima          67.29 GB   200.00 GB   132.71 GB  33.65%
+workspace1  scylla           9.98 GB   200.00 GB   190.02 GB   4.99%
+workspace1  ventress        42.77 GB   200.00 GB   157.23 GB  21.38%
+workspace1  yodaxico         4.00 KB   200.00 GB   200.00 GB   0.00%
+```
 
 ## **Comandos útiles**
 
