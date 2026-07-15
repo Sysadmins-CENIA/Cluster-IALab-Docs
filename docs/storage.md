@@ -86,7 +86,7 @@ Mantener un uso ordenado de estos directorios es clave para la convivencia y el 
 
 Es importante que tengas noción de cuánto espacio tienes ocupado y el restante según la cuota asignada.
 
-Para revisar esto, ejecuta en la terminal `cluster-quota`, que te mostrará una vista similar a esto:
+Para revisar esto, ejecuta en Kraken el siguiente comando: `cluster-quota`, te mostrará una vista similar a esto:
 
 ```
 === Wapol (NAS) ===
