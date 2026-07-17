@@ -1,5 +1,5 @@
 site_name: Cluster IALab
-site_url: https://sysadmins-cenia.github.io/Cluster-IALab-Docs/
+site_url: https://cluster.cenia.cl/
 site_description: Documentación técnica del Clúster IALab de CENIA // DCC UC
 nav:
   - Introducción: index.md
