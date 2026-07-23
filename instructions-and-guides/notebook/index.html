@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/instructions-and-guides/notebook/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Servidor de Notebooks (Jupyter) - Cluster IALab</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Servidor de Notebooks (Jupyter)";
+        var mkdocs_page_input_path = "instructions-and-guides/notebook.md";
+        var mkdocs_page_url = "/instructions-and-guides/notebook/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="Servidor de Notebooks (Jupyter) · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/instructions-and-guides/notebook/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Servidor de Notebooks (Jupyter) · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Servidor de Notebooks (Jupyter)</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-enviar-el-servidor-de-notebooks">1. Enviar el servidor de notebooks</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-crear-el-tunel-ssh">2. Crear el túnel SSH</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-conectarte-desde-el-navegador">3. Conectarte desde el navegador</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#al-terminar">Al terminar</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#solucion-de-problemas">Solución de problemas</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Instrucciones y Guías</li>
+      <li class="breadcrumb-item active">Servidor de Notebooks (Jupyter)</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="servidor-de-notebooks-jupyter">Servidor de notebooks (Jupyter)</h1>
+<p>Para trabajar con Jupyter en el clúster debes ejecutar el servidor a un nodo de cómputo <strong>como un trabajo de SLURM</strong>. Luego debes crear un <strong>túnel SSH</strong> desde tu computador hacia ese nodo para poder abrir el notebook en tu navegador local.</p>
+<p>El flujo tiene tres pasos:</p>
+<ol>
+<li>Enviar el servidor de notebooks con <code>sbatch</code>.</li>
+<li>Crear un túnel SSH desde tu computador.</li>
+<li>Conectarte desde el navegador a <code>localhost</code>.</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Prerrequisito: Jupyter instalado</p>
+<p>Jupyter debe estar instalado en el entorno que actives dentro del script. Si aún no lo tienes, instálalo en tu virtualenv o entorno de conda con <code>pip install notebook</code>.</p>
+</div>
+<h2 id="1-enviar-el-servidor-de-notebooks">1. Enviar el servidor de notebooks</h2>
+<p>Usa un script como el siguiente para lanzar el servidor. Está disponible en la carpeta <a href="https://github.com/Sysadmins-CENIA/Cluster-IALab-Docs/tree/main/assets/samples/notebook">samples</a> del repositorio.</p>
+<pre><code class="language-bash">#!/bin/bash
+#SBATCH --job-name=notebook            # Nombre del trabajo
+#SBATCH --mail-type=END,FAIL           # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
+#SBATCH --mail-user=&lt;mail&gt;             # El mail del usuario
+#SBATCH --ntasks=1                     # Correr una sola tarea
+#SBATCH --cpus-per-task=4              # Número de CPUs (threads) para el notebook
+#SBATCH --mem=8gb                      # Memoria reservada para el trabajo
+#SBATCH --partition=ialab              # Partición donde correr el trabajo
+#SBATCH --nodelist=&lt;node&gt;              # Nodo donde correr el trabajo
+#SBATCH --output=slurm/logs/%x_%j.log  # Nombre del output (%x=nombre del trabajo, %j=ID del trabajo)
+#SBATCH --time=8:00:00                 # Tiempo limite del trabajo. Importante definirlo para no
+                                       # mantener recursos ocupados si olvidas cerrar el servidor
+##SBATCH --gres=gpu:1                  # Solicitar una GPU de ser necesario (descomentar si se necesita)
+
+pwd; hostname; date
+
+# Activa tu entorno acá (por ejemplo, tu virtualenv o entorno de conda).
+# source ~/venv/bin/activate
+
+# Reemplaza &lt;port&gt; por un número de puerto libre (ej: 8888).
+PORT=&lt;port&gt;
+
+echo &quot;Iniciando servidor de notebooks&quot;
+echo &quot;&quot;
+echo &quot;Para conectarte, ejecuta en tu máquina local:&quot;
+echo &quot;  ssh -L localhost:8888:$(hostname):${PORT} &lt;usuario&gt;@kraken.ing.puc.cl&quot;
+echo &quot;Luego abre http://localhost:8888 en tu navegador.&quot;
+echo &quot;El token de acceso aparece más abajo en este mismo log.&quot;
+echo &quot;&quot;
+
+jupyter notebook --no-browser --ip=&quot;*&quot; --port=${PORT}
+
+echo &quot;Trabajo $SLURM_JOBID finalizado&quot;
+date
+</code></pre>
+<p>Antes de enviarlo, reemplaza los valores entre <code>&lt;&gt;</code>:</p>
+<ul>
+<li><code>&lt;mail&gt;</code>: tu correo para las notificaciones.</li>
+<li><code>&lt;node&gt;</code>: el nodo de cómputo donde quieres correr el servidor.</li>
+<li><code>&lt;port&gt;</code>: un número de puerto libre (por ejemplo <code>8888</code>). <strong>Anótalo</strong>, porque debe coincidir con el que usarás en el túnel SSH.</li>
+</ul>
+<p>Guarda el script (por ejemplo como <code>run-notebook-server.sh</code>) y envíalo. Antes crea la carpeta donde se guardará el log, ya que SLURM no la crea automáticamente:</p>
+<pre><code class="language-bash">mkdir -p slurm/logs
+sbatch run-notebook-server.sh
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Token de acceso</p>
+<p>Jupyter genera un <em>token</em> de acceso que aparece en el archivo de log del trabajo (<code>slurm/logs/notebook_&lt;jobid&gt;.log</code>). Lo necesitarás en el paso 3 para abrir el notebook.</p>
+</div>
+<div class="admonition warning">
+<p class="admonition-title">Recuerda el tiempo límite</p>
+<p>Define siempre un <code>--time</code> acotado. Si olvidas cerrar el servidor, el trabajo seguirá ocupando recursos hasta que se agote ese tiempo.</p>
+</div>
+<h2 id="2-crear-el-tunel-ssh">2. Crear el túnel SSH</h2>
+<p>Con el servidor corriendo, abre una <strong>nueva terminal en tu computador</strong> y crea el túnel SSH:</p>
+<pre><code class="language-bash">ssh -L localhost:8888:&lt;node&gt;:&lt;port&gt; &lt;usuario&gt;@kraken.ing.puc.cl
+</code></pre>
+<p>Donde:</p>
+<ul>
+<li><code>&lt;node&gt;</code>: el mismo nodo donde quedó corriendo el trabajo (el que indicaste en <code>--nodelist</code>).</li>
+<li><code>&lt;port&gt;</code>: <strong>debe ser igual</strong> al <code>&lt;port&gt;</code> que definiste dentro del script.</li>
+<li><code>&lt;usuario&gt;</code>: tu usuario del clúster.</li>
+<li><code>8888</code>: el puerto local de tu computador que abrirás en el navegador. Puede ser cualquier puerto libre; si lo cambias, ajusta también la dirección del paso 3.</li>
+</ul>
+<p>Deja esta terminal abierta: mientras el túnel esté activo, mantiene la conexión entre tu computador y el nodo de cómputo.</p>
+<h2 id="3-conectarte-desde-el-navegador">3. Conectarte desde el navegador</h2>
+<p>Con el túnel activo, abre tu navegador y entra a:</p>
+<pre><code>http://localhost:8888
+</code></pre>
+<p>Si Jupyter te pide un <em>token</em>, cópialo desde el log del trabajo (ver la nota del paso 1) y pégalo. ¡Listo! Ya puedes trabajar con tus notebooks ejecutándose en el clúster.</p>
+<h2 id="al-terminar">Al terminar</h2>
+<p>Cuando termines, <strong>cierra el servidor</strong> para liberar los recursos en vez de esperar a que se agote el tiempo límite. Puedes cancelar el trabajo con:</p>
+<pre><code class="language-bash">scancel &lt;jobid&gt;
+</code></pre>
+<p>Puedes obtener el <code>&lt;jobid&gt;</code> con <code>squeue --me</code>.</p>
+<h2 id="solucion-de-problemas">Solución de problemas</h2>
+<p><strong>El navegador muestra "connection refused" o no carga.</strong>
+Verifica que el túnel SSH del paso 2 siga abierto y que el trabajo ya esté corriendo (revisa el log del paso 1). Confirma también que el <code>&lt;port&gt;</code> del túnel sea exactamente el mismo que definiste dentro del script.</p>
+<p><strong>El túnel SSH falla con "bind: Address already in use".</strong>
+El puerto local (<code>8888</code>) ya está ocupado en tu computador, probablemente por otro túnel o servidor. Usa otro puerto local en el comando (por ejemplo <code>localhost:8889:...</code>) y abre esa misma dirección en el navegador.</p>
+<p><strong>Jupyter pide un token que no encuentro.</strong>
+El token se imprime en el log del trabajo (<code>slurm/logs/notebook_&lt;jobid&gt;.log</code>). Si no aparece, es probable que el servidor aún no haya terminado de iniciar; espera unos segundos y vuelve a revisar el log.</p>
+<p><strong>El log dice "jupyter: command not found".</strong>
+Jupyter no está instalado en el entorno o no lo activaste. Revisa que la línea que activa tu entorno esté descomentada y que Jupyter esté instalado (ver el prerrequisito al inicio de la página).</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../slurm_examples/" class="btn btn-neutral float-left" title="Ejemplos de SLURM"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../acl/" class="btn btn-neutral float-right" title="Compartir datos usando ACL">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../slurm_examples/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../acl/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

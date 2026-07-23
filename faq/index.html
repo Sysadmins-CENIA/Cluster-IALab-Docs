@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/faq/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>FAQ - Cluster IALab</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "FAQ";
+        var mkdocs_page_input_path = "faq.md";
+        var mkdocs_page_url = "/faq/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="FAQ · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/faq/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FAQ · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">FAQ</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#conceptos-basicos-y-acceso">Conceptos Básicos y Acceso</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#uso-de-recursos-slurm-y-memoria">Uso de Recursos, Slurm y Memoria</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#hardware-y-nodos-nvidia-vs-amd">Hardware y Nodos (NVIDIA vs AMD)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#gestion-de-archivos-espacio-y-workspaces">Gestión de Archivos, Espacio y Workspaces</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#entorno-de-software-y-contenedores">Entorno de Software y Contenedores</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#optimizacion-y-rendimiento">Optimización y Rendimiento</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#resolucion-de-problemas-avanzada">Resolución de Problemas Avanzada</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Otros</li>
+      <li class="breadcrumb-item active">FAQ</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="faq-cluster-ialab-preguntas-frecuentes">FAQ: Cluster IALab - Preguntas Frecuentes</h1>
+<p>Esta sección contiene las respuestas a las dudas más comunes sobre el uso y operación del Cluster IALab.</p>
+<h2 id="conceptos-basicos-y-acceso">Conceptos Básicos y Acceso</h2>
+<p><strong>1-. ¿Por qué no puedo acceder al clúster?</strong></p>
+<p>Si tu sesión es rechazada, es probable que hayas excedido la cuota de almacenamiento de tu home. Envía un ticket de soporte CENIA (detallado en el <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> para revisar tu situación.</p>
+<p><strong>2-. ¿Qué es el nodo Kraken?</strong></p>
+<p>Es el nodo de gestión (headnode). Úsalo solo para organizar archivos y lanzar tareas; no ejecutes cálculos pesados aquí.</p>
+<p><strong>3-. ¿Cómo accedo al cluster?</strong></p>
+<p>Debes conectarte vía SSH a través del nodo <em>Kraken</em> utilizando tus credenciales.</p>
+<p><strong>4-. ¿Cómo solicito acceso inicial?</strong></p>
+<p>Contacta al equipo de administración a través de los canales oficiales del laboratorio.</p>
+<p><strong>5-. ¿Qué es el "Cluster"?</strong></p>
+<p>Es un conjunto de computadoras interconectadas que trabajan como una unidad para procesar tareas científicas masivas.</p>
+<h2 id="uso-de-recursos-slurm-y-memoria">Uso de Recursos, Slurm y Memoria</h2>
+<p><strong>6-. ¿Cómo envío un trabajo al cluster?</strong></p>
+<p>Utiliza el comando <code>sbatch</code> seguido de tu script de ejecución configurado para <em>Slurm</em>. Todo trabajo enviado directamente al nodo sin pasar por Slurm será cancelado automáticamente.</p>
+<p><strong>7-. ¿Cómo verifico el estado de mis trabajos?</strong></p>
+<p>Usa <code>squeue -u &lt;tu_usuario&gt;</code> para ver la lista de tus procesos activos.</p>
+<p><strong>8-. ¿Cómo cancelo un trabajo?</strong></p>
+<p>Usa <code>scancel &lt;job_id&gt;</code> para detener un proceso.</p>
+<p><strong>9-. ¿Qué significa que un trabajo esté en estado "PENDING"?</strong></p>
+<p>Significa que está en cola esperando recursos (CPU/GPU) o que no hay nodos disponibles.</p>
+<p><strong>10-. ¿Existe un límite de tiempo por ejecución?</strong></p>
+<p>Sí, el límite máximo es de 24 horas por trabajo.</p>
+<p><strong>11-. ¿Qué pasa si mi trabajo se excede de las 24 horas?</strong></p>
+<p>El sistema lo terminará automáticamente. Implementa <em>checkpoints</em> en tu código.</p>
+<p><strong>12-. ¿Qué pasa si no especifico memoria en mi script?</strong></p>
+<p>Si no defines el parámetro <code>--mem</code>, el sistema asignará por defecto 4GB de RAM por cada CPU solicitada.</p>
+<p><strong>13-. ¿Cuál es el máximo de memoria RAM que puedo asignar?</strong></p>
+<p>El límite máximo estipulado por cada trabajo en el IALab es de 128 GB de memoria RAM.</p>
+<p><strong>14-. ¿Existe un límite en la cantidad de CPUs a solicitar?</strong></p>
+<p>Sí. Si no utilizas el flag <code>--mem</code> para definir una memoria específica, el límite máximo de CPUs que puedes solicitar es de 33. Esto evita que el cálculo automático de memoria (4GB por CPU) exceda el límite total de 128 GB del clúster por trabajo.</p>
+<h2 id="hardware-y-nodos-nvidia-vs-amd">Hardware y Nodos (NVIDIA vs AMD)</h2>
+<p><strong>15-. ¿Cuáles son los nodos con GPU NVIDIA?</strong></p>
+<p>Son <em>Hydra, Scylla, Llaima, Ahsoka</em> y <em>Yodaxico</em>.</p>
+<p><strong>16-. ¿Es obligatorio usar contenedores en el nodo Antuco?</strong></p>
+<p>No es un requisito estricto, pero es altamente recomendado. La arquitectura de AMD (ROCm) requiere librerías muy específicas y dependencias que suelen entrar en conflicto con el entorno local del usuario. Utilizar un contenedor asegura la compatibilidad con el hardware.</p>
+<p><strong>17-. ¿Cómo solicito una GPU específica en mi script?</strong></p>
+<p>Usa la directiva <code>#SBATCH --gres=gpu:1</code> en tu script.</p>
+<p><strong>18-. ¿Puedo elegir en qué nodo ejecutar específicamente?</strong></p>
+<p><em><em>Sí, puedes usar <code>--nodelist=nombre_nodo</code>, aunque se recomienda dejar que </em>Slurm</em> gestione la carga.</p>
+<h2 id="gestion-de-archivos-espacio-y-workspaces">Gestión de Archivos, Espacio y Workspaces</h2>
+<p><strong>19-. ¿Dónde debo guardar mis archivos?</strong></p>
+<p>Utiliza directorios de usuario (home) o volúmenes compartidos.</p>
+<p><strong>20-. ¿Cómo uso los workspaces?</strong></p>
+<p>Cada nodo de cómputo tiene un disco o discos de almacenamiento local, ubicados en <code>/workspace1</code>. Este es el único almacenamiento que se puede usar para tareas de entrenamiento. Está estrictamente prohibido leer y escribir desde tu almacenamiento persistente (<code>home</code>, <code>scratch</code> o <code>archive</code>) durante tareas de entrenamiento. Por esto, si vas a usar un nodo determinado para un experimento o investigación, el procedimiento correcto es copiar los datos que vayas a utilizar desde tu almacenamiento persistente (<code>scratch</code> o <code>archive</code>) al workspace del nodo y guardar todos los modelos/pesos/outputs en este mismo directorio.</p>
+<p>Puedes hacer esto directamente desde <code>kraken</code>. Por ejemplo, si vas a entrenar en el nodo <code>ahsoka</code>, puedes copiar los datos relevantes desde tu <code>scratch</code> o <code>archive</code> al directorio <code>/workspaces/ahsoka-workspace1/&lt;usuario_investigador&gt;/&lt;tu nombre de usuario&gt;</code> (solo disponible en kraken) con los comandos <code>cp</code> o <code>rsync</code>. Si este último directorio no existiese, puedes enviar un ticket al <a href="mailto:soporte@cenia.cl">soporte TI</a> para solicitar su creación. Si vas a copiar muchos datos, es recomendable dejar el proceso de copia corriendo dentro de una instancia de <code>tmux</code>.</p>
+<p>Es tu propia responsabilidad desocupar el espacio en los <code>workspaces</code> de los nodos de cómputo cuando termines un proyecto y respaldar lo necesario a tu almacenamiento persistente (<code>scratch</code> o <code>archive</code>). Recuerda que la capacidad de los <code>workspaces</code> es limitada y compartida, y datos de mucha antigüedad en un workspace pueden estar sujetos a ser eliminados.</p>
+<p><strong>21-. ¿Qué es el directorio <code>/scratch</code> de mi home y cómo lo uso?</strong></p>
+<p>Es almacenamiento temporal de alto rendimiento. Úsalo para cálculos, pero mueve los resultados a tu <code>/home</code> al finalizar.</p>
+<p><strong>22-. ¿Qué es el directorio <code>/archive</code> de mi home y cómo lo uso?</strong></p>
+<p>Almacenamiento a largo plazo para resultados importantes,
+Ideal para: Almacenar backups importantes, Resultados finales, datos de publicaciones.</p>
+<p><strong>23-. ¿Cómo transfiero archivos desde mi PC local al cluster?</strong></p>
+<p>Usa <code>scp</code> o <code>rsync</code>. Ejemplo: <code>rsync -avz mi_proyecto/ usuario@kraken:/home/usuario/</code>.</p>
+<p><strong>24-. ¿Qué hago si me quedo sin espacio en disco?</strong></p>
+<p>Revisa tu uso con <code>du -sh *</code> y elimina archivos temporales o logs antiguos.</p>
+<p><strong>25-. ¿Los archivos en el cluster están respaldados?</strong></p>
+<p>No existe backup automático. Mantén copias de resultados críticos fuera del cluster.</p>
+<p><strong>26-. ¿Puedo compartir datos con otros usuarios?</strong></p>
+<p>Sí, utiliza directorios de grupo con permisos de lectura (<code>chmod g+r</code>).</p>
+<h2 id="entorno-de-software-y-contenedores">Entorno de Software y Contenedores</h2>
+<p><strong>27-. ¿Puedo usar Docker?</strong></p>
+<p>Sí, pero el uso de Docker en nodos de cómputo debe ser autorizado previamente. Envía un ticket a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> para evaluar tu caso.</p>
+<p><strong>28-. ¿Por qué debo ejecutar mis contenedores a través de Slurm?</strong></p>
+<p>Es estrictamente obligatorio porque Slurm garantiza que tu contenedor tenga acceso exclusivo y seguro al hardware (GPU/CPU/RAM) asignado. Ejecutar fuera de Slurm compromete la estabilidad del sistema, causa conflictos de memoria con otros usuarios y evita que el clúster balancee la carga correctamente.</p>
+<h2 id="optimizacion-y-rendimiento">Optimización y Rendimiento</h2>
+<p><strong>29-. ¿Qué son los "nodos de cómputo" vs "headnode"?</strong></p>
+<p>Kraken coordina; los otros ejecutan. No entrenes en Kraken.</p>
+<p><strong>30-. ¿Cómo sé cuánta memoria RAM requiere mi trabajo?</strong></p>
+<p>Prueba y revisa con el comando <code>seff &lt;job_id&gt;</code> al terminar.</p>
+<p><strong>31-. ¿Por qué mis resultados son inconsistentes?</strong></p>
+<p>Asegúrate de configurar semillas (seeds) aleatorias si tu código es estocástico.</p>
+<p><strong>32-. ¿Es mejor enviar muchos trabajos pequeños o uno grande?</strong></p>
+<p>Usa arreglos de tareas (<em>job arrays</em>) si tienes muchos archivos pequeños.</p>
+<p><strong>33-. ¿Qué significa "Hyperthreading"?</strong></p>
+<p>Considera que un núcleo físico ejecuta dos hilos al solicitar <code>--cpus-per-task</code>.</p>
+<h2 id="resolucion-de-problemas-avanzada">Resolución de Problemas Avanzada</h2>
+<p><strong>34-. ¿Cómo depuro un error de segmentación (segfault)?</strong></p>
+<p>Ejecuta interactivamente con <code>srun --pty bash</code>.</p>
+<p><strong>35-. ¿Qué hago si olvido cancelar un trabajo en bucle?</strong></p>
+<p>Usa <code>scancel -u &lt;tu_usuario&gt;</code>.</p>
+<p><strong>36-. ¿Por qué Antuco me da errores de librerías CUDA?</strong></p>
+<p>Es un nodo AMD; usa contenedores compatibles con <strong>ROCm</strong>.</p>
+<p><strong>37-. ¿Qué es el "OOM Killer"?</strong></p>
+<p>El sistema mata tu proceso porque se quedó sin RAM. Solicita más memoria con <code>--mem=...</code>.</p>
+<p><strong>38-. ¿Cómo reporto un problema de infraestructura?</strong></p>
+<p>Envía un correo detallando: nodo, job ID, comando y error exacto a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a></p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../additional_resources/" class="btn btn-neutral float-left" title="Solicitud de Recursos Adicionales"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../compute_grants/" class="btn btn-neutral float-right" title="Recursos de cómputo adicionales">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../additional_resources/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../compute_grants/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

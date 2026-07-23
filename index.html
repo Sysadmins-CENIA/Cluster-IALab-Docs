@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC" /><link rel="canonical" href="https://cluster.cenia.cl/" />
+      <link rel="shortcut icon" href="img/favicon.ico" />
+    <title>Cluster IALab</title>
+    <link rel="stylesheet" href="css/theme.css" />
+    <link rel="stylesheet" href="css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Introducci\u00f3n";
+        var mkdocs_page_input_path = "index.md";
+        var mkdocs_page_url = "/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+                <li class="toctree-l1 current"><a class="reference internal current" href="#">Introducción</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#que-es-el-cluster">¿Qué es el clúster?</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#canales-de-comunicacion-y-soporte">Canales de comunicación y soporte</a>
+    </li>
+    </ul>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="instructions-and-guides/ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="instructions-and-guides/slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="instructions-and-guides/slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="instructions-and-guides/notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="instructions-and-guides/acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href=".">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="." class="icon icon-home" aria-label="Docs"></a></li>
+      <li class="breadcrumb-item active">Introducción</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="introduccion">Introducción</h1>
+<p>Bienvenid@ a la documentación del <strong>Clúster IALab</strong> de CENIA // DCC UC.</p>
+<p>Aquí encontrarás toda la información necesaria para acceder y hacer uso eficiente de los recursos computacionales disponibles: desde el proceso de registro hasta las guías de uso de SLURM, pasando por las políticas de almacenamiento, las buenas prácticas del clúster y tutoriales.</p>
+<h2 id="que-es-el-cluster">¿Qué es el clúster?</h2>
+<p>El clúster IALab es un conjunto de servidores diseñado para ejecutar cargas de trabajo computacionalmente exigentes de forma eficiente. Permite que múltiples usuarios trabajen en paralelo, con acceso a GPUs, CPUs y memoria de alto rendimiento.</p>
+<h2 id="canales-de-comunicacion-y-soporte">Canales de comunicación y soporte</h2>
+<p><strong>Canal de Telegram — Cluster IALab</strong></p>
+<p>El medio principal de comunicación del clúster es el canal de Telegram.</p>
+<p><a class="md-button" href="https://t.me/+C6otxYK7Z5RsX-sW">Unirse al canal</a></p>
+<p><strong>Soporte técnico</strong></p>
+<p>Si necesitas asistencia con una eventualidad puntual, puedes crear un ticket de soporte enviando un correo a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a>.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="onboarding/" class="btn btn-neutral float-right" title="Primeros Pasos / Registro">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+    
+      <span><a href="onboarding/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = ".";</script>
+    <script src="js/theme_extra.js"></script>
+    <script src="js/theme.js"></script>
+      <script src="js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.6.1
+Build Date UTC : 2026-07-23 16:06:52.459881+00:00
+-->

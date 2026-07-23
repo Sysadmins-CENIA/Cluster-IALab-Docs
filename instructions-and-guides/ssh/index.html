@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/instructions-and-guides/ssh/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>SSH - Cluster IALab</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "SSH";
+        var mkdocs_page_input_path = "instructions-and-guides/ssh.md";
+        var mkdocs_page_url = "/instructions-and-guides/ssh/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="SSH · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/instructions-and-guides/ssh/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SSH · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">SSH</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#1-obligatorio-cambio-de-contrasena">1. Obligatorio - Cambio de contraseña</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#2-recomendado-llave-ssh">2. Recomendado - Llave SSH</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#21-creando-una-llave-ssh">2.1 Creando una llave SSH</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#22-copiando-la-llave-ssh-al-cluster">2.2 Copiando la llave SSH al clúster</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#3-opcional-configuracion-de-ssh">3. Opcional - Configuración de SSH</a>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Instrucciones y Guías</li>
+      <li class="breadcrumb-item active">SSH</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="uso-de-ssh">Uso de SSH</h1>
+<p>El nodo de entrada al clúster es <code>kraken.ing.puc.cl</code>. Para conectarte usa el comando:</p>
+<pre><code class="language-bash">ssh &lt;usuario&gt;@kraken.ing.puc.cl
+</code></pre>
+<p><strong>Nota:</strong> En las siguientes instrucciones, reemplaza <code>&lt;usuario&gt;</code> por el nombre de usuario que solicitaste al crear tu cuenta.</p>
+<p>En esta guía verás cómo:</p>
+<ol>
+<li>Cambiar tu contraseña por defecto (<strong>obligatorio</strong>).</li>
+<li>Configurar una llave SSH para conectarte sin contraseña (<strong>recomendado</strong>).</li>
+<li>Crear alias y saltos a nodos de cómputo con <code>.ssh/config</code> (<strong>opcional</strong>).</li>
+</ol>
+<div class="admonition note">
+<p class="admonition-title">Cliente SSH</p>
+<p>En Linux y macOS el cliente <code>ssh</code> ya viene instalado. En Windows puedes usarlo desde PowerShell (incluido en Windows 10 y posteriores) o desde WSL. Los comandos de esta guía son los mismos en todos los casos.</p>
+</div>
+<h2 id="1-obligatorio-cambio-de-contrasena">1. Obligatorio - Cambio de contraseña</h2>
+<p>Lo primero es cambiar tu contraseña por defecto para evitar accesos no autorizados. Conéctate al clúster y ejecuta el comando <code>passwd</code>:</p>
+<pre><code class="language-bash">[pc-personal]$ ssh &lt;usuario&gt;@kraken.ing.puc.cl
+[kraken]$ passwd
+[kraken]Current password:
+[kraken]New password:
+[kraken]Retype new password:
+[kraken]passwd: Password updated successfully
+[kraken]$ exit
+[pc-personal]$
+</code></pre>
+<h2 id="2-recomendado-llave-ssh">2. Recomendado - Llave SSH</h2>
+<p>Este paso es opcional, pero muy recomendado por seguridad y comodidad.</p>
+<h3 id="21-creando-una-llave-ssh">2.1 Creando una llave SSH</h3>
+<p>El procedimiento es el mismo en Linux, Mac o WSL en Windows:</p>
+<pre><code class="language-bash">ssh-keygen -t ed25519 -C &quot;tu@email.com&quot;
+
+# Acepta la ubicación por defecto: ~/.ssh/id_ed25519
+# Puedes agregar una passphrase (recomendado) o dejarla vacía
+
+# Ver las claves generadas
+ls ~/.ssh/
+# id_ed25519       ← clave privada (NUNCA compartas esto)
+# id_ed25519.pub   ← clave pública (ésta la compartes)
+</code></pre>
+<div class="admonition danger">
+<p class="admonition-title">Nunca compartas tu llave privada</p>
+<p>La llave privada (el archivo <strong>sin</strong> la extensión <code>.pub</code>) es secreta y solo debe permanecer en tu computador. Nunca la envíes por correo, chat ni la subas a ningún repositorio.</p>
+</div>
+<h3 id="22-copiando-la-llave-ssh-al-cluster">2.2 Copiando la llave SSH al clúster</h3>
+<p>Copia tu llave <strong>pública</strong> al clúster. Si tu llave está en <code>.ssh/id_ed25519.pub</code>, ejecuta:</p>
+<pre><code class="language-bash"># Opción 1: usar ssh-copy-id (la forma más simple)
+
+ssh-copy-id -i ~/.ssh/id_ed25519.pub &lt;usuario&gt;@kraken.ing.puc.cl
+
+
+# Opción 2: copiar manualmente (si no tienes ssh-copy-id)
+
+cat ~/.ssh/id_ed25519.pub
+
+# Copia el output y pégalo en ~/.ssh/authorized_keys en el servidor
+
+# En el servidor, el archivo queda así:
+# ~/.ssh/authorized_keys
+# ssh-ed25519 AAAA...clave... tu@email.com
+</code></pre>
+<p>La primera vez que te conectes, <code>ssh-copy-id</code> te pedirá tu contraseña del clúster para instalar la llave. Después de eso podrás conectarte sin contraseña (o usando tu passphrase, si configuraste una).</p>
+<h2 id="3-opcional-configuracion-de-ssh">3. Opcional - Configuración de SSH</h2>
+<p>Puedes facilitar el uso de SSH creando y editando el archivo <code>.ssh/config</code> en tu computador local. Por ejemplo, puedes definir un "alias" para conectarte sin escribir la sintaxis completa <code>&lt;usuario&gt;@kraken.ing.puc.cl</code>.</p>
+<p>Si no existe, crea el archivo <code>.ssh/config</code> y agrega las siguientes líneas, reemplazando <code>&lt;usuario&gt;</code> por tu usuario del clúster:</p>
+<pre><code class="language-bash"># Nodo de entrada
+Host kraken
+    HostName kraken.ing.puc.cl
+    User &lt;usuario&gt;
+    IdentityFile ~/.ssh/id_ed25519
+
+# Con salto intermedio o proxy jump
+Host &lt;nodo&gt;
+    HostName &lt;nodo&gt; # Por ejemplo hydra
+    User &lt;usuario&gt;
+    IdentityFile ~/.ssh/id_ed25519
+    ProxyJump kraken
+</code></pre>
+<div class="admonition warning">
+<p class="admonition-title"><code>IdentityFile</code> apunta a la llave privada</p>
+<p>En <code>IdentityFile</code> debes indicar la llave <strong>privada</strong> (<code>~/.ssh/id_ed25519</code>, <strong>sin</strong> la extensión <code>.pub</code>). El cliente SSH usa la llave privada para autenticarse; la pública ya quedó instalada en el servidor en el paso anterior.</p>
+</div>
+<p>Ahora puedes conectarte simplemente con:</p>
+<pre><code class="language-bash">ssh kraken
+</code></pre>
+<p>Esto le indica al cliente SSH que use tu llave y que <code>kraken</code> es una abreviación de <code>&lt;usuario&gt;@kraken.ing.puc.cl</code>.</p>
+<p>Si quieres conectarte directamente a un nodo de cómputo del clúster (por ejemplo, para copiar datos con <code>scp</code> o <code>rsync</code>), puedes usar el clúster como salto intermedio. Gracias a <code>ProxyJump kraken</code>, la conexión pasa primero por el nodo de entrada y desde ahí alcanza el nodo interno.</p>
+<p>Y puedes conectarte con:</p>
+<pre><code class="language-bash">ssh &lt;nodo&gt;
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../usage_policy/" class="btn btn-neutral float-left" title="Política de Uso"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../slurm/" class="btn btn-neutral float-right" title="SLURM">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../usage_policy/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../slurm/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

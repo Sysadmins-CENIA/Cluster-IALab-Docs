@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/instructions-and-guides/acl/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Compartir datos usando ACL - Cluster IALab</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Compartir datos usando ACL";
+        var mkdocs_page_input_path = "instructions-and-guides/acl.md";
+        var mkdocs_page_url = "/instructions-and-guides/acl/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="Compartir datos usando ACL · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/instructions-and-guides/acl/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Compartir datos usando ACL · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Compartir datos usando ACL</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#herramientas-clave">Herramientas clave</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#consultar-permisos-con-getfacl">Consultar permisos con getfacl</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#modificar-permisos-con-setfacl">Modificar permisos con setfacl</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#dar-acceso-de-lectura-y-escritura-a-un-colaborador-en-tu-workspace">Dar acceso de lectura y escritura a un colaborador en tu $WORKSPACE</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#compartir-un-directorio-con-permisos-de-solo-lectura">Compartir un directorio con permisos de solo lectura</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#dar-acceso-a-un-grupo-completo-de-usuarios">Dar acceso a un grupo completo de usuarios</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#heredar-permisos-automaticamente-default-acls">Heredar permisos automáticamente (default ACLs)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#combinacion-recomendada-recursivo-y-por-defecto">Combinación recomendada (recursivo y por defecto)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#la-mascara-de-acl-mask-y-permisos-efectivos">La máscara de ACL (mask) y permisos efectivos</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ejemplo-de-restriccion-por-mascara">Ejemplo de restricción por máscara</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#caso-practico-compartir-el-script-gptpy-con-diferentes-permisos">Caso práctico: compartir el script gpt.py con diferentes permisos</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#opcion-a-mediante-comandos-individuales-paso-a-paso">Opción A: mediante comandos individuales (paso a paso)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#opcion-b-en-una-sola-linea-comando-combinado">Opción B: en una sola línea (comando combinado)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#comprobacion-del-resultado-getfacl">Comprobación del resultado (getfacl)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#eliminar-permisos-de-acl">Eliminar permisos de ACL</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#preservar-acls-al-copiar-o-sincronizar">Preservar ACLs al copiar o sincronizar</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Instrucciones y Guías</li>
+      <li class="breadcrumb-item active">Compartir datos usando ACL</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="compartir-datos-usando-acl-en-linux">Compartir datos usando ACL en Linux</h1>
+<p>Las ACL (Access Control Lists) permiten definir permisos detallados para usuarios y grupos específicos de forma individual, superando la limitación de los permisos tradicionales de Linux (usuario, grupo, otros).</p>
+<p>Esta guía muestra cómo gestionar estos permisos utilizando ejemplos prácticos adaptados a nuestras rutas de almacenamiento.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>En los siguientes ejemplos se asume el uso de la variable de entorno <strong><code>$WORKSPACE</code></strong> y <strong><code>$ARCHIVE</code></strong>, la primera apunta a tu espacio de alto rendimiento en el disco local de cada uno de los nodos (<code>/workspace1/$PI/$USER</code>) y la segunda a uno de almacenamiento de largo plazo (<code>/home/$PI/$USER/archive</code>). Para más detalles sobre el funcionamiento y las características de estos espacios, consulta la sección de <a href="../../storage/">Almacenamiento</a>.</p>
+</div>
+<hr />
+<h2 id="herramientas-clave">Herramientas clave</h2>
+<p>Para administrar las ACL utilizaremos dos comandos principales:</p>
+<ul>
+<li><strong><code>getfacl</code></strong>: muestra la lista de control de acceso de un archivo o directorio.</li>
+<li><strong><code>setfacl</code></strong>: define, modifica o elimina las reglas de acceso.</li>
+</ul>
+<hr />
+<h2 id="consultar-permisos-con-getfacl">Consultar permisos con getfacl</h2>
+<p>El comando <code>getfacl</code> (get file access control list) permite leer y mostrar las listas de control de acceso de cualquier archivo o directorio. Su objetivo es diagnosticar de forma clara qué usuarios o grupos adicionales tienen permisos específicos y cuáles son sus permisos efectivos actuales.</p>
+<p>La sintaxis básica del comando es:</p>
+<pre><code class="language-bash">getfacl &lt;directorio_o_archivo&gt;
+</code></pre>
+<p>Al ejecutar este comando sobre un elemento (por ejemplo, <code>$WORKSPACE/mi_proyecto</code>), se obtiene una salida estructurada similar a la siguiente:</p>
+<pre><code class="language-text"># file: workspace1/$PI/$USER/mi_proyecto
+# owner: $USER
+# group: grupo_investigacion
+user::rwx
+group::r-x
+other::---
+</code></pre>
+<p>Cada línea de la salida proporciona información clave sobre la seguridad del objeto:</p>
+<ul>
+<li><strong><code># file</code></strong>: indica la ruta del archivo o directorio consultado.</li>
+<li><strong><code># owner</code> y <code># group</code></strong>: identifican al usuario propietario y al grupo principal del archivo.</li>
+<li><strong><code>user::</code></strong>: muestra los permisos tradicionales del propietario (en este caso, <code>rwx</code>).</li>
+<li><strong><code>group::</code></strong>: muestra los permisos tradicionales del grupo propietario (en este caso, <code>r-x</code>).</li>
+<li><strong><code>other::</code></strong>: muestra los permisos tradicionales para cualquier otro usuario del sistema (en este caso, sin acceso: <code>---</code>).</li>
+</ul>
+<p>Si el archivo o directorio tiene reglas de ACL extendidas, estas aparecerán en líneas adicionales especificando el nombre del usuario o grupo correspondiente. Por ejemplo: <code>user:usuario_colaborador:rwx</code>.</p>
+<hr />
+<h2 id="modificar-permisos-con-setfacl">Modificar permisos con setfacl</h2>
+<p>El comando <code>setfacl</code> permite definir o modificar los permisos de acceso de un archivo o directorio. La estructura general del comando es la siguiente:</p>
+<pre><code class="language-bash">setfacl [opciones] &lt;directorio_o_archivo&gt;
+</code></pre>
+<p>Para modificar o añadir permisos, se utiliza el flag <code>-m</code> (modify) seguido de la especificación de permisos para usuarios (<code>u:</code>) o grupos (<code>g:</code>):</p>
+<pre><code class="language-bash">setfacl -m &lt;tipo_entrada&gt;:&lt;nombre&gt;:&lt;permisos&gt; &lt;directorio_o_archivo&gt;
+</code></pre>
+<h3 id="dar-acceso-de-lectura-y-escritura-a-un-colaborador-en-tu-workspace">Dar acceso de lectura y escritura a un colaborador en tu $WORKSPACE</h3>
+<p>Si deseas permitir que un colaborador (<code>usuario_colaborador</code>) trabaje en tu espacio de alto rendimiento:</p>
+<pre><code class="language-bash"># Otorga lectura (r), escritura (w) y ejecución (x)
+setfacl -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Es importante recordar que el permiso de ejecución (<code>x</code>) en un directorio es un requisito indispensable en Linux para que cualquier usuario pueda acceder a su interior (usando el comando <code>cd</code>) y listar o interactuar con los elementos que contiene.</p>
+</div>
+<h3 id="compartir-un-directorio-con-permisos-de-solo-lectura">Compartir un directorio con permisos de solo lectura</h3>
+<p>Si solo quieres que un colaborador pueda visualizar y copiar tus resultados en tu almacenamiento <code>/home</code>. Por ejemplo en tu archivo en el directorio <code>$ARCHIVE/mis_resultados</code>:</p>
+<pre><code class="language-bash"># Otorga lectura (r) y ejecución (x)
+setfacl -m u:usuario_colaborador:rx $ARCHIVE/mis_resultados
+</code></pre>
+<h3 id="dar-acceso-a-un-grupo-completo-de-usuarios">Dar acceso a un grupo completo de usuarios</h3>
+<p>Para que todos los miembros del grupo de investigación <code>grupo_bioinfo</code> puedan leer tu directorio:</p>
+<pre><code class="language-bash">setfacl -m g:grupo_bioinfo:rx $WORKSPACE/mi_proyecto
+</code></pre>
+<hr />
+<h2 id="heredar-permisos-automaticamente-default-acls">Heredar permisos automáticamente (default ACLs)</h2>
+<p>Por defecto, los archivos y subcarpetas que se creen dentro de un directorio no heredan las reglas de ACL. Para configurar la herencia automática de permisos para elementos futuros, se utiliza el flag <code>-d</code> (default).</p>
+<h3 id="combinacion-recomendada-recursivo-y-por-defecto">Combinación recomendada (recursivo y por defecto)</h3>
+<p>Si quieres que tu colaborador tenga acceso tanto a lo que <strong>ya existe</strong> en el directorio, como a todo lo que se <strong>cree en el futuro</strong>:</p>
+<pre><code class="language-bash"># 1. Aplicar recursivamente (-R) a lo que ya existe
+setfacl -R -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
+
+# 2. Configurar la herencia por defecto (-d) para el futuro
+setfacl -d -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
+</code></pre>
+<hr />
+<h2 id="la-mascara-de-acl-mask-y-permisos-efectivos">La máscara de ACL (mask) y permisos efectivos</h2>
+<p>Uno de los conceptos más importantes y que suele causar confusión es la <strong>máscara (<code>mask::</code>)</strong>.</p>
+<p>En ACL la máscara actúa como un <strong>"techo" o límite máximo</strong> de permisos aplicable para todos los usuarios y grupos específicos añadidos (no afecta al propietario del archivo ni a la sección de "otros").</p>
+<p>Los permisos reales que tendrá un usuario o grupo (llamados <strong>permisos efectivos</strong>) se calculan realizando una operación lógica <code>AND</code> entre los permisos otorgados por la regla de ACL y la máscara actual. Si una regla de ACL otorga permisos que superan a la máscara, el usuario solo obtendrá la intersección de ambos.</p>
+<p>Por ejemplo, si un usuario tiene permisos de lectura y escritura (<code>rw-</code>), pero la máscara se establece en solo lectura (<code>r--</code>), el permiso efectivo real de ese usuario será únicamente de lectura (<code>r--</code>).</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Ciertos comandos estándar de Linux, como <code>chmod</code>, recalculan automáticamente la máscara de las ACL extendidas para que coincida con los permisos de grupo tradicionales del archivo. Esto significa que si ejecutas un comando como <code>chmod g-w archivo.txt</code>, el sistema podría reducir la máscara de ACL, limitando inesperadamente los accesos de escritura que habías configurado previamente para tus colaboradores.</p>
+</div>
+<h3 id="ejemplo-de-restriccion-por-mascara">Ejemplo de restricción por máscara</h3>
+<p>A continuación, se muestra de manera práctica cómo se aplica esta restricción en el sistema.</p>
+<p>Si primero otorgas acceso de lectura, escritura y ejecución a tu colaborador en un directorio:</p>
+<pre><code class="language-bash">setfacl -m u:usuario_colaborador:rwx $WORKSPACE/mi_proyecto
+</code></pre>
+<p>Y luego reduces la máscara del mismo directorio para limitar los permisos a solo lectura (<code>r--</code>):</p>
+<pre><code class="language-bash">setfacl -m m::r-- $WORKSPACE/mi_proyecto
+</code></pre>
+<p>Al inspeccionar el directorio con <code>getfacl $WORKSPACE/mi_proyecto</code>, verás lo siguiente:</p>
+<pre><code class="language-text"># file: workspace1/$PI/$USER/mi_proyecto
+owner: $USER
+group: grupo_investigacion
+user::rwx
+user:usuario_colaborador:rwx  #effective:r--
+mask::r--
+other::---
+</code></pre>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Como la máscara se redujo a <code>r--</code>, el permiso real o efectivo de <code>usuario_colaborador</code> queda restringido a solo lectura (<code>#effective:r--</code>), a pesar de que su regla individual de usuario sigue diciendo <code>rwx</code>.
+Si un colaborador tiene problemas para escribir en una carpeta donde supuestamente tiene permisos asignados, <strong>revisa siempre el valor de la máscara</strong>.</p>
+</div>
+<p>Para restaurar los accesos y permitir de nuevo la escritura, debes restablecer la máscara a un nivel superior:</p>
+<pre><code class="language-bash">setfacl -m m::rwx $WORKSPACE/mi_proyecto
+</code></pre>
+<hr />
+<h2 id="caso-practico-compartir-el-script-gptpy-con-diferentes-permisos">Caso práctico: compartir el script gpt.py con diferentes permisos</h2>
+<p>Imagina que el usuario <strong>Aldo</strong> es el propietario del script <code>gpt.py</code> dentro de su <code>$WORKSPACE</code>. Aldo desea colaborar con tres compañeros asignándoles permisos específicos sobre este archivo:</p>
+<ol>
+<li><strong>David</strong>: solo debe poder <strong>leer</strong> el archivo (<code>r--</code>).</li>
+<li><strong>José</strong>: debe poder <strong>leer y escribir</strong> (modificar) el archivo (<code>rw-</code>).</li>
+<li><strong>Diego</strong>: debe saber que el archivo existe en la carpeta (ver el nombre), pero <strong>no debe poder ni leer ni modificar</strong> su contenido (<code>---</code>).</li>
+</ol>
+<p>A continuación, se muestran dos formas de realizar esta configuración.</p>
+<h3 id="opcion-a-mediante-comandos-individuales-paso-a-paso">Opción A: mediante comandos individuales (paso a paso)</h3>
+<p>Esta forma es ideal si vas agregando colaboradores de manera progresiva.</p>
+<pre><code class="language-bash"># 1. Dar acceso de solo lectura a David
+setfacl -m u:david:r-- $WORKSPACE/gpt.py
+
+# 2. Dar acceso de lectura y escritura a José
+setfacl -m u:jose:rw- $WORKSPACE/gpt.py
+
+# 3. Denegar explícitamente lectura y escritura a Diego
+setfacl -m u:diego:--- $WORKSPACE/gpt.py
+</code></pre>
+<h3 id="opcion-b-en-una-sola-linea-comando-combinado">Opción B: en una sola línea (comando combinado)</h3>
+<p>Si quieres aplicar todas las reglas al mismo tiempo, puedes separar las instrucciones con comas:</p>
+<pre><code class="language-bash">setfacl -m u:david:r--,u:jose:rw-,u:diego:--- $WORKSPACE/gpt.py
+</code></pre>
+<h3 id="comprobacion-del-resultado-getfacl">Comprobación del resultado (getfacl)</h3>
+<p>Una vez ejecutados los comandos, Aldo ejecuta <code>getfacl $WORKSPACE/gpt.py</code> para verificar los accesos. La salida esperada es:</p>
+<pre><code class="language-text"># file: /workspace1/$PI/aldo/gpt.py
+# owner: aldo
+# group: grupo_investigacion
+user::rw-
+user:david:r--
+user:jose:rw-
+user:diego:---
+mask::rw-
+other::---
+</code></pre>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Diego podrá ver el nombre del archivo <code>gpt.py</code> al hacer <code>ls</code> en la carpeta (siempre y cuando tenga permisos de lectura y ejecución en el directorio contenedor), pero si intenta leer el script (<code>cat gpt.py</code>) o editarlo, el sistema le devolverá el mensaje: <code>Permission denied</code> (permiso denegado).</p>
+</div>
+<hr />
+<h2 id="eliminar-permisos-de-acl">Eliminar permisos de ACL</h2>
+<p>El comando <code>setfacl</code> también permite revocar los accesos especiales previamente otorgados.</p>
+<p>Para eliminar los permisos de acceso de un usuario específico en un archivo o directorio, se puede utilizar el flag <code>-x</code> (remove) seguido del identificador del usuario:</p>
+<pre><code class="language-bash">setfacl -x u:usuario_colaborador $WORKSPACE/mi_proyecto
+</code></pre>
+<p>Si necesitas eliminar la herencia de permisos (ACL por defecto) asociada a un usuario específico en un directorio sin afectar sus permisos sobre los archivos existentes, se combina el flag <code>-d</code> con <code>-x</code>:</p>
+<pre><code class="language-bash">setfacl -d -x u:usuario_colaborador $WORKSPACE/mi_proyecto
+</code></pre>
+<p>En caso de que desees finalizar la colaboración en su totalidad y restaurar el comportamiento de seguridad nativo de Linux, puedes remover todas las ACLs extendidas (tanto de usuarios como de grupos) y limpiar el archivo usando el flag <code>-b</code> (remove all):</p>
+<pre><code class="language-bash">setfacl -b $WORKSPACE/mi_proyecto
+</code></pre>
+<hr />
+<h2 id="preservar-acls-al-copiar-o-sincronizar">Preservar ACLs al copiar o sincronizar</h2>
+<p>Por defecto, los comandos de transferencia estándar de Linux (como <code>cp</code> o <code>rsync</code> sin argumentos adicionales) no copian los atributos extendidos del sistema de archivos. Esto significa que si copias un archivo o directorio con ACLs configuradas a otra ubicación, el nuevo archivo perderá todos los accesos especiales que habías definido, volviendo al esquema básico de permisos del usuario que realiza la copia.</p>
+<p>Para mantener la colaboración activa y evitar la pérdida de estos permisos durante traslados o copias de respaldo, es fundamental indicar explícitamente a las herramientas que preserven estos metadatos utilizando los flags correctos.</p>
+<p><strong>Con <code>cp</code></strong>: Utiliza el flag <code>-p</code> para conservar los atributos y ACLs:</p>
+<pre><code class="language-bash">cp -p archivo.txt $ARCHIVE
+</code></pre>
+<p><strong>Con <code>rsync</code></strong>: Utiliza el flag <code>-A</code> (o <code>--acls</code>) para transferir las ACLs:</p>
+<pre><code class="language-bash">rsync -avA $WORKSPACE/mi_proyecto $ARCHIVE
+</code></pre>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../notebook/" class="btn btn-neutral float-left" title="Servidor de Notebooks (Jupyter)"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../../additional_resources/" class="btn btn-neutral float-right" title="Solicitud de Recursos Adicionales">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../notebook/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../../additional_resources/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/instructions-and-guides/slurm/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>SLURM - Cluster IALab</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "SLURM";
+        var mkdocs_page_input_path = "instructions-and-guides/slurm.md";
+        var mkdocs_page_url = "/instructions-and-guides/slurm/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="SLURM · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/instructions-and-guides/slurm/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="SLURM · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Primeros Pasos</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage_policy/">Política de Uso</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">SLURM</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#introduccion">Introducción</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#funcionalidades-principales">Funcionalidades principales</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#arquitectura-de-slurm-en-el-cluster">Arquitectura de SLURM en el clúster</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#particiones">Particiones</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#comandos-basicos">Comandos básicos</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#comandos-esenciales-de-slurm">Comandos esenciales de SLURM</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ejemplos-de-uso">Ejemplos de uso:</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#ejecutar-trabajos-en-slurm">Ejecutar trabajos en SLURM</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#ejecucion-interactiva-con-srun">Ejecución interactiva con srun</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ejecucion-batch-con-sbatch">Ejecución batch con sbatch</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#flags-comunes">Flags comunes</a>
+        <ul>
+    <li class="toctree-l4"><a class="reference internal" href="#uso-de-gpu">Uso de GPU</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#variables-de-entorno-relevantes-en-trabajos-de-slurm">Variables de entorno relevantes en trabajos de SLURM</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Instrucciones y Guías</li>
+      <li class="breadcrumb-item active">SLURM</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="uso-de-slurm">Uso de SLURM</h1>
+<h2 id="introduccion">Introducción</h2>
+<p><strong>SLURM</strong> (<em>Simple Linux Utility for Resource Management</em>) es el sistema de gestión de recursos y planificación de trabajos (<em>scheduler</em>) utilizado en el clúster. Su función principal es administrar las colas de ejecución, asignar recursos de cómputo y coordinar el uso eficiente de los nodos disponibles.</p>
+<p>La versión instalada en el clúster es la <a href="https://slurm.schedmd.com/archive/slurm-26.05-latest/">26.05.0</a>.</p>
+<h3 id="funcionalidades-principales">Funcionalidades principales</h3>
+<p>SLURM permite:</p>
+<ul>
+<li>Gestión de colas de trabajos</li>
+<li>Asignación eficiente de recursos</li>
+<li>Ejecución distribuida y paralela</li>
+<li>Monitoreo y control de trabajos</li>
+<li>Control de uso compartido del clúster</li>
+</ul>
+<hr />
+<h2 id="arquitectura-de-slurm-en-el-cluster">Arquitectura de SLURM en el clúster</h2>
+<p>SLURM utiliza una arquitectura tipo <strong>controller/worker</strong>:</p>
+<ul>
+<li>El nodo controlador ejecuta el servicio <code>slurmctld</code>, encargado de administrar la cola y coordinar los recursos.</li>
+<li>Los nodos de cómputo ejecutan el servicio <code>slurmd</code>, responsable de ejecutar las tareas asignadas.</li>
+</ul>
+<p>En este clúster, el controlador principal se encuentra en: <code>kraken.ing.puc.cl</code>.</p>
+<h2 id="particiones">Particiones</h2>
+<p>SLURM organiza los nodos en grupos llamados particiones (partitions).</p>
+<p>Cada partición define: recursos disponibles, tiempo máximo de ejecución, límites de memoria, cantidad máxima de tareas, y políticas de acceso y prioridad.</p>
+<p>Los usuarios envían trabajos a una partición específica dependiendo de las necesidades computacionales de su tarea.</p>
+<table>
+<thead>
+<tr>
+<th>Partition</th>
+<th>Memoria por CPU<br>(DefMemPerCPU)</th>
+<th>Máxima memoria por nodo<br>(MaxMemPerNode)</th>
+<th>Máximo de tiempo por tarea<br>(MaxTime)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>ialab</td>
+<td>4 GB</td>
+<td>128 GB</td>
+<td>24 hrs</td>
+</tr>
+</tbody>
+</table>
+<h2 id="comandos-basicos">Comandos básicos</h2>
+<p>Existe documentación para cada comando en la página oficial de <em>SLURM</em>. Algunos de los comandos básicos para el uso del scheduler se encuentran detallados a continuación.</p>
+<h3 id="comandos-esenciales-de-slurm">Comandos esenciales de SLURM</h3>
+<table>
+<thead>
+<tr>
+<th>Comando</th>
+<th>Acción</th>
+<th>Documentación</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>sinfo</code></td>
+<td>Ver estado general del cluster</td>
+<td><a href="https://slurm.schedmd.com/sinfo.html">link</a></td>
+</tr>
+<tr>
+<td><code>squeue</code></td>
+<td>Ver trabajos en la cola</td>
+<td><a href="https://slurm.schedmd.com/squeue.html">link</a></td>
+</tr>
+<tr>
+<td><code>sq</code></td>
+<td>Versión mejorada de <code>squeue</code></td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>sfree</code></td>
+<td>Ver recursos disponibles</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>scontrol show node &lt;node&gt;</code></td>
+<td>Ver detalles de un nodo</td>
+<td><a href="https://slurm.schedmd.com/scontrol.html">link</a></td>
+</tr>
+<tr>
+<td><code>sbatch script.sh</code></td>
+<td>Enviar un script batch</td>
+<td><a href="https://slurm.schedmd.com/sbatch.html">link</a></td>
+</tr>
+<tr>
+<td><code>srun --pty bash</code></td>
+<td>Enviar trabajo interactivo</td>
+<td><a href="https://slurm.schedmd.com/srun.html">link</a></td>
+</tr>
+<tr>
+<td><code>scancel &lt;jobid&gt;</code></td>
+<td>Cancelar un trabajo</td>
+<td><a href="https://slurm.schedmd.com/scancel.html">link</a></td>
+</tr>
+<tr>
+<td><code>scontrol show job &lt;jobid&gt;</code></td>
+<td>Ver detalles de un trabajo</td>
+<td><a href="https://slurm.schedmd.com/scontrol.html">link</a></td>
+</tr>
+<tr>
+<td><code>serror &lt;jobid&gt;</code></td>
+<td>Ver errores de un job</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>stail &lt;jobid&gt;</code></td>
+<td>Ver salida estándar de un job</td>
+<td>—</td>
+</tr>
+<tr>
+<td><code>sacct -u $USER</code></td>
+<td>Ver historial de trabajos</td>
+<td><a href="https://slurm.schedmd.com/sacct.html">link</a></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ejemplos-de-uso">Ejemplos de uso:</h3>
+<pre><code class="language-bash"># Ver particiones disponibles
+sinfo
+sinfo -s # vista resumida
+
+# Ver jobs en cola
+squeue -u $USER        # solo los tuyos
+squeue                 # todos
+
+# Versión mejorada de squeue
+sq
+
+# Ver recursos disponibles en el cluster (CPU / RAM / GPU disponibles)
+sfree
+
+# Ver el estado de un nodo.
+scontrol show &lt;node&gt;
+
+# Comandos para interactuar con trabajos en SLURM
+# Ejecutar un trabajo SLURM bloqueando tu terminal con 2 tareas o procesos
+srun -n 2 python main.py
+
+# Enviar un trabajo SLURM utilizando un script de bash
+sbatch script.sh
+
+# Cancelar un trabajo
+scancel &lt;jobid&gt;          # por job ID
+scancel -u $USER       # todos los tuyos
+
+# Ver o modificar el estado de un trabajo.
+scontrol show job &lt;jobid&gt;
+sshow &lt;jobid&gt; # Equivalente al comando de arriba
+
+# Pausar y reanudar un trabajo
+scontrol hold &lt;jobid&gt;       # detiene la ejecución
+scontrol release &lt;jobid&gt;    # la retoma
+
+# Mostrar output de errores del trabajo.
+serror &lt;jobid&gt;
+
+# Mostrar output del trabajo.
+stail &lt;jobid&gt;
+</code></pre>
+<h2 id="ejecutar-trabajos-en-slurm">Ejecutar trabajos en SLURM</h2>
+<h3 id="ejecucion-interactiva-con-srun">Ejecución interactiva con <code>srun</code></h3>
+<p><code>srun</code> ejecuta un trabajo de manera <strong>interactiva</strong>, bloqueando tu terminal hasta que termine y mostrando la salida directamente en pantalla. Es útil para pruebas rápidas, depuración o sesiones interactivas. A diferencia de <code>sbatch</code> (descrito más abajo), no envía un script a la cola para ejecutarse de forma desatendida.</p>
+<pre><code class="language-bash"># Ejecutar un comando directamente en un nodo de cómputo
+srun python main.py
+
+# Solicitar 2 CPUs para la tarea
+srun --cpus-per-task=2 python main.py
+
+# Solicitar una GPU
+srun --gres=gpu python train.py
+</code></pre>
+<p>Para abrir una <strong>shell interactiva</strong> dentro de un nodo de cómputo (por ejemplo, para inspeccionar el entorno o ejecutar comandos manualmente):</p>
+<pre><code class="language-bash"># Abrir una terminal interactiva en un nodo
+srun --pty bash
+
+# Terminal interactiva con una GPU asignada
+srun --gres=gpu --pty bash
+</code></pre>
+<p><code>srun</code> acepta los mismos flags de solicitud de recursos que se describen en la sección <a href="#flags-comunes">Flags comunes</a> (por ejemplo <code>--cpus-per-task</code>, <code>--mem</code>, <code>--gres</code>, <code>--nodelist</code>). Ten en cuenta que la sesión termina y los recursos se liberan al cerrar la terminal o al finalizar el comando.</p>
+<h3 id="ejecucion-batch-con-sbatch">Ejecución batch con <code>sbatch</code></h3>
+<p>Cuando corres un script con <code>sbatch</code>, e.g. <code>sbatch script.sh</code>, debes indicar los parámetros de la ejecución en el inicio del script. Abajo hay un ejemplo de como se deben indicar las opciones, y en la sección <a href="../slurm_examples/">Ejemplos de SLURM</a> puedes encontrar scripts de ejemplos útiles para distintas situaciones:</p>
+<pre><code class="language-bash">#!/bin/bash
+#SBATCH --job-name=compile
+#SBATCH -t 0-2:00                    # tiempo maximo en el cluster (D-HH:MM)
+#SBATCH -o c_job.out                 # STDOUT
+#SBATCH -e c_job.err                 # STDERR
+#SBATCH --mail-type=END,FAIL         # notificacion cuando el trabajo termine o falle
+#SBATCH --mail-user=usuario@uc.cl    # mail donde mandar las notificaciones
+#SBATCH --chdir=/user/miusuario      # direccion del directorio de trabajo
+#
+#SBATCH --nodes 1                    # numero de nodos a usar
+#SBATCH --ntasks-per-node=24         # numero de trabajos (procesos) por nodo
+#SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
+#SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
+
+python main.py
+echo &quot;Finished with job $SLURM_JOBID&quot;
+</code></pre>
+<h3 id="flags-comunes">Flags comunes</h3>
+<p>A continuación se muestra una lista de los flags más comunes que un usuario puede incluir en su trabajo, ya sean para solicitar recursos o características para el trabajo.</p>
+<table>
+<thead>
+<tr>
+<th>Descripción</th>
+<th>Slurm</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Nombre del trabajo</td>
+<td><code>#SBATCH --job-name=My-Job-Name</code></td>
+</tr>
+<tr>
+<td>Número de nodos solicitados</td>
+<td><code>#SBATCH --nodes=1</code></td>
+</tr>
+<tr>
+<td>Número de cores por nodo solicitados</td>
+<td><code>#SBATCH --ntasks-per-node=24</code></td>
+</tr>
+<tr>
+<td>Copia las variables de entorno del usuario</td>
+<td><code>#SBATCH --export=[ALL\|NONE\|Variables]</code></td>
+</tr>
+<tr>
+<td>Restricción de tiempo</td>
+<td><code>#SBATCH --time=24:0:0</code></td>
+</tr>
+<tr>
+<td>Reiniciar un trabajo en caso de falla</td>
+<td><code>#SBATCH --requeue</code></td>
+</tr>
+<tr>
+<td>Compartir los nodos</td>
+<td><code>#SBATCH --oversubscribe</code></td>
+</tr>
+<tr>
+<td>Reservar los nodos para uso exclusivo</td>
+<td><code>#SBATCH --exclusive</code></td>
+</tr>
+<tr>
+<td>Uso de un recurso específico</td>
+<td><code>#SBATCH --constraint="XXX"</code></td>
+</tr>
+<tr>
+<td>Uso de memoria</td>
+<td><code>#SBATCH --mem=[mem \|M\|G\|T]</code> o <code>--mem-per-cpu</code></td>
+</tr>
+<tr>
+<td>Email usuario</td>
+<td><code>#SBATCH --mail-user=username@uc.cl</code></td>
+</tr>
+<tr>
+<td>Notifica al usuario por evento</td>
+<td><code>#SBATCH --mail-type=ALL / BEGIN / END or FAIL</code></td>
+</tr>
+<tr>
+<td>Solicitud nodo específico</td>
+<td><code>#SBATCH --nodelist=hydra</code></td>
+</tr>
+</tbody>
+</table>
+<h4 id="uso-de-gpu">Uso de GPU</h4>
+<p>Para solicitar el uso de GPU en tu trabajo se utilizan <code>--gres=gpu</code> ó <code>--gres=gpu:N</code> donde <code>N</code> es el número de GPUs por nodo.</p>
+<p><strong>Por ejemplo:</strong></p>
+<pre><code class="language-bash">#!/bin/bash
+#SBATCH -t 0-2:00                               # time (D-HH:MM)
+#SBATCH -N 4
+#SBATCH --gres=gpu
+</code></pre>
+<p>El clúster es <strong>heterogéneo</strong>: distintos nodos tienen distintos modelos de GPU (revisa el <a href="../../hardware/">Hardware del Clúster</a>). Si tu trabajo necesita un modelo concreto, puedes pedirlo con la opción <code>--gres=gpu:&lt;modelo&gt;:N</code>:</p>
+<pre><code class="language-bash">#SBATCH --gres=gpu:a40:1        # 1 GPU A40
+#SBATCH --gres=gpu:2080ti:2     # 2 GPUs RTX 2080Ti
+</code></pre>
+<p>Para ver los modelos (GRES) disponibles en cada nodo usa <code>sfree</code> o <code>sinfo -o "%n %G"</code> o <code>scontrol show node &lt;node&gt;</code>.</p>
+<h3 id="variables-de-entorno-relevantes-en-trabajos-de-slurm">Variables de entorno relevantes en trabajos de SLURM</h3>
+<p>SLURM define automáticamente variables de entorno que puedes usar dentro de tu script. Las más comunes se listan a continuación; el listado completo está en la <a href="https://slurm.schedmd.com/sbatch.html#SECTION_OUTPUT-ENVIRONMENT-VARIABLES">documentación oficial</a>.</p>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>JobID</td>
+<td><code>$SLURM_JOBID</code></td>
+<td>ID único del trabajo.</td>
+</tr>
+<tr>
+<td>Job Name</td>
+<td><code>$SLURM_JOB_NAME</code></td>
+<td>Nombre del trabajo.</td>
+</tr>
+<tr>
+<td>Submit Directory</td>
+<td><code>$SLURM_SUBMIT_DIR</code></td>
+<td>Directorio desde donde se envió.</td>
+</tr>
+<tr>
+<td>Submit Host</td>
+<td><code>$SLURM_SUBMIT_HOST</code></td>
+<td>Nodo desde donde se envió.</td>
+</tr>
+<tr>
+<td>Node List</td>
+<td><code>$SLURM_JOB_NODELIST</code></td>
+<td>Nodos asignados al trabajo.</td>
+</tr>
+<tr>
+<td>Number of Nodes</td>
+<td><code>$SLURM_JOB_NUM_NODES</code></td>
+<td>Cantidad de nodos asignados.</td>
+</tr>
+<tr>
+<td>Number of Tasks</td>
+<td><code>$SLURM_NTASKS</code></td>
+<td>Cantidad total de tareas.</td>
+</tr>
+<tr>
+<td>CPUs per Task</td>
+<td><code>$SLURM_CPUS_PER_TASK</code></td>
+<td>CPUs asignadas por tarea.</td>
+</tr>
+<tr>
+<td>Node ID</td>
+<td><code>$SLURM_NODEID</code></td>
+<td>Índice del nodo dentro del trabajo.</td>
+</tr>
+<tr>
+<td>Process ID (rank)</td>
+<td><code>$SLURM_PROCID</code></td>
+<td>Rank global del proceso (MPI).</td>
+</tr>
+<tr>
+<td>Local Task ID</td>
+<td><code>$SLURM_LOCALID</code></td>
+<td>Índice local de la tarea en el nodo.</td>
+</tr>
+<tr>
+<td>GPUs Asignadas</td>
+<td><code>$CUDA_VISIBLE_DEVICES</code></td>
+<td>GPUs visibles para el trabajo.</td>
+</tr>
+<tr>
+<td>Array Job ID</td>
+<td><code>$SLURM_ARRAY_JOB_ID</code></td>
+<td>ID base de un job array.</td>
+</tr>
+<tr>
+<td>Job Array Index</td>
+<td><code>$SLURM_ARRAY_TASK_ID</code></td>
+<td>Índice de la tarea en un job array.</td>
+</tr>
+<tr>
+<td>Array Task Count</td>
+<td><code>$SLURM_ARRAY_TASK_COUNT</code></td>
+<td>Número total de tareas del array.</td>
+</tr>
+</tbody>
+</table>
+<p>Además, el clúster define las siguientes variables propias para acceder a las distintas áreas de almacenamiento:</p>
+<table>
+<thead>
+<tr>
+<th>Nombre</th>
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Home</td>
+<td><code>$HOME</code></td>
+<td>Directorio personal del usuario.</td>
+</tr>
+<tr>
+<td>Archive Directory</td>
+<td><code>$ARCHIVE</code></td>
+<td>Almacenamiento de largo plazo.</td>
+</tr>
+<tr>
+<td>Scratch Directory</td>
+<td><code>$SCRATCH</code></td>
+<td>Almacenamiento temporal.</td>
+</tr>
+<tr>
+<td>User Workspace</td>
+<td><code>$WORKSPACE</code></td>
+<td>Directorio de trabajo de alto rendimiento.</td>
+</tr>
+</tbody>
+</table>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../ssh/" class="btn btn-neutral float-left" title="SSH"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../slurm_examples/" class="btn btn-neutral float-right" title="Ejemplos de SLURM">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../ssh/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../slurm_examples/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
