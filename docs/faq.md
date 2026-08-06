@@ -6,19 +6,22 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 
 ## Errores de conexión y acceso (SSH)
 
-### Error: `ssh: connect to host kraken.ing.uchile.cl port 22: Connection refused` (o la sesión se cierra)
+### Error: `ssh: connect to host kraken.ing.uc.cl port 22: Connection refused` (o la sesión se cierra)
 
 * **Causa:** Has excedido la cuota de espacio en tu directorio personal (`home`), cuyo límite es de **50 GB**. Cuando no queda espacio libre, el sistema no puede crear los archivos temporales necesarios para validar tu sesión y rechaza el acceso.
 * **Solución:**
-    1. Solicita asistencia enviando un correo a `soporte@cenia.cl` para que liberen espacio temporalmente.
+    1. Solicita asistencia enviando un correo a [soporte@cenia.cl](mailto:soporte@cenia.cl) para que liberen espacio temporalmente.
     2. Al recuperar el acceso, usa el comando `ncdu` para identificar directorios pesados (cachés, entornos virtuales) y muévelos a tu carpeta `$SCRATCH` o `$ARCHIVE`.
 
-### Error: `Permission denied (publickey)` al intentar conectar
+### Error: `Permission denied (publickey)` al intentar conectar 
 
-* **Causa:** El cliente SSH local no encuentra tu llave privada o la llave pública no está registrada correctamente en el archivo `~/.ssh/authorized_keys` del clúster.
+* **Posible Causa:** El cliente SSH local no encuentra tu llave privada o la llave pública no está registrada correctamente en el archivo `~/.ssh/authorized_keys` del clúster.
 * **Solución:**
     1. Usa el parámetro `-i` apuntando a tu llave privada (ej. `ssh -i ~/.ssh/id_ed25519 tu_usuario@kraken...`).
     2. Verifica que la carpeta `.ssh` y el archivo `authorized_keys` tengan los permisos estrictos de Linux (`chmod 700 ~/.ssh` y `chmod 600 ~/.ssh/authorized_keys`).
+
+    !!! note ""
+        Para mas información puedes revisar la sección [SSH](instructions-and-guides/ssh.md).
 
 ### La conexión SSH de VS Code se cae constantemente o no logra conectar
 
@@ -27,7 +30,7 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 
 ### Ayer me conecté sin problemas, pero hoy mi cuenta está bloqueada (teniendo espacio)
 
-* **Causa:** Tu acceso puede haber sido restringido durante los procesos periódicos de limpieza semestral y auditoría del clúster si tu cuenta no fue validada a tiempo por tu supervisor. Envía un ticket a `soporte@cenia.cl` para regularizar.
+* **Causa:** Tu acceso puede haber sido restringido durante los procesos periódicos de limpieza semestral y auditoría del clúster si tu cuenta no fue validada a tiempo por tu supervisor. Envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) para regularizar.
 
 ---
 
@@ -53,14 +56,16 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 ### Error: Trabajo cancelado con estado `TIMEOUT`
 
 * **Causa:** El trabajo superó el límite de tiempo continuo de **24 horas** de la partición `ialab`.
-* **Solución:** Implementa *checkpoints* (puntos de guardado automáticos) en tu código para reanudar el entrenamiento. Si requieres más tiempo justificado, envía el [Formulario F-SRCIA-001] con 24h de anticipación.
+* **Solución:** Implementa *checkpoints* (puntos de guardado automáticos) en tu código para reanudar el entrenamiento. Si requieres más tiempo justificado o un proyecto en especifico, envía el [Formulario F-SRCIA-001](https://forms.gle/KtJqrreRoseXYrtU6) con 24h de anticipación.
 
 ### Mi trabajo sigue en estado `PENDING` (PD). ¿Por qué no inicia?
 
-* **Solución:** Revisa la columna `NODELIST(REASON)` usando `squeue`.
+* **Posibles Causas:** Revisa la columna `NODELIST(REASON)` usando `squeue`.
   * **`Resources`**: Esperando que se liberen CPUs, GPUs o RAM.
   * **`Priority`**: Hay trabajos con mayor prioridad en cola.
   * **`AssocJobLimit` / `QOSJobLimit`**: Superaste tu límite de trabajos concurrentes.
+  
+  * **Recomendamos usar el comando `sfree` para verificar si efectivamente existen recursos disponibles`**
 
 ### ¿Cómo depurar un error de segmentación (segfault) sin saturar Kraken?
 
@@ -91,13 +96,16 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
     1. Verifica permisos con `getfacl ruta_directorio`.
     2. Si la `mask` bloquea la escritura (ej. `r-x`), restáurala con `setfacl -m m:rwx ruta_directorio`.
 
+        !!! note ""
+            Para mas información puedes revisar la sección [Compartir datos usando ACL](instructions-and-guides/acl.md).
+
 ### El directorio `home, scratch o archive` en mi nodo no existe
 
-* **Solución:** Si al ingresar a un nodo de computo este inicia en `/` en vez de en tu home, envía un ticket a `soporte@cenia.cl` solicitando su verificación.
+* **Solución:** Si al ingresar a un nodo de computo este inicia en `/` en vez de en tu home, envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) solicitando su verificación.
 
 ### El directorio `workspace` en mi nodo no existe
 
-* **Solución:** Si vas a entrenar y no encuentras tu subcarpeta (ej. `/workspace/ahsoka/tu_usuario`), envía un ticket a `soporte@cenia.cl` solicitando su creación.
+* **Solución:** Si vas a entrenar y no encuentras tu subcarpeta (ej. `/workspace/ahsoka/tu_usuario`), envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) solicitando su creación.
 
 ---
 
@@ -119,7 +127,7 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 
 ### ¿Cómo reporto un nodo caído o un fallo?
 
-* **Solución:** Si un nodo falla o perdiste conexión repentinamiente. Abre de inmediato un ticket en `soporte@cenia.cl` incluyendo el nombre del nodo, el ID de tu trabajo en SLURM y el registro exacto del error.
+* **Solución:** Si un nodo falla o perdiste conexión repentinamiente. Abre de inmediato un ticket en [soporte@cenia.cl](mailto:soporte@cenia.cl) incluyendo el nombre del nodo, el ID de tu trabajo en SLURM y el registro exacto del error.
 
 ---
 
@@ -128,4 +136,4 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 ### Error: `docker: command not found` o `Permission denied`
 
 * **Causa:** Por seguridad y aislamiento de privilegios, el servicio nativo de Docker está restringido para los usuarios.
-* **Solución:** Si requieres Docker nativo obligatoriamente, solicita autorización a `soporte@cenia.cl`.
+* **Solución:** Si requieres Docker nativo obligatoriamente, solicita autorización a [soporte@cenia.cl](mailto:soporte@cenia.cl).
