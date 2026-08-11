@@ -23,11 +23,11 @@ Cada QoS define parámetros como el tiempo máximo de ejecución, la cantidad de
 
 En el clúster se han definido las siguientes colas de trabajo:
 
-| **QoS** | **Límite de tiempo** | **Máx. GPUs por job** | **Máx. jobs simultáneos** | **Particiones** | **Prioridad** | **Preempción** | **Protección contra preempción** |
+| **QoS** | **Límite de tiempo** | **Máx. GPUs por job** | **Máx. jobs simultáneos** | **Particiones** | **Prioridad** / **(Valor)** | **Preempción** | **Protección contra preempción** |
 | ------- | -------------------- | --------------------- | ------------------------- | --------------- | --------------| -------------- | -------------------------------- |
-| debug	| 1 hora | 4 | 1 | cenia, ialab | Alta | No | N/A |
-| regular | 24 horas | 4 | 4 | cenia, ialab | Media | No | N/A |
-| long | 72 horas | Sin límite | 4 | cenia, ialab | Media | Sí | 2 horas desde el inicio del job |
+| debug	| 1 hora | 4 | 1 | cenia, ialab | Alta / (200) | No | N/A |
+| regular | 24 horas | 4 | 4 | cenia, ialab | Media / (100) | No | N/A |
+| long | 72 horas | Sin límite | 4 | cenia, ialab | Media / (100) | Sí | 2 horas desde el inicio del job |
 | reserved | Configurable | Sin límite | Sin límite | Cualquiera | Alta | No | N/A |
 
 ## Accounts
