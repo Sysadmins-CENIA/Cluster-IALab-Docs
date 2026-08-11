@@ -78,7 +78,7 @@ El factor de QoS corresponde al valor de prioridad asociado a la cola de trabajo
 
 Por este motivo, los usuarios deben seleccionar la cola que mejor se adapte a las características de su trabajo. La elección de una QoS no solo determina las restricciones de ejecución del trabajo, sino que también puede influir en su prioridad frente a otros trabajos que se encuentren esperando recursos.
 
-## Preemption de jobs
+## Preempción de jobs
 
 Como es posible ver en la sección de "Colas de trabajo" se puede apreciar una cola de trabajo que permite la preempción de trabajos. Esto significa que aquellos trabajos que sean enviados a esa cola, serán propensos a ser movidos de la cola temporalmente por tareas de mayor prioridad, como lo pueden ser aquellas que se ejecuten en `debug`. Por lo que es de vital importancia tener en mente que las tareas que se ejecuten allí deben ser creadas pensando en que deben generar checkpoints, además de que la tarea se pueda reanudar por sí sola, con el fin de no perder progreso.
 
