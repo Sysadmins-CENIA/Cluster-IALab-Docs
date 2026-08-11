@@ -28,18 +28,6 @@ SLURM utiliza una arquitectura tipo **controller/worker**:
 
 En este clúster, el controlador principal se encuentra en: `kraken.ing.puc.cl`.
 
-## Particiones
-
-SLURM organiza los nodos en grupos llamados particiones (partitions).
-
-Cada partición define: recursos disponibles, tiempo máximo de ejecución, límites de memoria, cantidad máxima de tareas, y políticas de acceso y prioridad.
-
-Los usuarios envían trabajos a una partición específica dependiendo de las necesidades computacionales de su tarea.
-
-|Partition|Memoria por CPU<br>(DefMemPerCPU)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tiempo por tarea<br>(MaxTime)|
-|--|--|--|--|
-|ialab|4 GB|128 GB|24 hrs|
-
 ## Comandos básicos
 
 Existe documentación para cada comando en la página oficial de *SLURM*. Algunos de los comandos básicos para el uso del scheduler se encuentran detallados a continuación.
