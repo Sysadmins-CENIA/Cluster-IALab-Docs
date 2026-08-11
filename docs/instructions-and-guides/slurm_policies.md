@@ -70,3 +70,7 @@ Como es posible ver en la sección de "Colas de trabajo" se puede apreciar una c
 También cabe destacar que las tareas de esta cola, están protegidas con una ventana de 2 horas para evitar que se vean afectadas prematuramente al entrar a ejecución. Esta ventana cubre tanto una ejecución inicial como la reanudación de la tarea tras volver de una pausa.
 
 Una vez la tarea sea considerada apta para volver a la cola de ejecución, se reanudará y volverá a tomar los recursos que solicitaba originalmente y continuará por el tiempo restante que se solicitó al momento de enviar la tarea.
+
+## Reserva de recursos computacionales
+
+De necesitar una mayor cantidad de recursos para ejecutar un experimento de lo que proporcionamos de base, por favor, consultar la sección de [Solicitud de Recursos Adicionales](../../additional_resources).
