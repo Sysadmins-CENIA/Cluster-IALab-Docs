@@ -30,6 +30,21 @@ En el clúster se han definido las siguientes colas de trabajo:
 | long | 72 horas | Sin límite | 4 | cenia, ialab | Media | Sí | 2 horas desde el inicio del job |
 | reserved | Configurable | Sin límite | Sin límite | Cualquiera | Alta | No | N/A |
 
+## Accounts
+
+En Slurm, los accounts permiten asociar los trabajos a una cuenta determinada para efectos de administración, seguimiento y aplicación de políticas de uso de recursos.
+
+En el clúster, todos los usuarios pertenecen al account default-account. Por lo tanto, este debe ser especificado al momento de enviar los trabajos.
+
+Para trabajos enviados mediante scripts, se debe indicar el account utilizando la directiva `#SBATCH`:
+
+`#SBATCH --account=default-account`
+
+En el caso de utilizar srun directamente, se debe especificar mediante el parámetro correspondiente:
+
+`srun --account=default-account ...`
+
+Se recomienda incorporar esta configuración en todos los trabajos para asegurar que Slurm pueda asociarlos correctamente al account correspondiente.
 
 ## Priorización de jobs
 
