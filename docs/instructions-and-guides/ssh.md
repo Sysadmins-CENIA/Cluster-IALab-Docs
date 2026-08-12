@@ -89,6 +89,7 @@ Si no existe, crea el archivo `.ssh/config` y agrega las siguientes líneas, ree
 Host kraken
     HostName kraken.ing.puc.cl
     User <usuario>
+    Port 33052
     IdentityFile ~/.ssh/id_ed25519
 
 # Con salto intermedio o proxy jump
