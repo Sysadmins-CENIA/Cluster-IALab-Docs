@@ -3,40 +3,21 @@
 El nodo de entrada al clúster es `kraken.ing.puc.cl`. Para conectarte usa el comando:
 
 ```bash
-ssh <usuario>@kraken.ing.puc.cl
+ssh -p 33052 <usuario>@kraken.ing.puc.cl
 ```
 
 **Nota:** En las siguientes instrucciones, reemplaza `<usuario>` por el nombre de usuario que solicitaste al crear tu cuenta.
 
-En esta guía verás cómo:
-
-1. Cambiar tu contraseña por defecto (**obligatorio**).
-2. Configurar una llave SSH para conectarte sin contraseña (**recomendado**).
-3. Crear alias y saltos a nodos de cómputo con `.ssh/config` (**opcional**).
+!!! info "¿Por qué el puerto 33052?"
+    El nodo de entrada `kraken` usa el puerto **33052** en vez del puerto SSH estándar (22), como medida de seguridad adicional para reducir el tráfico de escaneos automatizados. Este cambio de puerto **aplica solo al nodo de entrada**; los nodos de cómputo internos (a los que accedes vía `ProxyJump`, ver sección 3) mantienen el puerto 22 por defecto, ya que no están expuestos directamente a internet.
 
 !!! note "Cliente SSH"
     En Linux y macOS el cliente `ssh` ya viene instalado. En Windows puedes usarlo desde PowerShell (incluido en Windows 10 y posteriores) o desde WSL. Los comandos de esta guía son los mismos en todos los casos.
 
-## 1. Obligatorio - Cambio de contraseña
 
-Lo primero es cambiar tu contraseña por defecto para evitar accesos no autorizados. Conéctate al clúster y ejecuta el comando `passwd`:
+## 1. Obligatorio - Llave SSH
 
-```bash
-[pc-personal]$ ssh <usuario>@kraken.ing.puc.cl
-[kraken]$ passwd
-[kraken]Current password:
-[kraken]New password:
-[kraken]Retype new password:
-[kraken]passwd: Password updated successfully
-[kraken]$ exit
-[pc-personal]$
-```
-
-## 2. Recomendado - Llave SSH
-
-Este paso es opcional, pero muy recomendado por seguridad y comodidad.
-
-### 2.1 Creando una llave SSH
+### 1.1 Creando una llave SSH
 
 El procedimiento es el mismo en Linux, Mac o WSL en Windows:
 
@@ -55,14 +36,14 @@ ls ~/.ssh/
 !!! danger "Nunca compartas tu llave privada"
     La llave privada (el archivo **sin** la extensión `.pub`) es secreta y solo debe permanecer en tu computador. Nunca la envíes por correo, chat ni la subas a ningún repositorio.
 
-### 2.2 Copiando la llave SSH al clúster
+### 2. Copiando la llave SSH al clúster
 
 Copia tu llave **pública** al clúster. Si tu llave está en `.ssh/id_ed25519.pub`, ejecuta:
 
 ```bash
 # Opción 1: usar ssh-copy-id (la forma más simple)
 
-ssh-copy-id -i ~/.ssh/id_ed25519.pub <usuario>@kraken.ing.puc.cl
+ssh-copy-id -p 33052 -i ~/.ssh/id_ed25519.pub <usuario>@kraken.ing.puc.cl
 
 
 # Opción 2: copiar manualmente (si no tienes ssh-copy-id)
@@ -108,6 +89,13 @@ Ahora puedes conectarte simplemente con:
 ```bash
 ssh kraken
 ```
+
+O puedes forzar la conexión al puerto usando:
+
+```bash
+ssh -p 33052 kraken
+```
+
 
 Esto le indica al cliente SSH que use tu llave y que `kraken` es una abreviación de `<usuario>@kraken.ing.puc.cl`.
 
