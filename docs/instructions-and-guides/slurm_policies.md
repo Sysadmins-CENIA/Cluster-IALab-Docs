@@ -2,6 +2,8 @@
 
 Debido a la diversidad de cargas de trabajo existentes en el clúster, se ha definido una política de uso de recursos que establece las condiciones bajo las cuales los usuarios pueden ejecutar sus trabajos.
 
+La política busca distribuir los recursos de manera equilibrada entre los usuarios, priorizando los trabajos de corta duración y menor consumo de recursos, al mismo tiempo que considera el uso histórico de cada usuario para evitar una utilización desproporcionada de los recursos disponibles.
+
 A continuación, se describen las particiones, colas de trabajo (QoS) y mecanismos de priorización utilizados por Slurm.
 
 ## Particiones
@@ -10,82 +12,290 @@ Las particiones son la forma en que se agrupan los nodos del clúster de acuerdo
 
 En el clúster se han definido las siguientes particiones:
 
-| **Partición** | **Nodos** |
-| ------------- | --------- |
-| cenia | antuco, llaima |
-| ialab	| ahsoka, hydra, scylla, ventress, yodaxico |
+| **Partición**      | **Nodos**                                 |
+| ------------------ | ----------------------------------------- |
+| `ialab-high`       | antuco, llaima                            |
+| `ialab-low`        | ahsoka, hydra, scylla, ventress, yodaxico |
+| `ialab-high-unlim` | antuco, llaima                            |
+| `ialab-low-unlim`  | ahsoka, hydra, scylla, ventress, yodaxico |
+
+Las particiones `ialab-high` e `ialab-low` poseen límites de recursos definidos para controlar la cantidad de CPU y memoria que puede utilizar un trabajo en función de las GPUs solicitadas.
+
+Las particiones `ialab-high-unlim` e `ialab-low-unlim` están destinadas a trabajos que requieren una mayor cantidad de recursos y, por lo tanto, no poseen los mismos límites máximos de CPU y memoria establecidos en sus respectivas particiones limitadas.
+
+### Particiones `ialab-high`
+
+Estas particiones utilizan los nodos `antuco` y `llaima`.
+
+| **Característica**      | **Valor**    |
+| ----------------------- | ------------ |
+| Memoria por GPU         | 111 GB       |
+| CPU por GPU             | 15           |
+| Memoria máxima por nodo | 444 GB       |
+| CPU máxima por nodo     | 60           |
+| Reserva del sistema     | 4 CPU, 24 GB |
+
+### Particiones `ialab-low`
+
+Estas particiones utilizan los nodos `ahsoka`, `hydra`, `scylla`, `ventress` y `yodaxico`.
+
+| **Característica**      | **Valor**    |
+| ----------------------- | ------------ |
+| Memoria por GPU         | 20 GB        |
+| CPU por GPU             | 4            |
+| Memoria máxima por nodo | 80 GB        |
+| CPU máxima por nodo     | 16           |
+| Reserva del sistema     | 4 CPU, 24 GB |
+
+### Relación entre GPUs, CPU y memoria
+
+En las particiones con límites definidos, la cantidad de GPUs solicitadas por un trabajo determina también la cantidad de CPU y memoria que este podrá utilizar de acuerdo con la configuración de la partición.
+
+Por ejemplo, en `ialab-low`, donde se establecen 4 CPU y 20 GB de memoria por GPU, un trabajo que solicite 2 GPUs podrá disponer de hasta 8 CPU y 40 GB de memoria, siempre respetando los límites máximos definidos para el nodo.
+
+Por este motivo, la cantidad de GPUs solicitadas por un trabajo no debe considerarse únicamente como un límite de aceleradores, ya que también afecta la cantidad de CPU y memoria que puede utilizar.
 
 ## Colas de trabajo (QoS)
 
-Las colas de trabajo son el mecanismo utilizado por Slurm para clasificar y gestionar los trabajos enviados al clúster de acuerdo con distintas políticas de ejecución. Estas se implementan mediante Quality of Service (QoS), que permiten establecer diferentes condiciones y restricciones para los trabajos asociados a cada cola.
+Las colas de trabajo son el mecanismo utilizado por Slurm para clasificar y gestionar los trabajos enviados al clúster de acuerdo con distintas políticas de ejecución. Estas se implementan mediante **Quality of Service (QoS)**, que permiten establecer diferentes condiciones y restricciones para los trabajos asociados a cada cola.
 
-Cada QoS define parámetros como el tiempo máximo de ejecución, la cantidad de recursos que puede utilizar un trabajo, la cantidad de trabajos que un usuario puede ejecutar simultáneamente, la prioridad y las condiciones de preempción.
+Cada QoS define parámetros como el tiempo máximo de ejecución, la cantidad de recursos que puede utilizar un trabajo, la cantidad de trabajos que un usuario puede ejecutar simultáneamente y la prioridad asociada a la cola.
 
 En el clúster se han definido las siguientes colas de trabajo:
 
-| **QoS** | **Límite de tiempo** | **Máx. GPUs por job** | **Máx. jobs simultáneos** | **Particiones** | **Prioridad** / **(Valor)** | **Preempción** | **Protección contra preempción** |
-| ------- | -------------------- | --------------------- | ------------------------- | --------------- | --------------| -------------- | -------------------------------- |
-| debug	| 1 hora | 4 | 1 | cenia, ialab | Alta / (200) | No | N/A |
-| regular | 24 horas | 4 | 4 | cenia, ialab | Media / (100) | No | N/A |
-| long | 72 horas | Sin límite | 4 | cenia, ialab | Media / (100) | Sí | 2 horas desde el inicio del job |
-| reserved | Configurable | Sin límite | Sin límite | Cualquiera | Alta | No | N/A |
+| **QoS**   | **Límite de tiempo** | **Máx. GPUs por job** | **Máx. jobs simultáneos** | **Máx. submits** | **Particiones**                       | **Prioridad** |
+| --------- | -------------------- | --------------------- | ------------------------- | ---------------- | ------------------------------------- | ------------- |
+| `debug`   | 1 hora               | 4                     | 1                         | 4                | `ialab-low-unlim`, `ialab-high-unlim` | Alta          |
+| `regular` | 24 horas             | 4                     | 4                         | 32               | `ialab-low`, `ialab-high`             | Media         |
+
+### Cola `debug`
+
+La cola `debug` está destinada principalmente a trabajos de prueba, depuración, validación y experimentación que requieran un período reducido de ejecución.
+
+Los trabajos enviados a esta cola poseen una prioridad superior a los trabajos enviados a `regular`, permitiendo que las pruebas puedan ejecutarse con mayor rapidez.
+
+Sus principales restricciones son:
+
+* Tiempo máximo de ejecución de 1 hora.
+* Máximo de 4 GPUs por trabajo.
+* Máximo de 1 job ejecutándose simultáneamente por usuario.
+* Máximo de 4 jobs enviados simultáneamente por usuario.
+* Puede utilizar las particiones `ialab-low-unlim` e `ialab-high-unlim`.
+
+Se recomienda utilizar esta cola únicamente para trabajos que realmente correspondan a actividades de prueba o depuración. Los trabajos de producción o de larga duración deben utilizar la cola `regular`.
+
+### Cola `regular`
+
+La cola `regular` está destinada a la ejecución habitual de trabajos de producción y experimentos que no correspondan a actividades de debug.
+
+Sus principales restricciones son:
+
+* Tiempo máximo de ejecución de 24 horas.
+* Máximo de 4 GPUs por trabajo.
+* Máximo de 4 jobs ejecutándose simultáneamente por usuario.
+* Máximo de 32 jobs enviados simultáneamente por usuario.
+* Puede utilizar las particiones `ialab-low` e `ialab-high`.
+
+Los límites de CPU y memoria disponibles para cada trabajo dependerán además de la partición y de la cantidad de GPUs solicitadas.
 
 ## Accounts
 
 En Slurm, los accounts permiten asociar los trabajos a una cuenta determinada para efectos de administración, seguimiento y aplicación de políticas de uso de recursos.
 
-En el clúster, todos los usuarios pertenecen al account default-account. Por lo tanto, este debe ser especificado al momento de enviar los trabajos.
+En el clúster, todos los usuarios pertenecen al account `default-account`. Por lo tanto, este debe ser especificado al momento de enviar los trabajos.
 
 Para trabajos enviados mediante scripts, se debe indicar el account utilizando la directiva `#SBATCH`:
 
-`#SBATCH --account=default-account`
+```bash
+#SBATCH --account=default-account
+```
 
-En el caso de utilizar srun directamente, se debe especificar mediante el parámetro correspondiente:
+En el caso de utilizar `srun` directamente, se debe especificar mediante el parámetro correspondiente:
 
-`srun --account=default-account ...`
+```bash
+srun --account=default-account ...
+```
 
 Se recomienda incorporar esta configuración en todos los trabajos para asegurar que Slurm pueda asociarlos correctamente al account correspondiente.
 
 ## Priorización de jobs
 
-La priorización de los trabajos se realiza mediante el Priority Multifactor Plugin de Slurm. Este mecanismo calcula una prioridad para cada trabajo utilizando distintos factores, los cuales determinan qué trabajos tienen mayor probabilidad de ser seleccionados para su ejecución cuando los recursos se encuentran disponibles.
+La priorización de los trabajos se realiza mediante el **Priority Multifactor Plugin** de Slurm. Este mecanismo calcula una prioridad para cada trabajo utilizando distintos factores, los cuales determinan qué trabajos tienen mayor probabilidad de ser seleccionados para su ejecución cuando los recursos se encuentran disponibles.
 
-Los principales factores considerados dentro de la política definida para el clúster son los siguientes.
+La prioridad no depende de un único criterio. Slurm combina diferentes factores para determinar la prioridad final de cada trabajo.
+
+Los factores considerados dentro de la política definida para el clúster son:
+
+* Age Factor
+* Job Size Factor
+* Fair-Share Factor
+* QoS Factor
+
+Los pesos definidos inicialmente para estos factores son:
+
+| **Factor** | **Peso**  | **Peso relativo aproximado** |
+| ---------- | --------- | ---------------------------- |
+| Age        | 1.000     | 0,09 %                       |
+| Job Size   | 10.000    | 0,90 %                       |
+| Fair-Share | 100.000   | 9,00 %                       |
+| QoS        | 1.000.000 | 90,01 %                      |
+
+La prioridad final se obtiene conceptualmente mediante la combinación de estos factores:
+
+```text
+Job_Priority =
+    (1000 * Age_Factor)
+  + (10000 * Job_Size_Factor)
+  + (100000 * FairShare_Factor)
+  + (1000000 * QOS_Factor)
+```
+
+Los valores utilizados por cada factor son calculados internamente por Slurm y pueden variar según las características y el historial de utilización de cada trabajo y usuario.
 
 ### Factor de edad (Age Factor)
 
-El factor de edad considera el tiempo que un trabajo permanece en estado PENDING desde el momento en que fue enviado. A medida que aumenta el tiempo de espera, también aumenta su contribución al cálculo de prioridad.
+El factor de edad considera el tiempo que un trabajo permanece en estado `PENDING` desde el momento en que fue enviado. A medida que aumenta el tiempo de espera, también aumenta su contribución al cálculo de prioridad.
 
-En esta política, el factor de edad permite evitar que un trabajo permanezca indefinidamente en espera debido a la existencia de otros trabajos con una prioridad inicialmente superior. De esta manera, los trabajos que llevan más tiempo esperando tienen progresivamente una mayor posibilidad de ser seleccionados para su ejecución.
+En esta política, el factor de edad posee una influencia relativamente baja frente a los demás factores. Su objetivo es evitar que un trabajo permanezca indefinidamente en espera, pero sin desplazar de forma significativa a trabajos pertenecientes a colas con una prioridad superior.
+
+Se establece inicialmente un peso de:
+
+```text
+PriorityWeightAge = 1000
+```
+
+El factor comenzará a tener una mayor influencia a medida que el trabajo acumule tiempo de espera, especialmente después de períodos prolongados en estado `PENDING`.
 
 ### Factor de tamaño del job (Job Size Factor)
 
-El factor de tamaño considera la cantidad de recursos solicitados por un trabajo. En la política definida para el clúster, se busca otorgar una mayor prioridad relativa a los trabajos que requieren una menor cantidad de recursos.
+El factor de tamaño considera la cantidad de recursos solicitados por un trabajo.
 
-Esto permite favorecer la ejecución de trabajos pequeños, particularmente aquellos asociados a la cola debug, que está limitada a una cantidad reducida de recursos y tiempo de ejecución. De esta forma, estos trabajos pueden entrar y finalizar rápidamente, evitando mantener recursos ocupados durante períodos prolongados y reduciendo los tiempos de espera.
+En la política definida para el clúster, se busca otorgar una mayor prioridad relativa a los trabajos que requieren una menor cantidad de recursos.
+
+Esto permite favorecer la ejecución de trabajos pequeños, particularmente aquellos asociados a la cola `debug`. De esta forma, trabajos que requieren pocos recursos pueden entrar y finalizar rápidamente sin tener que esperar necesariamente a que exista suficiente capacidad disponible para trabajos de mayor tamaño.
+
+Este factor posee un peso de:
+
+```text
+PriorityWeightJobSize = 10000
+```
+
+Por lo tanto, entre trabajos con características similares, aquellos que requieran una menor cantidad de recursos podrán obtener una prioridad relativa superior.
 
 ### Factor de Fair-Share
 
-El factor de Fair-Share permite considerar el uso histórico de recursos realizado por los usuarios al determinar la prioridad de sus trabajos. Este factor se calcula mediante el algoritmo FairTree de Slurm.
+El factor de Fair-Share permite considerar el uso histórico de recursos realizado por los usuarios al determinar la prioridad de sus trabajos.
 
-La política considera el consumo de recursos durante un período de un mes. A medida que un usuario utiliza una mayor cantidad de recursos respecto de los demás usuarios, su factor de Fair-Share disminuye y, por lo tanto, sus nuevos trabajos pueden recibir una menor prioridad.
+A medida que un usuario utiliza una mayor cantidad de recursos respecto de los demás usuarios, su factor de Fair-Share disminuye y, por lo tanto, sus nuevos trabajos pueden recibir una menor prioridad.
 
 El objetivo de este mecanismo es distribuir de manera más equitativa los recursos del clúster, evitando que un usuario que haya utilizado una cantidad considerable de recursos tenga una ventaja permanente sobre aquellos que han tenido un menor nivel de utilización.
 
+Este factor posee un peso de:
+
+```text
+PriorityWeightFairshare = 100000
+```
+
+Por lo tanto, el uso histórico de recursos tendrá una influencia considerable en la prioridad de los trabajos.
+
+Un usuario que utilice recursos de manera intensiva durante un período determinado verá reducida progresivamente la prioridad asociada al Fair-Share de sus trabajos posteriores.
+
+### Recuperación de prioridad mediante Half-Life Decay
+
+Para evitar que el historial de utilización afecte permanentemente la prioridad de un usuario, Slurm utiliza el mecanismo **Half-Life Decay**.
+
+Este mecanismo permite reducir progresivamente la influencia del uso histórico sobre el Fair-Share.
+
+La configuración considerada para esta política establece un período de recuperación de 7 días.
+
+Por ejemplo, si el uso considerado para un usuario corresponde a 1.000 horas de GPU y posteriormente deja de utilizar recursos, su influencia histórica se reducirá progresivamente:
+
+```text
+Semana 1: 1000 horas
+Semana 2:  500 horas
+Semana 3:  250 horas
+Semana 4:  125 horas
+...
+```
+
+Esto no significa que se elimine completamente el historial cada siete días. En cambio, la influencia del uso acumulado se reduce a la mitad durante cada período de Half-Life.
+
+De esta manera, un usuario que haya utilizado muchos recursos podrá recuperar progresivamente su prioridad si posteriormente reduce su consumo.
+
+### Actualización del cálculo de prioridad
+
+El período de Half-Life y la frecuencia con la que Slurm recalcula la prioridad son mecanismos diferentes.
+
+El **Half-Life Decay** determina cuánto tarda en reducirse la influencia del uso histórico, mientras que `PriorityCalcPeriod` determina cada cuánto tiempo se realizan los cálculos relacionados con la prioridad.
+
+Para esta política se considera:
+
+```text
+PriorityCalcPeriod = 5 minutos
+```
+
+Por lo tanto, los factores que determinan la prioridad pueden ser recalculados periódicamente. Como consecuencia, la prioridad de un trabajo que se encuentra actualmente en estado `PENDING` puede cambiar mientras permanece en la cola.
+
 ### Factor de cola de trabajo (QoS Factor)
 
-El factor de QoS corresponde al valor de prioridad asociado a la cola de trabajo seleccionada para ejecutar un trabajo. Cada QoS posee una prioridad determinada de acuerdo con las necesidades que busca cubrir dentro de la política del clúster.
+El factor de QoS corresponde al valor de prioridad asociado a la cola de trabajo seleccionada para ejecutar un trabajo.
 
-Por este motivo, los usuarios deben seleccionar la cola que mejor se adapte a las características de su trabajo. La elección de una QoS no solo determina las restricciones de ejecución del trabajo, sino que también puede influir en su prioridad frente a otros trabajos que se encuentren esperando recursos.
+Cada QoS posee una prioridad determinada de acuerdo con las necesidades que busca cubrir dentro de la política del clúster.
 
-## Preempción de jobs
+En esta política:
 
-Como es posible ver en la sección de "Colas de trabajo" se puede apreciar una cola de trabajo que permite la preempción de trabajos. Esto significa que aquellos trabajos que sean enviados a esa cola, serán propensos a ser movidos de la cola temporalmente por tareas de mayor prioridad, como lo pueden ser aquellas que se ejecuten en `debug`. Por lo que es de vital importancia tener en mente que las tareas que se ejecuten allí deben ser creadas pensando en que deben generar checkpoints, además de que la tarea se pueda reanudar por sí sola, con el fin de no perder progreso.
+* `debug` posee una prioridad superior.
+* `regular` posee una prioridad inferior.
 
-También cabe destacar que las tareas de esta cola, están protegidas con una ventana de 2 horas para evitar que se vean afectadas prematuramente al entrar a ejecución. Esta ventana cubre tanto una ejecución inicial como la reanudación de la tarea tras volver de una pausa.
+Por este motivo, los usuarios deben seleccionar la cola que mejor se adapte a las características de su trabajo.
 
-Una vez la tarea sea considerada apta para volver a la cola de ejecución, se reanudará y volverá a tomar los recursos que solicitaba originalmente y continuará por el tiempo restante que se solicitó al momento de enviar la tarea.
+La elección de una QoS determina tanto las restricciones de ejecución del trabajo como su prioridad relativa frente a otros trabajos que se encuentren esperando recursos.
 
-## Reserva de recursos computacionales
+El peso definido para este factor es:
 
-De necesitar una mayor cantidad de recursos para ejecutar un experimento de lo que proporcionamos de base, por favor, consultar la sección de [Solicitud de Recursos Adicionales](../../additional_resources).
+```text
+PriorityWeightQOS = 1000000
+```
+
+Debido a su elevado peso, la QoS seleccionada constituye actualmente el factor con mayor influencia sobre la prioridad final de un trabajo.
+
+## Distribución de recursos
+
+La política busca evitar que los recursos del clúster sean utilizados de manera desproporcionada por un único usuario durante períodos prolongados.
+
+Para ello, Slurm considera conjuntamente:
+
+* La cola de trabajo seleccionada.
+* La cantidad de recursos solicitados.
+* El tiempo que el trabajo lleva esperando.
+* El uso histórico de recursos del usuario.
+
+Por lo tanto, la prioridad de un trabajo no dependerá únicamente del momento en que fue enviado.
+
+Un usuario que haya utilizado una gran cantidad de recursos puede observar que sus trabajos posteriores reciben una prioridad menor debido al Fair-Share. Por el contrario, un usuario que haya utilizado pocos recursos podrá obtener una prioridad relativa superior.
+
+Esta penalización no es permanente, ya que el mecanismo Half-Life Decay permite recuperar progresivamente la prioridad a medida que disminuye la influencia del uso histórico.
+
+## Consideraciones para los usuarios
+
+Al enviar un trabajo, se recomienda seleccionar la QoS de acuerdo con el propósito real de este.
+
+Para trabajos de prueba, depuración o validación rápida se debe utilizar:
+
+`debug`
+
+Para trabajos de producción, experimentos o cargas que requieran hasta 24 horas se debe utilizar:
+
+`regular`
+
+La selección de una QoS que no corresponda con las características reales del trabajo puede afectar la disponibilidad de recursos para otros usuarios y el funcionamiento general de la política de planificación.
+
+Asimismo, se recomienda solicitar únicamente los recursos que realmente necesita el trabajo. La cantidad de recursos solicitados puede influir en la prioridad del job y, además, determina cuánto espacio de cómputo será necesario para ejecutarlo.
+
+## Solicitud de recursos computacionales adicionales
+
+En caso de requerir una cantidad de recursos superior a los límites establecidos para las colas o particiones disponibles, se deberá consultar el procedimiento correspondiente para la **Solicitud de Recursos Adicionales**.
+
+Para estos casos, se recomienda no utilizar una QoS distinta a la que corresponde al trabajo con el objetivo de intentar obtener recursos adicionales, sino realizar la solicitud mediante el procedimiento establecido por la administración del clúster.
+
+La solicitud será evaluada de acuerdo con las necesidades del trabajo y la disponibilidad de recursos.
