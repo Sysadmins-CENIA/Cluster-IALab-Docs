@@ -294,8 +294,6 @@ Asimismo, se recomienda solicitar únicamente los recursos que realmente necesit
 
 ## Solicitud de recursos computacionales adicionales
 
-En caso de requerir una cantidad de recursos superior a los límites establecidos para las colas o particiones disponibles, se deberá consultar el procedimiento correspondiente para la **Solicitud de Recursos Adicionales**.
+En caso de requerir una cantidad de recursos superior a los límites establecidos para las colas o particiones disponibles, se deberá consultar el procedimiento correspondiente para la [Solicitud de Recursos Adicionales](../../additional_resources).
 
-Para estos casos, se recomienda no utilizar una QoS distinta a la que corresponde al trabajo con el objetivo de intentar obtener recursos adicionales, sino realizar la solicitud mediante el procedimiento establecido por la administración del clúster.
-
-La solicitud será evaluada de acuerdo con las necesidades del trabajo y la disponibilidad de recursos.
+La administración del clúster revisará la solicitud de acuerdo con las necesidades del trabajo y la disponibilidad de recursos, de ser aceptada, se enviarán los pasos para ocupar la reserva de recursos.
