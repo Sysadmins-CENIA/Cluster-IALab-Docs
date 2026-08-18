@@ -84,20 +84,6 @@ Sus principales restricciones son:
 
 Se recomienda utilizar esta cola únicamente para trabajos que realmente correspondan a actividades de prueba o depuración. Los trabajos de producción o de larga duración deben utilizar la cola `regular`.
 
-### Cola `regular`
-
-La cola `regular` está destinada a la ejecución habitual de trabajos de producción y experimentos que no correspondan a actividades de debug.
-
-Sus principales restricciones son:
-
-* Tiempo máximo de ejecución de 24 horas.
-* Máximo de 4 GPUs por trabajo.
-* Máximo de 4 jobs ejecutándose simultáneamente por usuario.
-* Máximo de 32 jobs enviados simultáneamente por usuario.
-* Puede utilizar las particiones `ialab-low` e `ialab-high`.
-
-Los límites de CPU y memoria disponibles para cada trabajo dependerán además de la partición y de la cantidad de GPUs solicitadas.
-
 ## Accounts
 
 En Slurm, los accounts permiten asociar los trabajos a una cuenta determinada para efectos de administración, seguimiento y aplicación de políticas de uso de recursos.
