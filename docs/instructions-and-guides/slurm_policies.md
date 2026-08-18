@@ -68,22 +68,6 @@ En el clúster se han definido las siguientes colas de trabajo:
 | `debug`   | 1 hora               | 4                     | 1                         | 4                | `ialab-low-unlim`, `ialab-high-unlim` | Alta          |
 | `regular` | 24 horas             | 4                     | 4                         | 32               | `ialab-low`, `ialab-high`             | Media         |
 
-### Cola `debug`
-
-La cola `debug` está destinada principalmente a trabajos de prueba, depuración, validación y experimentación que requieran un período reducido de ejecución.
-
-Los trabajos enviados a esta cola poseen una prioridad superior a los trabajos enviados a `regular`, permitiendo que las pruebas puedan ejecutarse con mayor rapidez.
-
-Sus principales restricciones son:
-
-* Tiempo máximo de ejecución de 1 hora.
-* Máximo de 4 GPUs por trabajo.
-* Máximo de 1 job ejecutándose simultáneamente por usuario.
-* Máximo de 4 jobs enviados simultáneamente por usuario.
-* Puede utilizar las particiones `ialab-low-unlim` e `ialab-high-unlim`.
-
-Se recomienda utilizar esta cola únicamente para trabajos que realmente correspondan a actividades de prueba o depuración. Los trabajos de producción o de larga duración deben utilizar la cola `regular`.
-
 ## Accounts
 
 En Slurm, los accounts permiten asociar los trabajos a una cuenta determinada para efectos de administración, seguimiento y aplicación de políticas de uso de recursos.
