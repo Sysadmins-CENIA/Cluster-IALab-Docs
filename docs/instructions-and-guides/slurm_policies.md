@@ -276,22 +276,6 @@ Un usuario que haya utilizado una gran cantidad de recursos puede observar que s
 
 Esta penalización no es permanente, ya que el mecanismo Half-Life Decay permite recuperar progresivamente la prioridad a medida que disminuye la influencia del uso histórico.
 
-## Consideraciones para los usuarios
-
-Al enviar un trabajo, se recomienda seleccionar la QoS de acuerdo con el propósito real de este.
-
-Para trabajos de prueba, depuración o validación rápida se debe utilizar:
-
-`debug`
-
-Para trabajos de producción, experimentos o cargas que requieran hasta 24 horas se debe utilizar:
-
-`regular`
-
-La selección de una QoS que no corresponda con las características reales del trabajo puede afectar la disponibilidad de recursos para otros usuarios y el funcionamiento general de la política de planificación.
-
-Asimismo, se recomienda solicitar únicamente los recursos que realmente necesita el trabajo. La cantidad de recursos solicitados puede influir en la prioridad del job y, además, determina cuánto espacio de cómputo será necesario para ejecutarlo.
-
 ## Solicitud de recursos computacionales adicionales
 
 En caso de requerir una cantidad de recursos superior a los límites establecidos para las colas o particiones disponibles, se deberá consultar el procedimiento correspondiente para la [Solicitud de Recursos Adicionales](../../additional_resources).
