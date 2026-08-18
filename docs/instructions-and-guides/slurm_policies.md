@@ -23,30 +23,6 @@ Las particiones `ialab-high` e `ialab-low` poseen límites de recursos definidos
 
 Las particiones `ialab-high-unlim` e `ialab-low-unlim` están destinadas a trabajos que requieren una mayor cantidad de recursos y, por lo tanto, no poseen los mismos límites máximos de CPU y memoria establecidos en sus respectivas particiones limitadas.
 
-### Particiones `ialab-high`
-
-Estas particiones utilizan los nodos `antuco` y `llaima`.
-
-| **Característica**      | **Valor**    |
-| ----------------------- | ------------ |
-| Memoria por GPU         | 111 GB       |
-| CPU por GPU             | 15           |
-| Memoria máxima por nodo | 444 GB       |
-| CPU máxima por nodo     | 60           |
-| Reserva del sistema     | 4 CPU, 24 GB |
-
-### Particiones `ialab-low`
-
-Estas particiones utilizan los nodos `ahsoka`, `hydra`, `scylla`, `ventress` y `yodaxico`.
-
-| **Característica**      | **Valor**    |
-| ----------------------- | ------------ |
-| Memoria por GPU         | 20 GB        |
-| CPU por GPU             | 4            |
-| Memoria máxima por nodo | 80 GB        |
-| CPU máxima por nodo     | 16           |
-| Reserva del sistema     | 4 CPU, 24 GB |
-
 ### Relación entre GPUs, CPU y memoria
 
 En las particiones con límites definidos, la cantidad de GPUs solicitadas por un trabajo determina también la cantidad de CPU y memoria que este podrá utilizar de acuerdo con la configuración de la partición.
