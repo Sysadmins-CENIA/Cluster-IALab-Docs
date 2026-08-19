@@ -1,174 +1,184 @@
-# FAQ: Cluster IALab - Preguntas Frecuentes
+# FAQ: Resolución de Problemas y Errores Frecuentes
 
-Esta sección contiene las respuestas a las dudas más comunes sobre el uso y operación del Cluster IALab.
+Esta sección contiene soluciones rápidas a los errores, advertencias e inconvenientes más comunes al utilizar el Clúster IALab. Está dedicada exclusivamente a la resolución de problemas (*troubleshooting*).
 
-## Conceptos Básicos y Acceso
+---
 
-**1-. ¿Por qué no puedo acceder al clúster?**
+## Errores de conexión y acceso (SSH)
 
-Si tu sesión es rechazada, es probable que hayas excedido la cuota de almacenamiento de tu home. Envía un ticket de soporte CENIA (detallado en el [soporte@cenia.cl](mailto:soporte@cenia.cl) para revisar tu situación.
+### Error: `ssh: connect to host kraken.ing.uc.cl port 22: Connection refused` (o la sesión se cierra)
 
-**2-. ¿Qué es el nodo Kraken?**
+* **Posibles Causas:**
+    * Has excedido la cuota de espacio en tu directorio personal (`home`), cuyo límite es de **50 GB**. Cuando no queda espacio libre, el sistema no puede crear los archivos temporales necesarios para validar tu sesión y rechaza el acceso.
+    * El nodo `kraken` está temporalmente caído o en mantención.
+    * Problemas de red local o VPN de tu lado (revisa si puedes acceder a otros servicios de la red UC).
+* **Solución:**
+    1. Verifica primero tu conexión a internet y, si corresponde, tu VPN.
+    2. Solicita asistencia enviando un correo a [soporte@cenia.cl](mailto:soporte@cenia.cl) para que liberen espacio temporalmente o confirmen el estado del nodo.
+    3. Al recuperar el acceso, usa el comando `ncdu` para identificar directorios pesados (cachés, entornos virtuales) y muévelos a tu carpeta `$SCRATCH` o `$ARCHIVE`.
 
-Es el nodo de gestión (headnode). Úsalo solo para organizar archivos y lanzar tareas; no ejecutes cálculos pesados aquí.
+### Error: `Permission denied (publickey)` al intentar conectar
 
-**3-. ¿Cómo accedo al cluster?**
+* **Posible Causa:** El cliente SSH local no encuentra tu llave privada o la llave pública no está registrada correctamente en el archivo `~/.ssh/authorized_keys` del clúster.
+* **Solución:**
+    1. Usa el parámetro `-i` apuntando a tu llave privada, especificando el host completo:
+        ```
+        ssh -i ~/.ssh/id_ed25519 <usuario>@kraken.ing.puc.cl
+        ```
+    2. Verifica que la carpeta `.ssh` y el archivo `authorized_keys` tengan los permisos estrictos de Linux:
+        ```
+        chmod 700 ~/.ssh
+        chmod 600 ~/.ssh/authorized_keys
+        ```
 
-Debes conectarte vía SSH a través del nodo *Kraken* utilizando tus credenciales.
+    !!! note ""
+        Para más información puedes revisar la sección [SSH](instructions-and-guides/ssh.md).
 
-**4-. ¿Cómo solicito acceso inicial?**
+### La conexión SSH de VS Code se cae constantemente o no logra conectar
 
-Contacta al equipo de administración a través de los canales oficiales del laboratorio.
+* **Posibles Causas:**
+    * VS Code Server intenta instalar extensiones en `~/.vscode-server`; si tu cuota de disco está llena, la instalación falla.
+    * Estás ejecutando código pesado directamente en la terminal de VS Code sobre el nodo de entrada Kraken, y el sistema lo detecta y liquida el proceso para proteger el clúster.
+* **Solución:**
+    1. Verifica tu espacio disponible con `du -sh ~`.
+    2. Nunca ejecutes código pesado en Kraken. Configura un *Jump Host* en tu `.ssh/config` para que VS Code se conecte directamente a un nodo de cómputo asignado.
 
-**5-. ¿Qué es el "Cluster"?**
+### Ayer me conecté sin problemas, pero hoy mi cuenta está bloqueada (aunque tengo espacio disponible)
 
-Es un conjunto de computadoras interconectadas que trabajan como una unidad para procesar tareas científicas masivas.
+* **Posibles Causas:**
+    * Tu acceso fue restringido durante los procesos periódicos de limpieza semestral y auditoría del clúster, porque tu cuenta no fue validada a tiempo por tu supervisor.
+    * El bloqueo fue intencional, por ejemplo debido a un uso indebido de recursos (procesos fuera de SLURM, saturación de disco compartido) o incumplimiento de alguna política del clúster.
+* **Solución:** Envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) detallando tu usuario y la fecha en que notaste el bloqueo, para que puedan indicarte la causa exacta y el camino de regularización.
 
-## Uso de Recursos, Slurm y Memoria
+---
 
-**6-. ¿Cómo envío un trabajo al cluster?**
+## Errores y fallas en trabajos (SLURM)
 
-Utiliza el comando `sbatch` seguido de tu script de ejecución configurado para *Slurm*. Todo trabajo enviado directamente al nodo sin pasar por Slurm será cancelado automáticamente.
+### Cancelación silenciosa: Mi proceso finaliza o desaparece sin dejar logs
 
-**7-. ¿Cómo verifico el estado de mis trabajos?**
+* **Posibles Causas:**
+    * Estás ejecutando el proceso intensivo directamente en Kraken (headnode), evadiendo SLURM. El clúster monitorea activamente y liquida de forma inmediata cualquier proceso pesado fuera de las colas para proteger los recursos.
+    * La ruta donde esperas encontrar los logs no existe o no coincide con la que definiste al lanzar el trabajo.
+    * Hay un error en los parámetros con que se invocó `sbatch` o `srun` (por ejemplo, rutas relativas mal resueltas o falta de permisos de escritura en el directorio de salida), lo que impide que el log se genere aunque el proceso sí haya corrido.
+* **Solución:** Todo código debe enviarse a los nodos de cómputo usando `sbatch mi_script.sh` o de forma interactiva con `srun --pty bash`. Si ya estás usando SLURM correctamente, verifica que las rutas de `--output` y `--error` en tu script existan y sean escribibles.
 
-Usa `squeue -u <tu_usuario>` para ver la lista de tus procesos activos.
+### Error: `sbatch: error: Batch job submission failed`
 
-**8-. ¿Cómo cancelo un trabajo?**
+**`Requested partition's memory limit exceeded`**
 
-Usa `scancel <job_id>` para detener un proceso.
+* **Causa:** Estás pidiendo más de 128 GB de RAM (el límite de la partición `ialab`).
+* **Solución:** Reduce el valor de `#SBATCH --mem`.
 
-**9-. ¿Qué significa que un trabajo esté en estado "PENDING"?**
+**`More processors requested than permitted`**
 
-Significa que está en cola esperando recursos (CPU/GPU) o que no hay nodos disponibles.
+* **Causa:** Si no usas `--mem`, el sistema asigna **4 GB por CPU**. Si pides más de 33 CPUs, superas los 128 GB de RAM permitidos.
+* **Solución:** Define explícitamente una memoria menor por CPU, o reduce el número de CPUs solicitadas.
 
-**10-. ¿Existe un límite de tiempo por ejecución?**
+**`Invalid partition name` / `Invalid qos`**
 
-Sí, el límite máximo es de 24 horas por trabajo.
+* **Causa:** Estás apuntando a una cola inexistente o no tienes permisos sobre ella.
+* **Solución:** Verifica el nombre de la partición con `#SBATCH --partition=ialab`.
 
-**11-. ¿Qué pasa si mi trabajo se excede de las 24 horas?**
+### Exit Code 137: Trabajo cancelado inesperadamente (OOM Killer)
 
-El sistema lo terminará automáticamente. Implementa *checkpoints* en tu código.
+* **Causa:** Tu proceso intentó usar más memoria RAM de la asignada. El *Out-Of-Memory (OOM) Killer* del sistema operativo lo detuvo abruptamente para evitar el colapso del nodo.
+* **Solución:** Ejecuta `seff <ID_del_job>` para ver el consumo exacto. Vuelve a enviar el trabajo aumentando la RAM solicitada (ej. `#SBATCH --mem=64G`).
 
-**12-. ¿Qué pasa si no especifico memoria en mi script?**
+### Error: Trabajo cancelado con estado `TIMEOUT`
 
-Si no defines el parámetro `--mem`, el sistema asignará por defecto 4GB de RAM por cada CPU solicitada.
+* **Causa:** El trabajo superó el límite de tiempo continuo de **24 horas** de la partición `ialab`.
+* **Solución:** Implementa *checkpoints* (puntos de guardado automáticos) en tu código para reanudar el entrenamiento. Si requieres más tiempo justificado o un proyecto en especifico, envía el [Formulario F-SRCIA-001](https://forms.gle/KtJqrreRoseXYrtU6) con 24h de anticipación.
 
-**13-. ¿Cuál es el máximo de memoria RAM que puedo asignar?**
+### Mi trabajo sigue en estado `PENDING` (PD). ¿Por qué no inicia?
 
-El límite máximo estipulado por cada trabajo en el IALab es de 128 GB de memoria RAM.
+* **Posibles Causas:** Revisa la columna `NODELIST(REASON)` usando `squeue`.
+    * **`Resources`**: Esperando que se liberen CPUs, GPUs o RAM.
+    * **`Priority`**: Hay trabajos con mayor prioridad en cola.
+    * **`AssocJobLimit` / `QOSJobLimit`**: Superaste tu límite de trabajos concurrentes.
+* **Recomendación:** Usa el comando `sfree` para verificar si efectivamente existen recursos disponibles.
 
-**14-. ¿Existe un límite en la cantidad de CPUs a solicitar?**
+### ¿Cómo depurar un error de segmentación (segfault) sin saturar Kraken?
 
-Sí. Si no utilizas el flag `--mem` para definir una memoria específica, el límite máximo de CPUs que puedes solicitar es de 33. Esto evita que el cálculo automático de memoria (4GB por CPU) exceda el límite total de 128 GB del clúster por trabajo.
+* **Solución:** Solicita recursos interactivos en un nodo de cómputo para ver el error en tiempo real:
 
-## Hardware y Nodos (NVIDIA vs AMD)
+    ```
+    srun --pty --mem=16G --cpus-per-task=4 bash
+    ```
 
-**15-. ¿Cuáles son los nodos con GPU NVIDIA?**
+---
 
-Son *Hydra, Scylla, Llaima, Ahsoka* y *Yodaxico*.
+## Almacenamiento, cuotas y permisos (Disco & ACL)
 
-**16-. ¿Es obligatorio usar contenedores en el nodo Antuco?**
+### Error: `No space left on device` o `Disk quota exceeded`
 
-No es un requisito estricto, pero es altamente recomendado. La arquitectura de AMD (ROCm) requiere librerías muy específicas y dependencias que suelen entrar en conflicto con el entorno local del usuario. Utilizar un contenedor asegura la compatibilidad con el hardware.
+* **Causa:** Has sobrepasado tu cuota (Home: 50 GB, Scratch: 500 GB, Archive: 200 GB, Workspace local: 200 GB).
+* **Solución:** Usa `ncdu` para localizar directorios pesados y limpia cachés (e.g. `pip cache purge`, `~/.cache/huggingface`).
 
-**17-. ¿Cómo solicito una GPU específica en mi script?**
+### El entrenamiento es extremadamente lento o lanza alertas de I/O
 
-Usa la directiva `#SBATCH --gres=gpu:1` en tu script.
+* **Posible Causa:** Estás leyendo tu dataset directamente desde la red (`/home`, `$ARCHIVE` o `$SCRATCH`), saturando la conexión del clúster.
+* **Solución:** Copia tus datos primero al disco local de alta velocidad del nodo (`workspace`) y lee/escribe temporalmente allí.
 
-**18-. ¿Puedo elegir en qué nodo ejecutar específicamente?**
+### Error: `Permission denied` en carpetas compartidas con colaboradores
 
-**Sí, puedes usar `--nodelist=nombre_nodo`, aunque se recomienda dejar que *Slurm* gestione la carga.
+* **Posibles Causas:**
+    * Falta de permisos básicos (`+x` para entrar al directorio).
+    * Conflictos en las Listas de Control de Acceso (ACL), específicamente en la `mask`.
+* **Solución:**
+    1. Verifica permisos con `getfacl ruta_directorio`.
+    2. Si la `mask` bloquea la escritura (ej. `r-x`), restáurala con `setfacl -m m:rwx ruta_directorio`.
 
-## Gestión de Archivos, Espacio y Workspaces
+    !!! note ""
+        Para más información puedes revisar la sección [Compartir datos usando ACL](instructions-and-guides/acl.md).
 
-**19-. ¿Dónde debo guardar mis archivos?**
+### El directorio `home`, `scratch` o `archive` en mi nodo no existe
 
-Utiliza directorios de usuario (home) o volúmenes compartidos.
+* **Solución:** Si al ingresar a un nodo de cómputo este inicia en `/` en vez de en tu home, envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) solicitando su verificación.
 
-**20-. ¿Cómo uso los workspaces?**
+### El directorio `workspace` en mi nodo no existe
 
-Cada nodo de cómputo tiene un disco o discos de almacenamiento local, ubicados en `/workspace1`. Este es el único almacenamiento que se puede usar para tareas de entrenamiento. Está estrictamente prohibido leer y escribir desde tu almacenamiento persistente (`home`, `scratch` o `archive`) durante tareas de entrenamiento. Por esto, si vas a usar un nodo determinado para un experimento o investigación, el procedimiento correcto es copiar los datos que vayas a utilizar desde tu almacenamiento persistente (`scratch` o `archive`) al workspace del nodo y guardar todos los modelos/pesos/outputs en este mismo directorio.
+* **Causa:** El directorio `workspace` se monta vía NFS desde los nodos de cómputo hacia los headnodes, por lo que su ruta cambia según desde dónde lo mires.
+* **Solución:** Verifica la ruta correcta según dónde estés parado:
 
-Puedes hacer esto directamente desde `kraken`. Por ejemplo, si vas a entrenar en el nodo `ahsoka`, puedes copiar los datos relevantes desde tu `scratch` o `archive` al directorio `/workspaces/ahsoka-workspace1/<usuario_investigador>/<tu nombre de usuario>` (solo disponible en kraken) con los comandos `cp` o `rsync`. Si este último directorio no existiese, puedes enviar un ticket al [soporte TI](mailto:soporte@cenia.cl) para solicitar su creación. Si vas a copiar muchos datos, es recomendable dejar el proceso de copia corriendo dentro de una instancia de `tmux`.
+    Dentro de un nodo de cómputo (ej. Ahsoka, en un `srun` interactivo), usa la variable de entorno `$WORKSPACE`, que apunta a:
+    ```
+    /workspace1/$PI/$USER
+    ```
 
-Es tu propia responsabilidad desocupar el espacio en los `workspaces` de los nodos de cómputo cuando termines un proyecto y respaldar lo necesario a tu almacenamiento persistente (`scratch` o `archive`). Recuerda que la capacidad de los `workspaces` es limitada y compartida, y datos de mucha antigüedad en un workspace pueden estar sujetos a ser eliminados.
+    Desde el headnode (Kraken), esta variable **no existe**; debes usar la ruta completa:
+    ```
+    /workspaces/ahsoka-workspace1/$PI/$USER
+    ```
 
-**21-. ¿Qué es el directorio `/scratch` de mi home y cómo lo uso?**
+    Si no encuentras tu subcarpeta en ninguna de las dos rutas, envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) solicitando su creación.
 
-Es almacenamiento temporal de alto rendimiento. Úsalo para cálculos, pero mueve los resultados a tu `/home` al finalizar.
+---
 
-**22-. ¿Qué es el directorio `/archive` de mi home y cómo lo uso?**
+## Hardware, GPUs y compatibilidad (CUDA vs AMD/ROCm)
 
-Almacenamiento a largo plazo para resultados importantes,
-Ideal para: Almacenar backups importantes, Resultados finales, datos de publicaciones.
+### Error: "Permission denied" para la GPU o "No HIP GPUs available"
 
-**23-. ¿Cómo transfiero archivos desde mi PC local al cluster?**
+* **Causa:** SLURM aísla el hardware usando políticas estrictas (Cgroups). Si no solicitaste la GPU explícitamente en el script, tu código o contenedor no tendrá permiso para interactuar con ninguna tarjeta gráfica.
+* **Solución:** Asegúrate de incluir la directiva `#SBATCH --gres=gpu:N` (ej. `--gres=gpu:a40:1` para un modelo específico).
 
-Usa `scp` o `rsync`. Ejemplo: `rsync -avz mi_proyecto/ usuario@kraken:/home/usuario/`.
+### Error: `CUDA error: no kernel image is available for execution` en el nodo Antuco
 
-**24-. ¿Qué hago si me quedo sin espacio en disco?**
+* **Causa:** El nodo **Antuco** utiliza GPUs **AMD (Instinct MI210)**. Las librerías de PyTorch o CUDA compiladas para NVIDIA no son compatibles.
+* **Solución:** Debes usar el ecosistema **ROCm**.
 
-Revisa tu uso con `du -sh *` y elimina archivos temporales o logs antiguos.
+### Mi script falla por falta de un paquete o librería de sistema
 
-**25-. ¿Los archivos en el cluster están respaldados?**
+* **Solución:** No uses `apt` ni solicites instalaciones globales. Encapsula tus dependencias en tu entorno virtual (e.g. `conda` o`venv`) o utiliza un contenedor (solicitando primero la habilitación de contenedores para ti).
 
-No existe backup automático. Mantén copias de resultados críticos fuera del cluster.
+### ¿Cómo reporto un nodo caído o un fallo?
 
-**26-. ¿Puedo compartir datos con otros usuarios?**
+* **Solución:** Si un nodo falla o perdiste conexión repentinamente, abre de inmediato un ticket en [soporte@cenia.cl](mailto:soporte@cenia.cl) incluyendo el nombre del nodo, el ID de tu trabajo en SLURM y el registro exacto del error.
 
-Sí, utiliza directorios de grupo con permisos de lectura (`chmod g+r`).
+---
 
-## Entorno de Software y Contenedores
+## Contenedores y Docker
 
-**27-. ¿Puedo usar Docker?**
+### Error: `docker: command not found` o `Permission denied`
 
-Sí, pero el uso de Docker en nodos de cómputo debe ser autorizado previamente. Envía un ticket a [soporte@cenia.cl](mailto:soporte@cenia.cl) para evaluar tu caso.
-
-**28-. ¿Por qué debo ejecutar mis contenedores a través de Slurm?**
-
-Es estrictamente obligatorio porque Slurm garantiza que tu contenedor tenga acceso exclusivo y seguro al hardware (GPU/CPU/RAM) asignado. Ejecutar fuera de Slurm compromete la estabilidad del sistema, causa conflictos de memoria con otros usuarios y evita que el clúster balancee la carga correctamente.
-
-## Optimización y Rendimiento
-
-**29-. ¿Qué son los "nodos de cómputo" vs "headnode"?**
-
-Kraken coordina; los otros ejecutan. No entrenes en Kraken.
-
-**30-. ¿Cómo sé cuánta memoria RAM requiere mi trabajo?**
-
-Prueba y revisa con el comando `seff <job_id>` al terminar.
-
-**31-. ¿Por qué mis resultados son inconsistentes?**
-
-Asegúrate de configurar semillas (seeds) aleatorias si tu código es estocástico.
-
-**32-. ¿Es mejor enviar muchos trabajos pequeños o uno grande?**
-
-Usa arreglos de tareas (*job arrays*) si tienes muchos archivos pequeños.
-
-**33-. ¿Qué significa "Hyperthreading"?**
-
-Considera que un núcleo físico ejecuta dos hilos al solicitar `--cpus-per-task`.
-
-## Resolución de Problemas Avanzada
-
-**34-. ¿Cómo depuro un error de segmentación (segfault)?**
-
-Ejecuta interactivamente con `srun --pty bash`.
-
-**35-. ¿Qué hago si olvido cancelar un trabajo en bucle?**
-
-Usa `scancel -u <tu_usuario>`.
-
-**36-. ¿Por qué Antuco me da errores de librerías CUDA?**
-
-Es un nodo AMD; usa contenedores compatibles con **ROCm**.
-
-**37-. ¿Qué es el "OOM Killer"?**
-
-El sistema mata tu proceso porque se quedó sin RAM. Solicita más memoria con `--mem=...`.
-
-**38-. ¿Cómo reporto un problema de infraestructura?**
-
-Envía un correo detallando: nodo, job ID, comando y error exacto a [soporte@cenia.cl](mailto:soporte@cenia.cl)
+* **Causa:** Por seguridad y aislamiento de privilegios, el servicio nativo de Docker está restringido para los usuarios.
+* **Solución:** Si requieres Docker nativo obligatoriamente, solicita autorización a [soporte@cenia.cl](mailto:soporte@cenia.cl).
