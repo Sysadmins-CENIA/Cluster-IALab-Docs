@@ -23,7 +23,7 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 * **Solución:**
     1. Usa el parámetro `-i` apuntando a tu llave privada, especificando el host completo:
         ```
-        ssh -i ~/.ssh/id_ed25519 tu_usuario@kraken.ing.puc.cl
+        ssh -i ~/.ssh/id_ed25519 <usuario>@kraken.ing.puc.cl
         ```
     2. Verifica que la carpeta `.ssh` y el archivo `authorized_keys` tengan los permisos estrictos de Linux:
         ```
@@ -112,12 +112,12 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 ### Error: `No space left on device` o `Disk quota exceeded`
 
 * **Causa:** Has sobrepasado tu cuota (Home: 50 GB, Scratch: 500 GB, Archive: 200 GB, Workspace local: 200 GB).
-* **Solución:** Usa `ncdu` para localizar directorios pesados y limpia cachés (`pip cache purge`, `~/.cache/huggingface`).
+* **Solución:** Usa `ncdu` para localizar directorios pesados y limpia cachés (e.g. `pip cache purge`, `~/.cache/huggingface`).
 
 ### El entrenamiento es extremadamente lento o lanza alertas de I/O
 
 * **Posible Causa:** Estás leyendo tu dataset directamente desde la red (`/home`, `$ARCHIVE` o `$SCRATCH`), saturando la conexión del clúster.
-* **Solución:** Copia tus datos primero al disco local de alta velocidad del nodo (`Workspace`) y lee/escribe temporalmente allí.
+* **Solución:** Copia tus datos primero al disco local de alta velocidad del nodo (`workspace`) y lee/escribe temporalmente allí.
 
 ### Error: `Permission denied` en carpetas compartidas con colaboradores
 
@@ -168,7 +168,7 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 
 ### Mi script falla por falta de un paquete o librería de sistema
 
-* **Solución:** No uses `apt` ni solicites instalaciones globales. Encapsula tus dependencias en tu entorno virtual (`Conda`/`venv`) o utiliza un contenedor (solicitando primero la habilitación de contenedores para ti).
+* **Solución:** No uses `apt` ni solicites instalaciones globales. Encapsula tus dependencias en tu entorno virtual (e.g. `conda` o`venv`) o utiliza un contenedor (solicitando primero la habilitación de contenedores para ti).
 
 ### ¿Cómo reporto un nodo caído o un fallo?
 
