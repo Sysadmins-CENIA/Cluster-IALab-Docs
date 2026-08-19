@@ -39,10 +39,10 @@ Cada QoS define parámetros como el tiempo máximo de ejecución, la cantidad de
 
 En el clúster se han definido las siguientes colas de trabajo:
 
-| **QoS**   | **Límite de tiempo** | **Máx. GPUs por job** | **Máx. jobs simultáneos** | **Máx. submits** | **Particiones**                       | **Prioridad** |
-| --------- | -------------------- | --------------------- | ------------------------- | ---------------- | ------------------------------------- | ------------- |
-| `debug`   | 1 hora               | 4                     | 1                         | 4                | `ialab-low-unlim`, `ialab-high-unlim` | Alta          |
-| `regular` | 24 horas             | 4                     | 4                         | 32               | `ialab-low`, `ialab-high`             | Media         |
+| **QoS**   | **Límite<br>de tiempo** | **Máx. GPUs<br>por job** | **Máx. jobs<br>simultáneos** | **Máx.<br>submits** | **Particiones**                       | **Prioridad** |
+| --------- | ----------------------- | ------------------------ | ---------------------------- | ------------------- | ------------------------------------- | ------------- |
+| `debug`   | 1 hora                  | 4                        | 1                            | 4                   | `ialab-low-unlim`<br>`ialab-high-unlim` | Alta        |
+| `regular` | 24 horas                | 4                        | 4                            | 32                  | `ialab-low`<br>`ialab-high`             | Media       |
 
 ## Accounts
 
@@ -64,18 +64,18 @@ srun --account=default-account ...
 
 Se recomienda incorporar esta configuración en todos los trabajos para asegurar que Slurm pueda asociarlos correctamente al account correspondiente.
 
-## Priorización de jobs
+## Priorización de trabajos
 
-La priorización de los trabajos se realiza mediante el **Priority Multifactor Plugin** de Slurm. Este mecanismo calcula una prioridad para cada trabajo utilizando distintos factores, los cuales determinan qué trabajos tienen mayor probabilidad de ser seleccionados para su ejecución cuando los recursos se encuentran disponibles.
+La priorización de los trabajos se realiza mediante el **[Multifactor Priority Plugin](https://slurm.schedmd.com/priority_multifactor.html)** de Slurm. Este mecanismo calcula una prioridad para cada trabajo utilizando distintos factores, los cuales determinan qué trabajos tienen mayor probabilidad de ser seleccionados para su ejecución cuando los recursos se encuentran disponibles.
 
 La prioridad no depende de un único criterio. Slurm combina diferentes factores para determinar la prioridad final de cada trabajo.
 
 Los factores considerados dentro de la política definida para el clúster son:
 
-* Age Factor
-* Job Size Factor
-* Fair-Share Factor
-* QoS Factor
+* **Age Factor**: considera el tiempo que el trabajo lleva esperando en la cola. Mientras más tiempo permanece en estado `PENDING`, mayor es su aporte a la prioridad.
+* **Job Size Factor**: considera la cantidad de recursos solicitados por el trabajo. En esta política se favorece a los trabajos que solicitan menos recursos.
+* **Fair-Share Factor**: considera el uso histórico de recursos del usuario. Mientras más recursos ha consumido respecto de los demás usuarios, menor es este factor.
+* **QoS Factor**: corresponde a la prioridad asociada a la cola de trabajo (QoS) seleccionada para ejecutar el trabajo.
 
 Los pesos definidos inicialmente para estos factores son:
 
