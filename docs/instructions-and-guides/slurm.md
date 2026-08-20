@@ -159,6 +159,8 @@ Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los
 #SBATCH --ntasks-per-node=24         # numero de trabajos (procesos) por nodo
 #SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
 #SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
+#SBATCH --account=default-account    # account de Slurm que debes ocupar para tu trabajo (proceso)
+#SBATCH --qos=regular                # cola de trabajo que ocupará tu trabajo (puede ser regular o debug)
 
 python main.py
 echo "Finished with job $SLURM_JOBID"

@@ -25,6 +25,8 @@ Las directivas `#SBATCH` al inicio del archivo definen los recursos y la configu
 #SBATCH --output=test_%j.log        # Nombre del output (%j se reemplaza por el ID del trabajo)
 #SBATCH --error=test_%j.err         # Output de errores (opcional)
 #SBATCH --partition=ialab           # Partición del clúster
+#SBATCH --account=default-account   # Account del clúster
+#SBATCH --qos=regular               # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 pwd; hostname; date
 
 echo "Corriendo un programa de python en un solo CPU core"
@@ -55,6 +57,8 @@ Aquí partimos del ejemplo de "Un proceso", pero la misma técnica aplica a cual
 #SBATCH --output=results/array_%A-%a.log  # Output (%A se reemplaza por el ID del trabajo maestro, %a se reemplaza por el índice del arreglo)
 #SBATCH --array=1-100%10                  # 100 procesos, 10 simultáneos
 #SBATCH --partition=ialab                 # Partición del clúster
+#SBATCH --account=default-account   # Account del clúster
+#SBATCH --qos=regular               # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 pwd; hostname; date
 
 python main.py $SLURM_ARRAY_TASK_ID
@@ -81,6 +85,8 @@ El siguiente script reserva 2 GPUs (`--gres=gpu:2`) y ejecuta `python main.py`. 
 #SBATCH --mail-type=END,FAIL         # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl    # El mail del usuario
 #SBATCH --partition=ialab            # Partición del clúster
+#SBATCH --account=default-account   # Account del clúster
+#SBATCH --qos=regular               # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 #SBATCH --gres=gpu:2                 # Usar 2 GPUs (se pueden usar N GPUs de marca específica de la manera --gres=gpu:marca:N)
 date;hostname;pwd
 
