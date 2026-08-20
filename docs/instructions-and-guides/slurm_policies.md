@@ -205,23 +205,6 @@ PriorityWeightQOS = 1000000
 
 Debido a su elevado peso, la QoS seleccionada constituye actualmente el factor con mayor influencia sobre la prioridad final de un trabajo.
 
-## Distribución de recursos
-
-La política busca evitar que los recursos del clúster sean utilizados de manera desproporcionada por un único usuario durante períodos prolongados.
-
-Para ello, Slurm considera conjuntamente:
-
-* La cola de trabajo seleccionada.
-* La cantidad de recursos solicitados.
-* El tiempo que el trabajo lleva esperando.
-* El uso histórico de recursos del usuario.
-
-Por lo tanto, la prioridad de un trabajo no dependerá únicamente del momento en que fue enviado.
-
-Un usuario que haya utilizado una gran cantidad de recursos puede observar que sus trabajos posteriores reciben una prioridad menor debido al Fair-Share. Por el contrario, un usuario que haya utilizado pocos recursos podrá obtener una prioridad relativa superior.
-
-Esta penalización no es permanente, ya que el mecanismo Half-Life Decay permite recuperar progresivamente la prioridad a medida que disminuye la influencia del uso histórico.
-
 ## Solicitud de recursos computacionales adicionales
 
 En caso de requerir una cantidad de recursos superior a los límites establecidos para las colas o particiones disponibles, se deberá consultar el procedimiento correspondiente para la [Solicitud de Recursos Adicionales](../../additional_resources).
