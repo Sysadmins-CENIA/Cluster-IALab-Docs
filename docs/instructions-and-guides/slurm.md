@@ -48,6 +48,8 @@ Existe documentación para cada comando en la página oficial de *SLURM*. Alguno
 | `serror <jobid>` | Ver errores de un job | — |
 | `stail <jobid>` | Ver salida estándar de un job | — |
 | `sacct -u $USER` | Ver historial de trabajos | [link](https://slurm.schedmd.com/sacct.html) |
+| `sshare` | Ver asignación de FairShare | [link](https://slurm.schedmd.com/sshare.html) |
+| `sprio` | Ver prioridad de jobs | [link](https://slurm.schedmd.com/sprio.html) |
 
 
 
@@ -94,6 +96,21 @@ serror <jobid>
 
 # Mostrar output del trabajo.
 stail <jobid>
+
+# Mostrar share del usuario
+sshare
+
+# Mostrar share del usuario con mayor detalle
+sshare -l
+
+# Mostrar share de todos los usuarios
+sshare -a
+
+# Mostrar prioridad de todos los jobs en PENDING
+sprio
+
+# Mostrar prioridad de uno o más jobs en PENDING
+sprio --jobs=<ID_JOB1>,<ID_JOB2>
 ```
 
 ## Ejecutar trabajos en SLURM
