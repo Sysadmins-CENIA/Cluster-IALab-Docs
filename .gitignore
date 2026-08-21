@@ -13,6 +13,9 @@ Icon[]
 # Resource forks
 ._*
 
+# Python venv
+venv/
+
 # Files and directories that might appear in the root of a volume
 .DocumentRevisions-V100
 .fseventsd

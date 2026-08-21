@@ -28,18 +28,6 @@ SLURM utiliza una arquitectura tipo **controller/worker**:
 
 En este clúster, el controlador principal se encuentra en: `kraken.ing.puc.cl`.
 
-## Particiones
-
-SLURM organiza los nodos en grupos llamados particiones (partitions).
-
-Cada partición define: recursos disponibles, tiempo máximo de ejecución, límites de memoria, cantidad máxima de tareas, y políticas de acceso y prioridad.
-
-Los usuarios envían trabajos a una partición específica dependiendo de las necesidades computacionales de su tarea.
-
-|Partition|Memoria por CPU<br>(DefMemPerCPU)|Máxima memoria por nodo<br>(MaxMemPerNode)|Máximo de tiempo por tarea<br>(MaxTime)|
-|--|--|--|--|
-|ialab|4 GB|128 GB|24 hrs|
-
 ## Comandos básicos
 
 Existe documentación para cada comando en la página oficial de *SLURM*. Algunos de los comandos básicos para el uso del scheduler se encuentran detallados a continuación.
@@ -60,6 +48,8 @@ Existe documentación para cada comando en la página oficial de *SLURM*. Alguno
 | `serror <jobid>` | Ver errores de un job | — |
 | `stail <jobid>` | Ver salida estándar de un job | — |
 | `sacct -u $USER` | Ver historial de trabajos | [link](https://slurm.schedmd.com/sacct.html) |
+| `sshare` | Ver asignación de FairShare | [link](https://slurm.schedmd.com/sshare.html) |
+| `sprio` | Ver prioridad de jobs | [link](https://slurm.schedmd.com/sprio.html) |
 
 
 
@@ -106,6 +96,21 @@ serror <jobid>
 
 # Mostrar output del trabajo.
 stail <jobid>
+
+# Mostrar share del usuario
+sshare
+
+# Mostrar share del usuario con mayor detalle
+sshare -l
+
+# Mostrar share de todos los usuarios
+sshare -a
+
+# Mostrar prioridad de todos los jobs en PENDING
+sprio
+
+# Mostrar prioridad de uno o más jobs en PENDING
+sprio --jobs=<ID_JOB1>,<ID_JOB2>
 ```
 
 ## Ejecutar trabajos en SLURM
@@ -154,6 +159,8 @@ Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los
 #SBATCH --ntasks-per-node=24         # numero de trabajos (procesos) por nodo
 #SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
 #SBATCH --partition=ialab            # partición donde correrá tu trabajo (proceso)
+#SBATCH --account=default-account    # account de Slurm que debes ocupar para tu trabajo (proceso)
+#SBATCH --qos=regular                # cola de trabajo que ocupará tu trabajo (puede ser regular o debug)
 
 python main.py
 echo "Finished with job $SLURM_JOBID"

@@ -3,11 +3,12 @@ site_url: https://cluster.cenia.cl/
 site_description: Documentación técnica del Clúster IALab de CENIA // DCC UC
 nav:
   - Introducción: index.md
-  - Primeros Pasos:
+  - Información y Políticas:
     - Primeros Pasos / Registro: onboarding.md
     - Hardware del Clúster: hardware.md
     - Almacenamiento: storage.md
     - Política de Uso: usage_policy.md
+    - Políticas de SLURM: instructions-and-guides/slurm_policies.md
   - Instrucciones y Guías:
     - SSH: instructions-and-guides/ssh.md
     - SLURM: instructions-and-guides/slurm.md

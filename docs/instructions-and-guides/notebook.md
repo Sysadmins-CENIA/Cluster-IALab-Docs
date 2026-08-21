@@ -24,6 +24,8 @@ Usa un script como el siguiente para lanzar el servidor. Está disponible en la 
 #SBATCH --cpus-per-task=4              # Número de CPUs (threads) para el notebook
 #SBATCH --mem=8gb                      # Memoria reservada para el trabajo
 #SBATCH --partition=ialab              # Partición donde correr el trabajo
+#SBATCH --account=default-account      # Account del clúster
+#SBATCH --qos=regular                  # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 #SBATCH --nodelist=<node>              # Nodo donde correr el trabajo
 #SBATCH --output=slurm/logs/%x_%j.log  # Nombre del output (%x=nombre del trabajo, %j=ID del trabajo)
 #SBATCH --time=8:00:00                 # Tiempo limite del trabajo. Importante definirlo para no
