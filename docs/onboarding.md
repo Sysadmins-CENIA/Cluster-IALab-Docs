@@ -6,7 +6,7 @@ Para obtener acceso al clúster IALab debes completar el siguiente formulario de
 
 [Formulario de Registro](https://bit.ly/registroClusterIALab){ .md-button }
 
-Una vez procesada tu solicitud, recibirás tu usuario para acceder al Cluster.
+Una vez procesada tu solicitud, recibirás tu usuario para acceder al cluster.
 
 ## Primera conexión al clúster
 
