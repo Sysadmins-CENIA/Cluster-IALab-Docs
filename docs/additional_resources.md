@@ -1,8 +1,8 @@
 #  Políticas de Solicitud y Asignación de Recursos Adicionales del Cluster de Inteligencia Artificial
 
 !!! note "📋 Acceso Rápido a Formularios"
-    * **Solicitud de Reserva de Recursos Computacionales por Proyecto (GPU/CPU/RAM)** — [Formulario](https://forms.gle/cm7PKZGuexncfa857) → ver [Sección 3.1](#31-equipo-solicitante)
-    * **Solicitud Excepcional de Espacio de Almacenamiento** **(HOME, ARCHIVE, SCRATCH, WORKSPACE)** — [Formulario](https://forms.gle/Pfo9LUD6566trFb69) → ver [Sección 9](#9-solicitud-excepcional-de-espacio-de-almacenamiento-por-proyecto)
+    * **Solicitud Reserva de Recursos Computacionales por Proyecto (GPU/CPU/RAM)** — [Formulario](https://forms.gle/cm7PKZGuexncfa857) → ver [Sección 3.1](#31-equipo-solicitante)
+    * **Solicitud Excepcional de Espacio de Almacenamiento por Proyecto** **(HOME, ARCHIVE, SCRATCH, WORKSPACE)** — [Formulario](https://forms.gle/Pfo9LUD6566trFb69) → ver [Sección 9](#9-solicitud-excepcional-de-espacio-de-almacenamiento-por-proyecto)
 
 ---
 
@@ -110,7 +110,7 @@ El Equipo Sysadmin se reserva el derecho de programar **ventanas de mantenimient
 ### 9.1 Propósito
 Cuando un proyecto requiera una capacidad de almacenamiento **superior a la cuota por defecto** asignada al usuario, el Investigador Principal deberá completar el Formulario **"Solicitud excepcional de espacio por proyecto"**, disponible en el siguiente enlace:
 
-**[Formulario de Solicitud Excepcional de Espacio](https://forms.gle/Pfo9LUD6566trFb69)**
+**[Formulario de Solicitud Excepcional de Espacio por Proyecto](https://forms.gle/Pfo9LUD6566trFb69)**
 
 ### 9.2 Tipos de Almacenamiento Cubiertos
 Esta solicitud aplica a cualquiera de las siguientes áreas de almacenamiento del usuario o proyecto:
