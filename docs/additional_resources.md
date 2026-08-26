@@ -1,4 +1,10 @@
-#  Políticas de Solicitud y Asignación de Recursos del Cluster de Inteligencia Artificial
+#  Políticas de Solicitud y Asignación de Recursos Adicionales del Cluster de Inteligencia Artificial
+
+!!! note "📋 Acceso Rápido a Formularios"
+    * **Solicitud de Reserva de Recursos Computacionales por Proyecto (GPU/CPU/RAM)** — [Formulario](https://forms.gle/cm7PKZGuexncfa857) → ver [Sección 3.1](#31-equipo-solicitante)
+    * **Solicitud Excepcional de Espacio de Almacenamiento** **(HOME, ARCHIVE, SCRATCH, WORKSPACE)** — [Formulario](https://forms.gle/Pfo9LUD6566trFb69) → ver [Sección 9](#9-solicitud-excepcional-de-espacio-de-almacenamiento-por-proyecto)
+
+---
 
 ## 1. Introducción y Marco General
 
@@ -29,7 +35,7 @@ Esta política es de **cumplimiento obligatorio** para todo el personal investig
 ### 3.1 Equipo Solicitante
 Es responsabilidad del **Investigador Principal**:
 
-* Completar el [Formulario **F-SRCIA-001**](https://forms.gle/cm7PKZGuexncfa857) de manera **veraz, precisa y completa**.
+* Completar el [Formulario Solicitud de Recursos Adicionales Computacionales por Proyecto del Cluster de IA](https://forms.gle/cm7PKZGuexncfa857) de manera **veraz, precisa y completa**.
 * Asegurar que el código y el job estén **optimizados** antes de la solicitud (pruebas locales, Pruebas de Concepto (PoC)).
 * **Monitorear activamente** su job una vez asignado y asegurar su terminación o liberación una vez finalizado el proceso.
 * Monitorear el uso de recursos.
@@ -64,7 +70,7 @@ Si el método solicitado (ej. Full Fine-Tuning) consume significativamente más 
 
 El Equipo Sysadmin seguirá estos pasos internos para la asignación:
 
-1.  **Recepción y Validación:** Revisar el Formulario **F-SRCIA-001** y clasificar la Prioridad (P1, P2 o P3).
+1.  **Recepción y Validación:** Revisar el **Formulario** y clasificar la Prioridad (P1, P2 o P3).
 2.  **Reunión de coordinación**
 3.  **Mapeo de Hardware:** Identificar un **Nodo Específico** dentro del Cluster (ej. NODO-ALPHA-03 o NODO-BETA-05) cuyas especificaciones (GPU,RAM) cumplan o superen los requisitos del proyecto.
 4.  **Posible periodo de prueba**
@@ -96,3 +102,27 @@ Los proyectos que indiquen **alta flexibilidad horaria** (disponibilidad para ej
 
 ### 8.2 Mantenimiento Planificado
 El Equipo Sysadmin se reserva el derecho de programar **ventanas de mantenimiento planificado** con **48 horas de aviso**. Todos los jobs deben ser detenidos o migrados por el equipo solicitante antes de este periodo para evitar la corrupción de datos o checkpoints.
+
+---
+
+## 9. Solicitud Excepcional de Espacio de Almacenamiento por Proyecto
+
+### 9.1 Propósito
+Cuando un proyecto requiera una capacidad de almacenamiento **superior a la cuota por defecto** asignada al usuario, el Investigador Principal deberá completar el Formulario **"Solicitud excepcional de espacio por proyecto"**, disponible en el siguiente enlace:
+
+**[Formulario de Solicitud Excepcional de Espacio](https://forms.gle/Pfo9LUD6566trFb69)**
+
+### 9.2 Tipos de Almacenamiento Cubiertos
+Esta solicitud aplica a cualquiera de las siguientes áreas de almacenamiento del usuario o proyecto:
+
+* **HOME**
+* **ARCHIVE**
+* **SCRATCH**
+* **WORKSPACE**
+
+### 9.3 Alcance
+Esta solicitud es válida para espacio adicional en los distintos nodos del Cluster de IA de CENIA, incluyendo tanto los nodos del **IALAB** como el resto de los nodos del Cluster.
+
+### 9.4 Consideraciones
+* La solicitud debe incluir una justificación técnica del volumen de datos y su relación con el proyecto (ej. tamaño de datasets, checkpoints, resultados intermedios).
+* Al igual que con las solicitudes de cómputo **(Formulario de Recursos Adicionales Computacionales por Proyecto del Cluster de IA)**, esta solicitud será evaluada por el Equipo Sysadmin en función de la disponibilidad de infraestructura.
