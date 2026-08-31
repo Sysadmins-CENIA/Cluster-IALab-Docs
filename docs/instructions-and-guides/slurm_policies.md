@@ -16,12 +16,12 @@ En el clúster se han definido las siguientes particiones:
 | ------------------ | ----------------------------------------- |
 | `ialab-high`       | antuco, llaima                            |
 | `ialab-low`        | ahsoka, hydra, scylla, ventress, yodaxico |
-| `ialab-high-unlim` | antuco, llaima                            |
-| `ialab-low-unlim`  | ahsoka, hydra, scylla, ventress, yodaxico |
+| `ialab-high-unlimit` | antuco, llaima                            |
+| `ialab-low-unlimit`  | ahsoka, hydra, scylla, ventress, yodaxico |
 
 Las particiones `ialab-high` e `ialab-low` poseen límites de recursos definidos para controlar la cantidad de CPU y memoria que puede utilizar un trabajo en función de las GPUs solicitadas.
 
-Las particiones `ialab-high-unlim` e `ialab-low-unlim` están destinadas a trabajos que requieren una mayor cantidad de recursos y, por lo tanto, no poseen los mismos límites máximos de CPU y memoria establecidos en sus respectivas particiones limitadas.
+Las particiones `ialab-high-unlimit` e `ialab-low-unlimit` están destinadas a trabajos que requieren una mayor cantidad de recursos y, por lo tanto, no poseen los mismos límites máximos de CPU y memoria establecidos en sus respectivas particiones limitadas.
 
 ### Relación entre GPUs, CPU y memoria
 
@@ -41,7 +41,7 @@ En el clúster se han definido las siguientes colas de trabajo:
 
 | **QoS**   | **Límite<br>de tiempo** | **Máx. GPUs<br>por job** | **Máx. jobs<br>simultáneos** | **Máx.<br>submits** | **Particiones**                       | **Prioridad** |
 | --------- | ----------------------- | ------------------------ | ---------------------------- | ------------------- | ------------------------------------- | ------------- |
-| `debug`   | 1 hora                  | 4                        | 1                            | 4                   | `ialab-low-unlim`<br>`ialab-high-unlim` | Alta        |
+| `debug`   | 1 hora                  | 4                        | 1                            | 4                   | `ialab-low-unlimit`<br>`ialab-high-unlimit` | Alta        |
 | `regular` | 24 horas                | 4                        | 4                            | 32                  | `ialab-low`<br>`ialab-high`             | Media       |
 
 ## Accounts

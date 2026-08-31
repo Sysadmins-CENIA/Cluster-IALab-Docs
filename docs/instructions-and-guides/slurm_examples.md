@@ -24,7 +24,7 @@ Las directivas `#SBATCH` al inicio del archivo definen los recursos y la configu
 #SBATCH --time=0-00:05:00           # Tiempo límite d-hrs:min:sec
 #SBATCH --output=test_%j.log        # Nombre del output (%j se reemplaza por el ID del trabajo)
 #SBATCH --error=test_%j.err         # Output de errores (opcional)
-#SBATCH --partition=ialab           # Partición del clúster
+#SBATCH --partition=ialab-low       # Partición del clúster
 #SBATCH --account=default-account   # Account del clúster
 #SBATCH --qos=regular               # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 pwd; hostname; date
@@ -56,7 +56,7 @@ Aquí partimos del ejemplo de "Un proceso", pero la misma técnica aplica a cual
 #SBATCH --time=0-00:05:00                 # Tiempo límite d-hrs:min:sec
 #SBATCH --output=results/array_%A-%a.log  # Output (%A se reemplaza por el ID del trabajo maestro, %a se reemplaza por el índice del arreglo)
 #SBATCH --array=1-100%10                  # 100 procesos, 10 simultáneos
-#SBATCH --partition=ialab                 # Partición del clúster
+#SBATCH --partition=ialab-low             # Partición del clúster
 #SBATCH --account=default-account   # Account del clúster
 #SBATCH --qos=regular               # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 pwd; hostname; date
@@ -84,7 +84,7 @@ El siguiente script reserva 2 GPUs (`--gres=gpu:2`) y ejecuta `python main.py`. 
 #SBATCH --mem-per-cpu=2000mb         # Memoria por proceso
 #SBATCH --mail-type=END,FAIL         # Enviar eventos al mail (NONE, BEGIN, END, FAIL, ALL)
 #SBATCH --mail-user=usuario@uc.cl    # El mail del usuario
-#SBATCH --partition=ialab            # Partición del clúster
+#SBATCH --partition=ialab-low        # Partición del clúster
 #SBATCH --account=default-account   # Account del clúster
 #SBATCH --qos=regular               # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 #SBATCH --gres=gpu:2                 # Usar 2 GPUs (se pueden usar N GPUs de marca específica de la manera --gres=gpu:marca:N)

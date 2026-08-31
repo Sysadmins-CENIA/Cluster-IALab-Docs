@@ -77,7 +77,7 @@ Esta sección contiene soluciones rápidas a los errores, advertencias e inconve
 **`Invalid partition name` / `Invalid qos`**
 
 * **Causa:** Estás apuntando a una cola inexistente o no tienes permisos sobre ella.
-* **Solución:** Verifica el nombre de la partición con `#SBATCH --partition=ialab`.
+* **Solución:** Verifica el nombre de la partición con `#SBATCH --partition=ialab-low`.
 
 ### Exit Code 137: Trabajo cancelado inesperadamente (OOM Killer)
 

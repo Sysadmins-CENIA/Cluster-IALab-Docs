@@ -23,7 +23,7 @@ Usa un script como el siguiente para lanzar el servidor. Está disponible en la 
 #SBATCH --ntasks=1                     # Correr una sola tarea
 #SBATCH --cpus-per-task=4              # Número de CPUs (threads) para el notebook
 #SBATCH --mem=8gb                      # Memoria reservada para el trabajo
-#SBATCH --partition=ialab              # Partición donde correr el trabajo
+#SBATCH --partition=ialab-low          # Partición donde correr el trabajo
 #SBATCH --account=default-account      # Account del clúster
 #SBATCH --qos=regular                  # Cola de trabajo del clúster (puede ser regular o debug, según necesidad)
 #SBATCH --nodelist=<node>              # Nodo donde correr el trabajo
