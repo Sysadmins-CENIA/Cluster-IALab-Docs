@@ -14,16 +14,13 @@ Esta solicitud está destinada a proyectos de gran envergadura que exceden las c
 
 ---
 
-## Solicitud Excepcional de Espacio de Almacenamiento por Proyecto
+## Aumento Excepcional de Almacenamiento por Proyecto
 
-### Propósito
-Cuando un proyecto requiera una capacidad de almacenamiento **superior a la cuota por defecto** asignada al usuario, el Investigador Principal deberá completar este formulario.
+Esta solicitud está destinada a proyectos que requieran una capacidad de almacenamiento **superior a la cuota por defecto** asignada a los usuarios. A través de esta solicitud, el Investigador Principal puede solicitar una ampliación de cuota de acuerdo con las necesidades del proyecto.
+
+Esta solicitud aplica a cualquier [almacenamiento](./storage.md) del clúster.
 
 **[Formulario de Solicitud Excepcional de Espacio](https://forms.gle/Pfo9LUD6566trFb69)**
-
-### Tipos de Almacenamiento Cubiertos
-Esta solicitud aplica a cualquier **almacenamiento** del cluster.
-
 
 ### Alcance
 Esta solicitud es válida para espacio adicional en los distintos nodos del cluster de IA de CENIA, incluyendo tanto los nodos del **IALAB** como el resto de los nodos del cluster.
