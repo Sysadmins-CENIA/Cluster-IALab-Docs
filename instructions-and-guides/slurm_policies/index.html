@@ -1,0 +1,397 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/instructions-and-guides/slurm_policies/" />
+      <link rel="shortcut icon" href="../../img/favicon.ico" />
+    <title>Políticas de SLURM - Cluster IALab</title>
+    <link rel="stylesheet" href="../../css/theme.css" />
+    <link rel="stylesheet" href="../../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "Pol\u00edticas de SLURM";
+        var mkdocs_page_input_path = "instructions-and-guides/slurm_policies.md";
+        var mkdocs_page_url = "/instructions-and-guides/slurm_policies/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="Políticas de SLURM · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/instructions-and-guides/slurm_policies/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Políticas de SLURM · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href="../.." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="../..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Información y Políticas</span></p>
+              <ul class="current">
+                  <li class="toctree-l1"><a class="reference internal" href="../../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../usage_policy/">Política de Uso</a>
+                  </li>
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">Políticas de SLURM</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#particiones">Particiones</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#relacion-entre-gpus-cpu-y-memoria">Relación entre GPUs, CPU y memoria</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#colas-de-trabajo-qos">Colas de trabajo (QoS)</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#accounts">Accounts</a>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#priorizacion-de-trabajos">Priorización de trabajos</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#factor-de-edad-age-factor">Factor de edad (Age Factor)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#factor-de-tamano-del-job-job-size-factor">Factor de tamaño del job (Job Size Factor)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#factor-de-fair-share">Factor de Fair-Share</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#recuperacion-de-prioridad-mediante-half-life-decay">Recuperación de prioridad mediante Half-Life Decay</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#actualizacion-del-calculo-de-prioridad">Actualización del cálculo de prioridad</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#factor-de-cola-de-trabajo-qos-factor">Factor de cola de trabajo (QoS Factor)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#solicitud-de-recursos-computacionales-adicionales">Solicitud de recursos computacionales adicionales</a>
+    </li>
+    </ul>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../../faq/">FAQ</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../.." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Información y Políticas</li>
+      <li class="breadcrumb-item active">Políticas de SLURM</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="politicas-de-slurm">Políticas de SLURM</h1>
+<p>Debido a la diversidad de cargas de trabajo existentes en el clúster, se ha definido una política de uso de recursos que establece las condiciones bajo las cuales los usuarios pueden ejecutar sus trabajos.</p>
+<p>La política busca distribuir los recursos de manera equilibrada entre los usuarios, priorizando los trabajos de corta duración y menor consumo de recursos, al mismo tiempo que considera el uso histórico de cada usuario para evitar una utilización desproporcionada de los recursos disponibles.</p>
+<p>A continuación, se describen las particiones, colas de trabajo (QoS) y mecanismos de priorización utilizados por Slurm.</p>
+<h2 id="particiones">Particiones</h2>
+<p>Las particiones son la forma en que se agrupan los nodos del clúster de acuerdo con sus características y capacidades. Cada partición define un conjunto de nodos sobre los cuales pueden ejecutarse los trabajos asociados a ella.</p>
+<p>En el clúster se han definido las siguientes particiones:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Partición</strong></th>
+<th><strong>Nodos</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ialab-high</code></td>
+<td>antuco, llaima</td>
+</tr>
+<tr>
+<td><code>ialab-low</code></td>
+<td>ahsoka, hydra, scylla, ventress, yodaxico</td>
+</tr>
+<tr>
+<td><code>ialab-high-unlimit</code></td>
+<td>antuco, llaima</td>
+</tr>
+<tr>
+<td><code>ialab-low-unlimit</code></td>
+<td>ahsoka, hydra, scylla, ventress, yodaxico</td>
+</tr>
+</tbody>
+</table>
+<p>Las particiones <code>ialab-high</code> e <code>ialab-low</code> poseen límites de recursos definidos para controlar la cantidad de CPU y memoria que puede utilizar un trabajo en función de las GPUs solicitadas.</p>
+<p>Las particiones <code>ialab-high-unlimit</code> e <code>ialab-low-unlimit</code> están destinadas a trabajos que requieren una mayor cantidad de recursos y, por lo tanto, no poseen los mismos límites máximos de CPU y memoria establecidos en sus respectivas particiones limitadas.</p>
+<h3 id="relacion-entre-gpus-cpu-y-memoria">Relación entre GPUs, CPU y memoria</h3>
+<p>En las particiones con límites definidos, la cantidad de GPUs solicitadas por un trabajo determina también la cantidad de CPU y memoria que este podrá utilizar de acuerdo con la configuración de la partición.</p>
+<p>Por ejemplo, en <code>ialab-low</code>, donde se establecen 4 CPU y 20 GB de memoria por GPU, un trabajo que solicite 2 GPUs podrá disponer de hasta 8 CPU y 40 GB de memoria, siempre respetando los límites máximos definidos para el nodo.</p>
+<p>Por este motivo, la cantidad de GPUs solicitadas por un trabajo no debe considerarse únicamente como un límite de aceleradores, ya que también afecta la cantidad de CPU y memoria que puede utilizar.</p>
+<h2 id="colas-de-trabajo-qos">Colas de trabajo (QoS)</h2>
+<p>Las colas de trabajo son el mecanismo utilizado por Slurm para clasificar y gestionar los trabajos enviados al clúster de acuerdo con distintas políticas de ejecución. Estas se implementan mediante <strong>Quality of Service (QoS)</strong>, que permiten establecer diferentes condiciones y restricciones para los trabajos asociados a cada cola.</p>
+<p>Cada QoS define parámetros como el tiempo máximo de ejecución, la cantidad de recursos que puede utilizar un trabajo, la cantidad de trabajos que un usuario puede ejecutar simultáneamente y la prioridad asociada a la cola.</p>
+<p>En el clúster se han definido las siguientes colas de trabajo:</p>
+<table>
+<thead>
+<tr>
+<th><strong>QoS</strong></th>
+<th><strong>Límite<br>de tiempo</strong></th>
+<th><strong>Máx. GPUs<br>por job</strong></th>
+<th><strong>Máx. jobs<br>simultáneos</strong></th>
+<th><strong>Máx.<br>submits</strong></th>
+<th><strong>Particiones</strong></th>
+<th><strong>Prioridad</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>debug</code></td>
+<td>1 hora</td>
+<td>4</td>
+<td>1</td>
+<td>4</td>
+<td><code>ialab-low-unlimit</code><br><code>ialab-high-unlimit</code></td>
+<td>Alta</td>
+</tr>
+<tr>
+<td><code>regular</code></td>
+<td>24 horas</td>
+<td>4</td>
+<td>4</td>
+<td>32</td>
+<td><code>ialab-low</code><br><code>ialab-high</code></td>
+<td>Media</td>
+</tr>
+</tbody>
+</table>
+<h2 id="accounts">Accounts</h2>
+<p>En Slurm, los accounts permiten asociar los trabajos a una cuenta determinada para efectos de administración, seguimiento y aplicación de políticas de uso de recursos.</p>
+<p>En el clúster, todos los usuarios pertenecen al account <code>default-account</code>. Por lo tanto, este debe ser especificado al momento de enviar los trabajos.</p>
+<p>Para trabajos enviados mediante scripts, se debe indicar el account utilizando la directiva <code>#SBATCH</code>:</p>
+<pre><code class="language-bash">#SBATCH --account=default-account
+</code></pre>
+<p>En el caso de utilizar <code>srun</code> directamente, se debe especificar mediante el parámetro correspondiente:</p>
+<pre><code class="language-bash">srun --account=default-account ...
+</code></pre>
+<p>Se recomienda incorporar esta configuración en todos los trabajos para asegurar que Slurm pueda asociarlos correctamente al account correspondiente.</p>
+<h2 id="priorizacion-de-trabajos">Priorización de trabajos</h2>
+<p>La priorización de los trabajos se realiza mediante el <strong><a href="https://slurm.schedmd.com/priority_multifactor.html">Multifactor Priority Plugin</a></strong> de Slurm. Este mecanismo calcula una prioridad para cada trabajo utilizando distintos factores, los cuales determinan qué trabajos tienen mayor probabilidad de ser seleccionados para su ejecución cuando los recursos se encuentran disponibles.</p>
+<p>La prioridad no depende de un único criterio. Slurm combina diferentes factores para determinar la prioridad final de cada trabajo.</p>
+<p>Los factores considerados dentro de la política definida para el clúster son:</p>
+<ul>
+<li><strong>Age Factor</strong>: considera el tiempo que el trabajo lleva esperando en la cola. Mientras más tiempo permanece en estado <code>PENDING</code>, mayor es su aporte a la prioridad.</li>
+<li><strong>Job Size Factor</strong>: considera la cantidad de recursos solicitados por el trabajo. En esta política se favorece a los trabajos que solicitan menos recursos.</li>
+<li><strong>Fair-Share Factor</strong>: considera el uso histórico de recursos del usuario. Mientras más recursos ha consumido respecto de los demás usuarios, menor es este factor.</li>
+<li><strong>QoS Factor</strong>: corresponde a la prioridad asociada a la cola de trabajo (QoS) seleccionada para ejecutar el trabajo.</li>
+</ul>
+<p>Los pesos definidos inicialmente para estos factores son:</p>
+<table>
+<thead>
+<tr>
+<th><strong>Factor</strong></th>
+<th><strong>Peso</strong></th>
+<th><strong>Peso relativo aproximado</strong></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Age</td>
+<td>1.000</td>
+<td>0,09 %</td>
+</tr>
+<tr>
+<td>Job Size</td>
+<td>10.000</td>
+<td>0,90 %</td>
+</tr>
+<tr>
+<td>Fair-Share</td>
+<td>100.000</td>
+<td>9,00 %</td>
+</tr>
+<tr>
+<td>QoS</td>
+<td>1.000.000</td>
+<td>90,01 %</td>
+</tr>
+</tbody>
+</table>
+<p>La prioridad final se obtiene conceptualmente mediante la combinación de estos factores:</p>
+<pre><code class="language-text">Job_Priority =
+    (1000 * Age_Factor)
+  + (10000 * Job_Size_Factor)
+  + (100000 * FairShare_Factor)
+  + (1000000 * QOS_Factor)
+</code></pre>
+<p>Los valores utilizados por cada factor son calculados internamente por Slurm y pueden variar según las características y el historial de utilización de cada trabajo y usuario.</p>
+<h3 id="factor-de-edad-age-factor">Factor de edad (Age Factor)</h3>
+<p>El factor de edad considera el tiempo que un trabajo permanece en estado <code>PENDING</code> desde el momento en que fue enviado. A medida que aumenta el tiempo de espera, también aumenta su contribución al cálculo de prioridad.</p>
+<p>En esta política, el factor de edad posee una influencia relativamente baja frente a los demás factores. Su objetivo es evitar que un trabajo permanezca indefinidamente en espera, pero sin desplazar de forma significativa a trabajos pertenecientes a colas con una prioridad superior.</p>
+<p>Se establece inicialmente un peso de:</p>
+<pre><code class="language-text">PriorityWeightAge = 1000
+</code></pre>
+<p>El factor comenzará a tener una mayor influencia a medida que el trabajo acumule tiempo de espera, especialmente después de períodos prolongados en estado <code>PENDING</code>.</p>
+<h3 id="factor-de-tamano-del-job-job-size-factor">Factor de tamaño del job (Job Size Factor)</h3>
+<p>El factor de tamaño considera la cantidad de recursos solicitados por un trabajo.</p>
+<p>En la política definida para el clúster, se busca otorgar una mayor prioridad relativa a los trabajos que requieren una menor cantidad de recursos.</p>
+<p>Esto permite favorecer la ejecución de trabajos pequeños, particularmente aquellos asociados a la cola <code>debug</code>. De esta forma, trabajos que requieren pocos recursos pueden entrar y finalizar rápidamente sin tener que esperar necesariamente a que exista suficiente capacidad disponible para trabajos de mayor tamaño.</p>
+<p>Este factor posee un peso de:</p>
+<pre><code class="language-text">PriorityWeightJobSize = 10000
+</code></pre>
+<p>Por lo tanto, entre trabajos con características similares, aquellos que requieran una menor cantidad de recursos podrán obtener una prioridad relativa superior.</p>
+<h3 id="factor-de-fair-share">Factor de Fair-Share</h3>
+<p>El factor de Fair-Share permite considerar el uso histórico de recursos realizado por los usuarios al determinar la prioridad de sus trabajos.</p>
+<p>A medida que un usuario utiliza una mayor cantidad de recursos respecto de los demás usuarios, su factor de Fair-Share disminuye y, por lo tanto, sus nuevos trabajos pueden recibir una menor prioridad.</p>
+<p>El objetivo de este mecanismo es distribuir de manera más equitativa los recursos del clúster, evitando que un usuario que haya utilizado una cantidad considerable de recursos tenga una ventaja permanente sobre aquellos que han tenido un menor nivel de utilización.</p>
+<p>Este factor posee un peso de:</p>
+<pre><code class="language-text">PriorityWeightFairshare = 100000
+</code></pre>
+<p>Por lo tanto, el uso histórico de recursos tendrá una influencia considerable en la prioridad de los trabajos.</p>
+<p>Un usuario que utilice recursos de manera intensiva durante un período determinado verá reducida progresivamente la prioridad asociada al Fair-Share de sus trabajos posteriores.</p>
+<h3 id="recuperacion-de-prioridad-mediante-half-life-decay">Recuperación de prioridad mediante Half-Life Decay</h3>
+<p>Para evitar que el historial de utilización afecte permanentemente la prioridad de un usuario, Slurm utiliza el mecanismo <strong>Half-Life Decay</strong>.</p>
+<p>Este mecanismo permite reducir progresivamente la influencia del uso histórico sobre el Fair-Share.</p>
+<p>La configuración considerada para esta política establece un período de recuperación de 7 días.</p>
+<p>Por ejemplo, si el uso considerado para un usuario corresponde a 1.000 horas de GPU y posteriormente deja de utilizar recursos, su influencia histórica se reducirá progresivamente:</p>
+<pre><code class="language-text">Semana 1: 1000 horas
+Semana 2:  500 horas
+Semana 3:  250 horas
+Semana 4:  125 horas
+...
+</code></pre>
+<p>Esto no significa que se elimine completamente el historial cada siete días. En cambio, la influencia del uso acumulado se reduce a la mitad durante cada período de Half-Life.</p>
+<p>De esta manera, un usuario que haya utilizado muchos recursos podrá recuperar progresivamente su prioridad si posteriormente reduce su consumo.</p>
+<h3 id="actualizacion-del-calculo-de-prioridad">Actualización del cálculo de prioridad</h3>
+<p>El período de Half-Life y la frecuencia con la que Slurm recalcula la prioridad son mecanismos diferentes.</p>
+<p>El <strong>Half-Life Decay</strong> determina cuánto tarda en reducirse la influencia del uso histórico, mientras que <code>PriorityCalcPeriod</code> determina cada cuánto tiempo se realizan los cálculos relacionados con la prioridad.</p>
+<p>Para esta política se considera:</p>
+<pre><code class="language-text">PriorityCalcPeriod = 5 minutos
+</code></pre>
+<p>Por lo tanto, los factores que determinan la prioridad pueden ser recalculados periódicamente. Como consecuencia, la prioridad de un trabajo que se encuentra actualmente en estado <code>PENDING</code> puede cambiar mientras permanece en la cola.</p>
+<h3 id="factor-de-cola-de-trabajo-qos-factor">Factor de cola de trabajo (QoS Factor)</h3>
+<p>El factor de QoS corresponde al valor de prioridad asociado a la cola de trabajo seleccionada para ejecutar un trabajo.</p>
+<p>Cada QoS posee una prioridad determinada de acuerdo con las necesidades que busca cubrir dentro de la política del clúster.</p>
+<p>En esta política:</p>
+<ul>
+<li><code>debug</code> posee una prioridad superior.</li>
+<li><code>regular</code> posee una prioridad inferior.</li>
+</ul>
+<p>Por este motivo, los usuarios deben seleccionar la cola que mejor se adapte a las características de su trabajo.</p>
+<p>La elección de una QoS determina tanto las restricciones de ejecución del trabajo como su prioridad relativa frente a otros trabajos que se encuentren esperando recursos.</p>
+<p>El peso definido para este factor es:</p>
+<pre><code class="language-text">PriorityWeightQOS = 1000000
+</code></pre>
+<p>Debido a su elevado peso, la QoS seleccionada constituye actualmente el factor con mayor influencia sobre la prioridad final de un trabajo.</p>
+<h2 id="solicitud-de-recursos-computacionales-adicionales">Solicitud de recursos computacionales adicionales</h2>
+<p>En caso de requerir una cantidad de recursos superior a los límites establecidos para las colas o particiones disponibles, se deberá consultar el procedimiento correspondiente para la <a href="../../additional_resources">Solicitud de Recursos Adicionales</a>.</p>
+<p>La administración del clúster revisará la solicitud de acuerdo con las necesidades del trabajo y la disponibilidad de recursos, de ser aceptada, se enviarán los pasos para ocupar la reserva de recursos.</p>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../../usage_policy/" class="btn btn-neutral float-left" title="Política de Uso"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../ssh/" class="btn btn-neutral float-right" title="SSH">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../../usage_policy/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../ssh/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "../..";</script>
+    <script src="../../js/theme_extra.js"></script>
+    <script src="../../js/theme.js"></script>
+      <script src="../../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>

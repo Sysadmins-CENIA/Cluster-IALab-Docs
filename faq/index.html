@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="canonical" href="https://cluster.cenia.cl/faq/" />
+      <link rel="shortcut icon" href="../img/favicon.ico" />
+    <title>FAQ - Cluster IALab</title>
+    <link rel="stylesheet" href="../css/theme.css" />
+    <link rel="stylesheet" href="../css/theme_extra.css" />
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css" />
+    
+      <script>
+        // Current page data
+        var mkdocs_page_name = "FAQ";
+        var mkdocs_page_input_path = "faq.md";
+        var mkdocs_page_url = "/faq/";
+      </script>
+    
+    <!--[if lt IE 9]>
+      <script src="../js/html5shiv.min.js"></script>
+    <![endif]-->
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+      <script>hljs.highlightAll();</script>
+
+  <meta property="og:type" content="website">
+  <meta property="og:site_name" content="Cluster IALab">
+  <meta property="og:title" content="FAQ · Cluster IALab">
+  <meta property="og:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta property="og:url" content="https://cluster.cenia.cl/faq/">
+  <meta property="og:image" content="https://cluster.cenia.cl/img/social-card.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Cluster IALab">
+
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="FAQ · Cluster IALab">
+  <meta name="twitter:description" content="Documentación técnica del Clúster IALab de CENIA // DCC UC">
+  <meta name="twitter:image" content="https://cluster.cenia.cl/img/social-card.png">
+
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+    <div class="wy-side-scroll">
+      <div class="wy-side-nav-search">
+          <a href=".." class="icon icon-home"> Cluster IALab
+        </a>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+                <li class="toctree-l1"><a class="reference internal" href="..">Introducción</a>
+                </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Información y Políticas</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../onboarding/">Primeros Pasos / Registro</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../hardware/">Hardware del Clúster</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../storage/">Almacenamiento</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../usage_policy/">Política de Uso</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/slurm_policies/">Políticas de SLURM</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Instrucciones y Guías</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/ssh/">SSH</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/slurm/">SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/slurm_examples/">Ejemplos de SLURM</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/notebook/">Servidor de Notebooks (Jupyter)</a>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../instructions-and-guides/acl/">Compartir datos usando ACL</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Solicitudes</span></p>
+              <ul>
+                  <li class="toctree-l1"><a class="reference internal" href="../additional_resources/">Solicitud de Recursos Adicionales</a>
+                  </li>
+              </ul>
+              <p class="caption"><span class="caption-text">Otros</span></p>
+              <ul class="current">
+                  <li class="toctree-l1 current"><a class="reference internal current" href="#">FAQ</a>
+    <ul class="current">
+    <li class="toctree-l2"><a class="reference internal" href="#errores-de-conexion-y-acceso-ssh">Errores de conexión y acceso (SSH)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-ssh-connect-to-host-krakeninguccl-port-22-connection-refused-o-la-sesion-se-cierra">Error: ssh: connect to host kraken.ing.uc.cl port 22: Connection refused (o la sesión se cierra)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-permission-denied-publickey-al-intentar-conectar">Error: Permission denied (publickey) al intentar conectar</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#la-conexion-ssh-de-vs-code-se-cae-constantemente-o-no-logra-conectar">La conexión SSH de VS Code se cae constantemente o no logra conectar</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#ayer-me-conecte-sin-problemas-pero-hoy-mi-cuenta-esta-bloqueada-aunque-tengo-espacio-disponible">Ayer me conecté sin problemas, pero hoy mi cuenta está bloqueada (aunque tengo espacio disponible)</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#errores-y-fallas-en-trabajos-slurm">Errores y fallas en trabajos (SLURM)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#cancelacion-silenciosa-mi-proceso-finaliza-o-desaparece-sin-dejar-logs">Cancelación silenciosa: Mi proceso finaliza o desaparece sin dejar logs</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-sbatch-error-batch-job-submission-failed">Error: sbatch: error: Batch job submission failed</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#exit-code-137-trabajo-cancelado-inesperadamente-oom-killer">Exit Code 137: Trabajo cancelado inesperadamente (OOM Killer)</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-trabajo-cancelado-con-estado-timeout">Error: Trabajo cancelado con estado TIMEOUT</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mi-trabajo-sigue-en-estado-pending-pd-por-que-no-inicia">Mi trabajo sigue en estado PENDING (PD). ¿Por qué no inicia?</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#como-depurar-un-error-de-segmentacion-segfault-sin-saturar-kraken">¿Cómo depurar un error de segmentación (segfault) sin saturar Kraken?</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#almacenamiento-cuotas-y-permisos-disco-acl">Almacenamiento, cuotas y permisos (Disco &amp; ACL)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-no-space-left-on-device-o-disk-quota-exceeded">Error: No space left on device o Disk quota exceeded</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#el-entrenamiento-es-extremadamente-lento-o-lanza-alertas-de-io">El entrenamiento es extremadamente lento o lanza alertas de I/O</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-permission-denied-en-carpetas-compartidas-con-colaboradores">Error: Permission denied en carpetas compartidas con colaboradores</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#el-directorio-home-scratch-o-archive-en-mi-nodo-no-existe">El directorio home, scratch o archive en mi nodo no existe</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#el-directorio-workspace-en-mi-nodo-no-existe">El directorio workspace en mi nodo no existe</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#hardware-gpus-y-compatibilidad-cuda-vs-amdrocm">Hardware, GPUs y compatibilidad (CUDA vs AMD/ROCm)</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-permission-denied-para-la-gpu-o-no-hip-gpus-available">Error: "Permission denied" para la GPU o "No HIP GPUs available"</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#error-cuda-error-no-kernel-image-is-available-for-execution-en-el-nodo-antuco">Error: CUDA error: no kernel image is available for execution en el nodo Antuco</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#mi-script-falla-por-falta-de-un-paquete-o-libreria-de-sistema">Mi script falla por falta de un paquete o librería de sistema</a>
+    </li>
+    <li class="toctree-l3"><a class="reference internal" href="#como-reporto-un-nodo-caido-o-un-fallo">¿Cómo reporto un nodo caído o un fallo?</a>
+    </li>
+        </ul>
+    </li>
+    <li class="toctree-l2"><a class="reference internal" href="#contenedores-y-docker">Contenedores y Docker</a>
+        <ul>
+    <li class="toctree-l3"><a class="reference internal" href="#error-docker-command-not-found-o-permission-denied">Error: docker: command not found o Permission denied</a>
+    </li>
+        </ul>
+    </li>
+    </ul>
+                  </li>
+                  <li class="toctree-l1"><a class="reference internal" href="../compute_grants/">Recursos de cómputo adicionales</a>
+                  </li>
+                  <li class="toctree-l1"><a class="" href="https://sysadminscenia.grafana.net/public-dashboards/8208a7202e7d4bd3ad6ed793a5286a7a">Monitoreo de Recursos 🔗</a>
+                  </li>
+              </ul>
+      </div>
+    </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+      <nav class="wy-nav-top" role="navigation" aria-label="Mobile navigation menu">
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="..">Cluster IALab</a>
+        
+      </nav>
+      <div class="wy-nav-content">
+        <div class="rst-content"><div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".." class="icon icon-home" aria-label="Docs"></a></li>
+          <li class="breadcrumb-item">Otros</li>
+      <li class="breadcrumb-item active">FAQ</li>
+    <li class="wy-breadcrumbs-aside">
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+            <div class="section" itemprop="articleBody">
+              
+                <h1 id="faq-resolucion-de-problemas-y-errores-frecuentes">FAQ: Resolución de Problemas y Errores Frecuentes</h1>
+<p>Esta sección contiene soluciones rápidas a los errores, advertencias e inconvenientes más comunes al utilizar el Clúster IALab. Está dedicada exclusivamente a la resolución de problemas (<em>troubleshooting</em>).</p>
+<hr />
+<h2 id="errores-de-conexion-y-acceso-ssh">Errores de conexión y acceso (SSH)</h2>
+<h3 id="error-ssh-connect-to-host-krakeninguccl-port-22-connection-refused-o-la-sesion-se-cierra">Error: <code>ssh: connect to host kraken.ing.uc.cl port 22: Connection refused</code> (o la sesión se cierra)</h3>
+<ul>
+<li><strong>Posibles Causas:</strong><ul>
+<li>Has excedido la cuota de espacio en tu directorio personal (<code>home</code>), cuyo límite es de <strong>50 GB</strong>. Cuando no queda espacio libre, el sistema no puede crear los archivos temporales necesarios para validar tu sesión y rechaza el acceso.</li>
+<li>El nodo <code>kraken</code> está temporalmente caído o en mantención.</li>
+<li>Problemas de red local o VPN de tu lado (revisa si puedes acceder a otros servicios de la red UC).</li>
+</ul>
+</li>
+<li><strong>Solución:</strong><ol>
+<li>Verifica primero tu conexión a internet y, si corresponde, tu VPN.</li>
+<li>Solicita asistencia enviando un correo a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> para que liberen espacio temporalmente o confirmen el estado del nodo.</li>
+<li>Al recuperar el acceso, usa el comando <code>ncdu</code> para identificar directorios pesados (cachés, entornos virtuales) y muévelos a tu carpeta <code>$SCRATCH</code> o <code>$ARCHIVE</code>.</li>
+</ol>
+</li>
+</ul>
+<h3 id="error-permission-denied-publickey-al-intentar-conectar">Error: <code>Permission denied (publickey)</code> al intentar conectar</h3>
+<ul>
+<li><strong>Posible Causa:</strong> El cliente SSH local no encuentra tu llave privada o la llave pública no está registrada correctamente en el archivo <code>~/.ssh/authorized_keys</code> del clúster.</li>
+<li>
+<p><strong>Solución:</strong></p>
+<ol>
+<li>Usa el parámetro <code>-i</code> apuntando a tu llave privada, especificando el host completo:
+    <code>ssh -i ~/.ssh/id_ed25519 &lt;usuario&gt;@kraken.ing.puc.cl</code></li>
+<li>Verifica que la carpeta <code>.ssh</code> y el archivo <code>authorized_keys</code> tengan los permisos estrictos de Linux:
+    <code>chmod 700 ~/.ssh
+    chmod 600 ~/.ssh/authorized_keys</code></li>
+</ol>
+<div class="admonition note">
+<p>Para más información puedes revisar la sección <a href="../instructions-and-guides/ssh/">SSH</a>.</p>
+</div>
+</li>
+</ul>
+<h3 id="la-conexion-ssh-de-vs-code-se-cae-constantemente-o-no-logra-conectar">La conexión SSH de VS Code se cae constantemente o no logra conectar</h3>
+<ul>
+<li><strong>Posibles Causas:</strong><ul>
+<li>VS Code Server intenta instalar extensiones en <code>~/.vscode-server</code>; si tu cuota de disco está llena, la instalación falla.</li>
+<li>Estás ejecutando código pesado directamente en la terminal de VS Code sobre el nodo de entrada Kraken, y el sistema lo detecta y liquida el proceso para proteger el clúster.</li>
+</ul>
+</li>
+<li><strong>Solución:</strong><ol>
+<li>Verifica tu espacio disponible con <code>du -sh ~</code>.</li>
+<li>Nunca ejecutes código pesado en Kraken. Configura un <em>Jump Host</em> en tu <code>.ssh/config</code> para que VS Code se conecte directamente a un nodo de cómputo asignado.</li>
+</ol>
+</li>
+</ul>
+<h3 id="ayer-me-conecte-sin-problemas-pero-hoy-mi-cuenta-esta-bloqueada-aunque-tengo-espacio-disponible">Ayer me conecté sin problemas, pero hoy mi cuenta está bloqueada (aunque tengo espacio disponible)</h3>
+<ul>
+<li><strong>Posibles Causas:</strong><ul>
+<li>Tu acceso fue restringido durante los procesos periódicos de limpieza semestral y auditoría del clúster, porque tu cuenta no fue validada a tiempo por tu supervisor.</li>
+<li>El bloqueo fue intencional, por ejemplo debido a un uso indebido de recursos (procesos fuera de SLURM, saturación de disco compartido) o incumplimiento de alguna política del clúster.</li>
+</ul>
+</li>
+<li><strong>Solución:</strong> Envía un ticket a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> detallando tu usuario y la fecha en que notaste el bloqueo, para que puedan indicarte la causa exacta y el camino de regularización.</li>
+</ul>
+<hr />
+<h2 id="errores-y-fallas-en-trabajos-slurm">Errores y fallas en trabajos (SLURM)</h2>
+<h3 id="cancelacion-silenciosa-mi-proceso-finaliza-o-desaparece-sin-dejar-logs">Cancelación silenciosa: Mi proceso finaliza o desaparece sin dejar logs</h3>
+<ul>
+<li><strong>Posibles Causas:</strong><ul>
+<li>Estás ejecutando el proceso intensivo directamente en Kraken (headnode), evadiendo SLURM. El clúster monitorea activamente y liquida de forma inmediata cualquier proceso pesado fuera de las colas para proteger los recursos.</li>
+<li>La ruta donde esperas encontrar los logs no existe o no coincide con la que definiste al lanzar el trabajo.</li>
+<li>Hay un error en los parámetros con que se invocó <code>sbatch</code> o <code>srun</code> (por ejemplo, rutas relativas mal resueltas o falta de permisos de escritura en el directorio de salida), lo que impide que el log se genere aunque el proceso sí haya corrido.</li>
+</ul>
+</li>
+<li><strong>Solución:</strong> Todo código debe enviarse a los nodos de cómputo usando <code>sbatch mi_script.sh</code> o de forma interactiva con <code>srun --pty bash</code>. Si ya estás usando SLURM correctamente, verifica que las rutas de <code>--output</code> y <code>--error</code> en tu script existan y sean escribibles.</li>
+</ul>
+<h3 id="error-sbatch-error-batch-job-submission-failed">Error: <code>sbatch: error: Batch job submission failed</code></h3>
+<p><strong><code>Requested partition's memory limit exceeded</code></strong></p>
+<ul>
+<li><strong>Causa:</strong> Estás pidiendo más de 128 GB de RAM (el límite de la partición <code>ialab</code>).</li>
+<li><strong>Solución:</strong> Reduce el valor de <code>#SBATCH --mem</code>.</li>
+</ul>
+<p><strong><code>More processors requested than permitted</code></strong></p>
+<ul>
+<li><strong>Causa:</strong> Si no usas <code>--mem</code>, el sistema asigna <strong>4 GB por CPU</strong>. Si pides más de 33 CPUs, superas los 128 GB de RAM permitidos.</li>
+<li><strong>Solución:</strong> Define explícitamente una memoria menor por CPU, o reduce el número de CPUs solicitadas.</li>
+</ul>
+<p><strong><code>Invalid partition name</code> / <code>Invalid qos</code></strong></p>
+<ul>
+<li><strong>Causa:</strong> Estás apuntando a una cola inexistente o no tienes permisos sobre ella.</li>
+<li><strong>Solución:</strong> Verifica el nombre de la partición con <code>#SBATCH --partition=ialab-low</code>.</li>
+</ul>
+<h3 id="exit-code-137-trabajo-cancelado-inesperadamente-oom-killer">Exit Code 137: Trabajo cancelado inesperadamente (OOM Killer)</h3>
+<ul>
+<li><strong>Causa:</strong> Tu proceso intentó usar más memoria RAM de la asignada. El <em>Out-Of-Memory (OOM) Killer</em> del sistema operativo lo detuvo abruptamente para evitar el colapso del nodo.</li>
+<li><strong>Solución:</strong> Ejecuta <code>seff &lt;ID_del_job&gt;</code> para ver el consumo exacto. Vuelve a enviar el trabajo aumentando la RAM solicitada (ej. <code>#SBATCH --mem=64G</code>).</li>
+</ul>
+<h3 id="error-trabajo-cancelado-con-estado-timeout">Error: Trabajo cancelado con estado <code>TIMEOUT</code></h3>
+<ul>
+<li><strong>Causa:</strong> El trabajo superó el límite de tiempo continuo de <strong>24 horas</strong> de la partición <code>ialab</code>.</li>
+<li><strong>Solución:</strong> Implementa <em>checkpoints</em> (puntos de guardado automáticos) en tu código para reanudar el entrenamiento. Si requieres más tiempo justificado o un proyecto en especifico, envía el <a href="https://forms.gle/KtJqrreRoseXYrtU6">Formulario F-SRCIA-001</a> con 24h de anticipación.</li>
+</ul>
+<h3 id="mi-trabajo-sigue-en-estado-pending-pd-por-que-no-inicia">Mi trabajo sigue en estado <code>PENDING</code> (PD). ¿Por qué no inicia?</h3>
+<ul>
+<li><strong>Posibles Causas:</strong> Revisa la columna <code>NODELIST(REASON)</code> usando <code>squeue</code>.<ul>
+<li><strong><code>Resources</code></strong>: Esperando que se liberen CPUs, GPUs o RAM.</li>
+<li><strong><code>Priority</code></strong>: Hay trabajos con mayor prioridad en cola.</li>
+<li><strong><code>AssocJobLimit</code> / <code>QOSJobLimit</code></strong>: Superaste tu límite de trabajos concurrentes.</li>
+</ul>
+</li>
+<li><strong>Recomendación:</strong> Usa el comando <code>sfree</code> para verificar si efectivamente existen recursos disponibles.</li>
+</ul>
+<h3 id="como-depurar-un-error-de-segmentacion-segfault-sin-saturar-kraken">¿Cómo depurar un error de segmentación (segfault) sin saturar Kraken?</h3>
+<ul>
+<li>
+<p><strong>Solución:</strong> Solicita recursos interactivos en un nodo de cómputo para ver el error en tiempo real:</p>
+<p><code>srun --pty --mem=16G --cpus-per-task=4 bash</code></p>
+</li>
+</ul>
+<hr />
+<h2 id="almacenamiento-cuotas-y-permisos-disco-acl">Almacenamiento, cuotas y permisos (Disco &amp; ACL)</h2>
+<h3 id="error-no-space-left-on-device-o-disk-quota-exceeded">Error: <code>No space left on device</code> o <code>Disk quota exceeded</code></h3>
+<ul>
+<li><strong>Causa:</strong> Has sobrepasado tu cuota (Home: 50 GB, Scratch: 500 GB, Archive: 200 GB, Workspace local: 200 GB).</li>
+<li><strong>Solución:</strong> Usa <code>ncdu</code> para localizar directorios pesados y limpia cachés (e.g. <code>pip cache purge</code>, <code>~/.cache/huggingface</code>).</li>
+</ul>
+<h3 id="el-entrenamiento-es-extremadamente-lento-o-lanza-alertas-de-io">El entrenamiento es extremadamente lento o lanza alertas de I/O</h3>
+<ul>
+<li><strong>Posible Causa:</strong> Estás leyendo tu dataset directamente desde la red (<code>/home</code>, <code>$ARCHIVE</code> o <code>$SCRATCH</code>), saturando la conexión del clúster.</li>
+<li><strong>Solución:</strong> Copia tus datos primero al disco local de alta velocidad del nodo (<code>workspace</code>) y lee/escribe temporalmente allí.</li>
+</ul>
+<h3 id="error-permission-denied-en-carpetas-compartidas-con-colaboradores">Error: <code>Permission denied</code> en carpetas compartidas con colaboradores</h3>
+<ul>
+<li><strong>Posibles Causas:</strong><ul>
+<li>Falta de permisos básicos (<code>+x</code> para entrar al directorio).</li>
+<li>Conflictos en las Listas de Control de Acceso (ACL), específicamente en la <code>mask</code>.</li>
+</ul>
+</li>
+<li>
+<p><strong>Solución:</strong></p>
+<ol>
+<li>Verifica permisos con <code>getfacl ruta_directorio</code>.</li>
+<li>Si la <code>mask</code> bloquea la escritura (ej. <code>r-x</code>), restáurala con <code>setfacl -m m:rwx ruta_directorio</code>.</li>
+</ol>
+<div class="admonition note">
+<p>Para más información puedes revisar la sección <a href="../instructions-and-guides/acl/">Compartir datos usando ACL</a>.</p>
+</div>
+</li>
+</ul>
+<h3 id="el-directorio-home-scratch-o-archive-en-mi-nodo-no-existe">El directorio <code>home</code>, <code>scratch</code> o <code>archive</code> en mi nodo no existe</h3>
+<ul>
+<li><strong>Solución:</strong> Si al ingresar a un nodo de cómputo este inicia en <code>/</code> en vez de en tu home, envía un ticket a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> solicitando su verificación.</li>
+</ul>
+<h3 id="el-directorio-workspace-en-mi-nodo-no-existe">El directorio <code>workspace</code> en mi nodo no existe</h3>
+<ul>
+<li><strong>Causa:</strong> El directorio <code>workspace</code> se monta vía NFS desde los nodos de cómputo hacia los headnodes, por lo que su ruta cambia según desde dónde lo mires.</li>
+<li>
+<p><strong>Solución:</strong> Verifica la ruta correcta según dónde estés parado:</p>
+<p>Dentro de un nodo de cómputo (ej. Ahsoka, en un <code>srun</code> interactivo), usa la variable de entorno <code>$WORKSPACE</code>, que apunta a:
+<code>/workspace1/$PI/$USER</code></p>
+<p>Desde el headnode (Kraken), esta variable <strong>no existe</strong>; debes usar la ruta completa:
+<code>/workspaces/ahsoka-workspace1/$PI/$USER</code></p>
+<p>Si no encuentras tu subcarpeta en ninguna de las dos rutas, envía un ticket a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> solicitando su creación.</p>
+</li>
+</ul>
+<hr />
+<h2 id="hardware-gpus-y-compatibilidad-cuda-vs-amdrocm">Hardware, GPUs y compatibilidad (CUDA vs AMD/ROCm)</h2>
+<h3 id="error-permission-denied-para-la-gpu-o-no-hip-gpus-available">Error: "Permission denied" para la GPU o "No HIP GPUs available"</h3>
+<ul>
+<li><strong>Causa:</strong> SLURM aísla el hardware usando políticas estrictas (Cgroups). Si no solicitaste la GPU explícitamente en el script, tu código o contenedor no tendrá permiso para interactuar con ninguna tarjeta gráfica.</li>
+<li><strong>Solución:</strong> Asegúrate de incluir la directiva <code>#SBATCH --gres=gpu:N</code> (ej. <code>--gres=gpu:a40:1</code> para un modelo específico).</li>
+</ul>
+<h3 id="error-cuda-error-no-kernel-image-is-available-for-execution-en-el-nodo-antuco">Error: <code>CUDA error: no kernel image is available for execution</code> en el nodo Antuco</h3>
+<ul>
+<li><strong>Causa:</strong> El nodo <strong>Antuco</strong> utiliza GPUs <strong>AMD (Instinct MI210)</strong>. Las librerías de PyTorch o CUDA compiladas para NVIDIA no son compatibles.</li>
+<li><strong>Solución:</strong> Debes usar el ecosistema <strong>ROCm</strong>.</li>
+</ul>
+<h3 id="mi-script-falla-por-falta-de-un-paquete-o-libreria-de-sistema">Mi script falla por falta de un paquete o librería de sistema</h3>
+<ul>
+<li><strong>Solución:</strong> No uses <code>apt</code> ni solicites instalaciones globales. Encapsula tus dependencias en tu entorno virtual (e.g. <code>conda</code> o<code>venv</code>) o utiliza un contenedor (solicitando primero la habilitación de contenedores para ti).</li>
+</ul>
+<h3 id="como-reporto-un-nodo-caido-o-un-fallo">¿Cómo reporto un nodo caído o un fallo?</h3>
+<ul>
+<li><strong>Solución:</strong> Si un nodo falla o perdiste conexión repentinamente, abre de inmediato un ticket en <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a> incluyendo el nombre del nodo, el ID de tu trabajo en SLURM y el registro exacto del error.</li>
+</ul>
+<hr />
+<h2 id="contenedores-y-docker">Contenedores y Docker</h2>
+<h3 id="error-docker-command-not-found-o-permission-denied">Error: <code>docker: command not found</code> o <code>Permission denied</code></h3>
+<ul>
+<li><strong>Causa:</strong> Por seguridad y aislamiento de privilegios, el servicio nativo de Docker está restringido para los usuarios.</li>
+<li><strong>Solución:</strong> Si requieres Docker nativo obligatoriamente, solicita autorización a <a href="mailto:soporte@cenia.cl">soporte@cenia.cl</a>.</li>
+</ul>
+              
+            </div>
+          </div><footer>
+    <div class="rst-footer-buttons" role="navigation" aria-label="Footer Navigation">
+        <a href="../additional_resources/" class="btn btn-neutral float-left" title="Solicitud de Recursos Adicionales"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+        <a href="../compute_grants/" class="btn btn-neutral float-right" title="Recursos de cómputo adicionales">Next <span class="icon icon-circle-arrow-right"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+  </div>
+
+  Built with <a href="https://www.mkdocs.org/">MkDocs</a> using a <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+          
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" aria-label="Versions">
+  <span class="rst-current-version" data-toggle="rst-current-version">
+    
+    
+      <span><a href="../additional_resources/" style="color: #fcfcfc">&laquo; Previous</a></span>
+    
+    
+      <span><a href="../compute_grants/" style="color: #fcfcfc">Next &raquo;</a></span>
+    
+  </span>
+</div>
+    <script src="../js/jquery-3.6.0.min.js"></script>
+    <script>var base_url = "..";</script>
+    <script src="../js/theme_extra.js"></script>
+    <script src="../js/theme.js"></script>
+      <script src="../js/open_in_new_tab.js"></script>
+    <script>
+        jQuery(function () {
+            SphinxRtdTheme.Navigation.enable(true);
+        });
+    </script>
+
+</body>
+</html>
