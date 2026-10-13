@@ -166,6 +166,20 @@ python main.py
 echo "Finished with job $SLURM_JOBID"
 ```
 
+!!! tip "Pide solo el tiempo que necesitas: Backfill"
+    SLURM usa **Backfill**: cuando hay recursos libres mientras otros trabajos esperan,
+    deja pasar adelante a trabajos más cortos que alcancen a terminar sin retrasar
+    a los de mayor prioridad.
+
+    **Mientras menos tiempo pida tu trabajo (`--time` / `-t`), más probable es que entre antes.**
+
+    Si te gustaría leer mas sobre este tema puedes ingresar a [este link.](https://slurm.schedmd.com/sched_config.html#backfill)
+
+!!! warning "Si se acaba el tiempo, tu trabajo se termina"
+    Cuando un trabajo alcanza el tiempo solicitado, SLURM lo **termina automáticamente**,
+    aunque no haya finalizado. Estima un tiempo realista y agrega un margen razonable
+    (por ejemplo, 10–20%) en vez de pedir el máximo de la partición.
+
 ### Flags comunes
 
 A continuación se muestra una lista de los flags más comunes que un usuario puede incluir en su trabajo, ya sean para solicitar recursos o características para el trabajo.
