@@ -13,6 +13,7 @@ nav:
     - SSH: instructions-and-guides/ssh.md
     - SLURM: instructions-and-guides/slurm.md
     - Ejemplos de SLURM: instructions-and-guides/slurm_examples.md
+    - Monitoreo y eficiencia de trabajos: instructions-and-guides/monitoring_jobs_seff.md
     - Servidor de Notebooks (Jupyter): instructions-and-guides/notebook.md
     - Compartir datos usando ACL: instructions-and-guides/acl.md
   - Solicitudes:
