@@ -1,0 +1,16 @@
+/*
+ * El tema readthedocs no corta el texto de las celdas de las tablas,
+ * así que las tablas anchas se salen de la página. Se permite el salto
+ * de línea para que se ajusten al ancho del contenido.
+ */
+.rst-content table.docutils {
+    display: table;
+    width: 100%;
+}
+
+.rst-content table.docutils td,
+.rst-content table.docutils th,
+.wy-table-responsive table td,
+.wy-table-responsive table th {
+    white-space: normal;
+}
