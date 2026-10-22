@@ -48,6 +48,7 @@ Existe documentación para cada comando en la página oficial de *SLURM*. Alguno
 | `serror <jobid>` | Ver errores de un job | — |
 | `stail <jobid>` | Ver salida estándar de un job | — |
 | `sacct -u $USER` | Ver historial de trabajos | [link](https://slurm.schedmd.com/sacct.html) |
+| `seff <jobid>` | Ver eficiencia de CPU y memoria de un trabajo terminado | [link](#monitoreo-y-eficiencia-de-tus-trabajos) |
 | `sshare` | Ver asignación de FairShare | [link](https://slurm.schedmd.com/sshare.html) |
 | `sprio` | Ver prioridad de jobs | [link](https://slurm.schedmd.com/sprio.html) |
 
@@ -96,6 +97,9 @@ serror <jobid>
 
 # Mostrar output del trabajo.
 stail <jobid>
+
+# Ver cuánta CPU y memoria usó un trabajo terminado, comparado con lo que pidió
+seff <jobid>
 
 # Mostrar share del usuario
 sshare
@@ -161,10 +165,25 @@ Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los
 #SBATCH --partition=ialab-low        # partición donde correrá tu trabajo (proceso)
 #SBATCH --account=default-account    # account de Slurm que debes ocupar para tu trabajo (proceso)
 #SBATCH --qos=regular                # cola de trabajo que ocupará tu trabajo (puede ser regular o debug)
+#SENDJOBREPORT                       # (opcional) reporte de rendimiento por correo al terminar
 
 python main.py
 echo "Finished with job $SLURM_JOBID"
 ```
+<a id="Backfill-callback"></a>
+!!! tip "Pide solo el tiempo que necesitas: Backfill"
+    SLURM usa **Backfill**: cuando hay recursos libres mientras otros trabajos esperan,
+    deja pasar adelante a trabajos más cortos que alcancen a terminar sin retrasar
+    a los de mayor prioridad.
+
+    **Mientras menos tiempo pida tu trabajo (`--time` / `-t`), más probable es que entre antes.**
+
+    Si te gustaría leer mas sobre este tema puedes ingresar a [este link.](https://slurm.schedmd.com/sched_config.html#backfill)
+
+!!! warning "Si se acaba el tiempo, tu trabajo se termina"
+    Cuando un trabajo alcanza el tiempo solicitado, SLURM lo **termina automáticamente**,
+    aunque no haya finalizado. Estima un tiempo realista y agrega un margen razonable
+    (por ejemplo, 10–20%) en vez de pedir el máximo de la partición.
 
 ### Flags comunes
 
@@ -185,6 +204,7 @@ A continuación se muestra una lista de los flags más comunes que un usuario pu
 |Email usuario |`#SBATCH --mail-user=username@uc.cl` |
 |Notifica al usuario por evento |`#SBATCH --mail-type=ALL / BEGIN / END or FAIL` |
 |Solicitud nodo específico |`#SBATCH --nodelist=hydra` |
+|Reporte de rendimiento por correo al terminar |`#SENDJOBREPORT` (sin `#SBATCH` delante) |
 
 #### Uso de GPU
 
@@ -238,3 +258,5 @@ Además, el clúster define las siguientes variables propias para acceder a las 
 |Archive Directory|`$ARCHIVE`                   |Almacenamiento de largo plazo.             |
 |Scratch Directory|`$SCRATCH`                   |Almacenamiento temporal.                   |
 |User Workspace   |`$WORKSPACE`                 |Directorio de trabajo de alto rendimiento. |
+
+---
