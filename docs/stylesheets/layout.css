@@ -1,0 +1,137 @@
+/* ===== Columna central entre el menú izquierdo y el índice derecho ===== */
+.wy-nav-content-wrap {
+  margin-left: 300px;
+  margin-right: 240px;
+}
+.wy-nav-content { max-width: none; }
+.wy-nav-content .rst-content {
+  max-width: 1000px; /* las tablas de QoS tienen 8 columnas; css/extra.css las ajusta a este ancho */
+  margin: 0 auto;
+  padding: 1.5rem 2rem;
+}
+
+/* Bloque azul del menú (buscador) fijo en la parte superior del menú */
+.wy-side-nav-search {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+}
+.wy-menu-vertical p.caption {
+  margin-top: 1.25rem;
+}
+
+/* ===== Subsecciones fuera del menú (el tema activo se mantiene) ===== */
+.wy-menu-vertical button.toctree-expand {
+  display: none !important;
+}
+.wy-menu-vertical a[href^="#"]:not([href="#"]) {
+  display: none !important;
+}
+
+/* ===== Índice de la página ===== */
+.page-toc {
+  position: fixed;
+  top: 3rem;
+  right: 1.5rem;
+  width: 240px;
+  max-height: calc(100vh - 4rem);
+  overflow-y: auto;
+  font-size: 1rem;
+}
+.page-toc-title {
+  font-size: 1.15rem;
+  font-weight: bold;
+  margin-bottom: .75rem;
+  color: #404040;
+}
+.page-toc ul { list-style: none; padding: 0; margin: 0; }
+.page-toc li { margin: .3rem 0; }
+.page-toc li.lvl3 { padding-left: .75rem; }
+.page-toc li.lvl3 a { font-size: .8rem; opacity: .8; }
+.page-toc a { color: #666; text-decoration: none; }
+.page-toc a:hover,
+.page-toc a.active { color: #2980b9; }
+
+/* ===== Buscador difuso ===== */
+.fuzzy-search-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: .45rem .6rem;
+  border-radius: 4px;
+  border: 0;
+}
+.fuzzy-results {
+  background: #fff;
+  color: #333;
+  border-radius: 4px;
+  margin-top: .4rem;
+  max-height: 60vh;
+  overflow-y: auto;
+  text-align: left;
+}
+.fuzzy-results a {
+  display: block;
+  padding: .45rem .6rem;
+  color: #2980b9;
+  text-decoration: none;
+  border-bottom: 1px solid #eee;
+}
+.fuzzy-results a:hover { background: #f2f7fb; }
+.fuzzy-empty { padding: .5rem .6rem; margin: 0; color: #777; }
+
+/* ===== Historial de noticias ===== */
+.news-item {
+  background: #fff;
+  border-radius: 8px;
+  padding: .75rem 1rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 1px 3px rgba(0,0,0,.08);
+  border-left: 4px solid #2980b9;
+}
+.news-item.critical { border-left-color: #e53935; }
+.news-item.warning  { border-left-color: #fb8c00; }
+.news-item h4 { margin: 0 0 .25rem; font-size: .95rem; }
+.news-item small { opacity: .7; }
+
+/* ===== Popup de avisos críticos ===== */
+.news-popup-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.45);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+}
+.news-popup-backdrop.open { display: flex; }
+.news-popup {
+  background: #fff;
+  color: #333;
+  border-radius: 10px;
+  padding: 1.5rem;
+  max-width: 480px;
+  width: calc(100% - 2rem);
+  box-shadow: 0 10px 40px rgba(0,0,0,.3);
+}
+.news-popup-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+.news-popup-link { color: #2980b9; }
+.news-popup button {
+  cursor: pointer;
+  padding: .5rem 1rem;
+  border-radius: 6px;
+  border: 0;
+  background: #2980b9;
+  color: #fff;
+}
+
+/* ===== Pantallas estrechas: sin índice lateral ===== */
+@media (max-width: 1100px) {
+  .wy-nav-content-wrap { margin-right: 0; }
+  .page-toc { display: none; }
+}

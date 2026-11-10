@@ -29,8 +29,14 @@ theme:
 
 extra_css:
   - css/extra.css
+  - stylesheets/layout.css
+
+extra_javascript:
+  - javascripts/toc.js
+  - javascripts/search.js
 
 plugins:
+  - search
   - open-in-new-tab
 
 markdown_extensions:
