@@ -18,6 +18,8 @@ nav:
     - Compartir datos usando ACL: instructions-and-guides/acl.md
   - Solicitudes:
     - Solicitud de Recursos Adicionales: additional_resources.md
+  - Noticias:
+    - Historial de Noticias: novedades.md
   - Otros:
     - FAQ: faq.md
     - Recursos de cómputo adicionales: compute_grants.md
@@ -34,6 +36,7 @@ extra_css:
 extra_javascript:
   - javascripts/toc.js
   - javascripts/search.js
+  - javascripts/news.js
 
 plugins:
   - search
