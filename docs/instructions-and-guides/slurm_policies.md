@@ -45,7 +45,7 @@ En el clúster se han definido las siguientes colas de trabajo:
 | `regular` | 24 horas                | 4                        | 4                            | 32                  | `ialab-low`<br>`ialab-high`             | Media       | No |
 | `long` | 120 horas                | Sin límite                        | 1                            | 4                  | `ialab-low-unlimit`<br>`ialab-high-unlimit` | Media       | Si |
 
-**NOTA:** La cola de trabajo `long` es **preempteable**. Esto significa que cualquier job que se encuentre en esta cola, puede ser puesto en pausa únicamente por jobs de la cola `debug`, esta pausa implica ser re-encolados. Sin embargo, los jobs que corran en esta partición tienen una protección de 2 horas antes de poder ser elegibles de preemption.
+**NOTA:** La cola de trabajo `long` es **preempteable**. Esto significa que cualquier job que se encuentre en esta cola, puede ser puesto en pausa únicamente por jobs de la cola `debug`, esta pausa hace `REQUEUE` de los jobs, lo que significa que empezarán de 0, por lo que es importante que puedan programar sus jobs con checkpoints para evitar perder progreso. Sin embargo, los jobs que corran en esta partición tienen una protección de 2 horas antes de poder ser elegibles de preemption.
 
 
 ## Accounts
