@@ -151,21 +151,35 @@ Cuando corres un script con `sbatch`, e.g. `sbatch script.sh`, debes indicar los
 
 ```bash
 #!/bin/bash
+# Nombre del trabajo
 #SBATCH --job-name=compile
-#SBATCH -t 0-2:00                    # tiempo maximo en el cluster (D-HH:MM)
-#SBATCH -o c_job.out                 # STDOUT
-#SBATCH -e c_job.err                 # STDERR
-#SBATCH --mail-type=END,FAIL         # notificacion cuando el trabajo termine o falle
-#SBATCH --mail-user=usuario@uc.cl    # mail donde mandar las notificaciones
-#SBATCH --chdir=/user/miusuario      # direccion del directorio de trabajo
-#
-#SBATCH --nodes 1                    # numero de nodos a usar
-#SBATCH --ntasks-per-node=24         # numero de trabajos (procesos) por nodo
-#SBATCH --cpus-per-task=1            # numero de cpus (threads) por trabajo (proceso)
-#SBATCH --partition=ialab-low        # partición donde correrá tu trabajo (proceso)
-#SBATCH --account=default-account    # account de Slurm que debes ocupar para tu trabajo (proceso)
-#SBATCH --qos=regular                # cola de trabajo que ocupará tu trabajo (puede ser regular o debug)
-#SENDJOBREPORT                       # (opcional) reporte de rendimiento por correo al terminar
+
+# Tiempo máximo en el clúster (D-HH:MM)
+#SBATCH -t 0-2:00
+
+# Salida estándar y de errores
+#SBATCH -o c_job.out
+#SBATCH -e c_job.err
+
+# Notificación por correo al terminar o fallar
+#SBATCH --mail-type=END,FAIL
+#SBATCH --mail-user=usuario@uc.cl
+
+# Directorio de trabajo
+#SBATCH --chdir=/user/miusuario
+
+# Recursos: nodos, procesos por nodo y CPUs por proceso
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=24
+#SBATCH --cpus-per-task=1
+
+# Partición, account y cola
+#SBATCH --partition=ialab-low
+#SBATCH --account=default-account
+#SBATCH --qos=regular
+
+# (Opcional) reporte de rendimiento por correo al terminar
+#SENDJOBREPORT
 
 python main.py
 echo "Finished with job $SLURM_JOBID"

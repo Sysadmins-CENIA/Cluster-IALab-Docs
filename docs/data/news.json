@@ -1,0 +1,12 @@
+{
+  "news": [
+    {
+      "id": "1",
+      "severity": "critical",
+      "title": "Nueva cola de trabajo long",
+      "body": "Ya está disponible la QoS long: hasta 120 horas por trabajo en las particiones ialab-low-unlimit e ialab-high-unlimit. Es interrumpible: un trabajo de la cola debug puede cancelarlo y reencolarlo (parte de cero) tras 2 horas de ejecución, así que usa checkpoints. Detalles en Políticas de SLURM.",
+      "date": "2026-11-10",
+      "expires": "2026-12-10"
+    }
+  ]
+}
