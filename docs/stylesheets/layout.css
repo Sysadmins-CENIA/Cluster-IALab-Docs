@@ -98,6 +98,14 @@
 .news-popup-list .news-brief { margin: .15rem 0 0; font-size: .9rem; }
 .news-popup-more { margin: 0 0 .5rem; font-style: italic; }
 
+/* Filtros y paginación del historial */
+.news-filters { display: flex; flex-wrap: wrap; gap: 1rem; margin-bottom: 1rem; }
+.news-filters label { font-weight: 600; }
+.news-filters select { margin-left: .4rem; padding: .25rem .4rem; border-radius: 4px; }
+.news-pager { display: flex; align-items: center; justify-content: center; gap: 1rem; margin: 1.5rem 0 .5rem; }
+.news-pager button { cursor: pointer; padding: .4rem .9rem; border-radius: 6px; border: 1px solid #2980b9; background: #fff; color: #2980b9; }
+.news-pager button:disabled { cursor: default; opacity: .4; }
+
 /* Historial agrupado: año > mes > noticia */
 .news-year > summary, .news-month > summary { cursor: pointer; font-weight: 700; padding: .3rem 0; }
 .news-year > summary { font-size: 1.15rem; }

@@ -89,28 +89,99 @@ function groupByYearMonth(items) {
   return years;
 }
 
-// Historial: año > mes > noticia, todos desplegables; abiertos solo el año, el mes y la noticia más recientes
-function historyHtml(items) {
-  if (!items.length) return "<p>Aún no hay avisos publicados.</p>";
+// Grupos año > mes > noticia. openGroups: "latest" (solo los más recientes) o "all";
+// openFirst: la primera noticia viene abierta
+function groupsHtml(items, openGroups, openFirst) {
   return groupByYearMonth(items).map((y, yi) => {
     const count = y.months.reduce((s, m) => s + m.items.length, 0);
     const body = y.months.map((mo, mi) => {
-      const list = mo.items.map((n, ni) => itemHtml(n, yi === 0 && mi === 0 && ni === 0)).join("");
+      const list = mo.items.map((n, ni) => itemHtml(n, openFirst && yi === 0 && mi === 0 && ni === 0)).join("");
       if (mo.month === null) return list; // sin fecha: sin nivel de mes
+      const open = openGroups === "all" || (yi === 0 && mi === 0);
       return `
-      <details class="news-month"${yi === 0 && mi === 0 ? " open" : ""}>
+      <details class="news-month"${open ? " open" : ""}>
         <summary>${mo.month} (${mo.items.length})</summary>${list}
       </details>`;
     }).join("");
+    const open = openGroups === "all" || yi === 0;
     return `
-    <details class="news-year"${yi === 0 ? " open" : ""}>
+    <details class="news-year"${open ? " open" : ""}>
       <summary>${escapeHtml(y.year)} (${count})</summary>${body}
     </details>`;
   }).join("");
 }
 
+// Historial completo: abiertos solo el año, el mes y la noticia más recientes
+function historyHtml(items) {
+  if (!items.length) return "<p>Aún no hay avisos publicados.</p>";
+  return groupsHtml(items, "latest", true);
+}
+
+const PAGE_SIZE = 10;
+
+// state: { year: "2026", month: "11" } (strings; vacío = todos)
+function filterItems(items, state) {
+  return byDateDesc(items).filter(n => {
+    const m = /^(\d{4})-(\d{2})/.exec(n.date || "");
+    if (state.year && (!m || m[1] !== state.year)) return false;
+    if (state.month && (!m || m[2] !== state.month)) return false;
+    return true;
+  });
+}
+
+// Años con noticias y meses con noticias (dentro del año elegido, si lo hay); de lo más reciente a lo más antiguo
+function filterOptions(items, state) {
+  const dated = items.map(n => /^(\d{4})-(\d{2})/.exec(n.date || "")).filter(Boolean);
+  const years = [...new Set(dated.map(m => m[1]))].sort().reverse();
+  const months = [...new Set(dated.filter(m => !state.year || m[1] === state.year).map(m => m[2]))]
+    .sort().reverse().map(v => ({ value: v, label: MONTHS[Number(v) - 1] }));
+  return { years, months };
+}
+
+function paginate(items, page, size = PAGE_SIZE) {
+  const pages = Math.max(1, Math.ceil(items.length / size));
+  const p = Math.min(Math.max(1, Number(page) || 1), pages);
+  return { page: p, pages, items: items.slice((p - 1) * size, p * size) };
+}
+
+// Página (1, 2, …) donde está una noticia en la lista sin filtros
+function pageOf(items, id, size = PAGE_SIZE) {
+  const i = byDateDesc(items).findIndex(n => String(n.id) === String(id));
+  return i < 0 ? 1 : Math.floor(i / size) + 1;
+}
+
+function pagerHtml(p) {
+  if (p.pages <= 1) return "";
+  return `
+    <nav class="news-pager" aria-label="Páginas del historial">
+      <button type="button" data-page="${p.page - 1}"${p.page === 1 ? " disabled" : ""}>« Anterior</button>
+      <span>Página ${p.page} de ${p.pages}</span>
+      <button type="button" data-page="${p.page + 1}"${p.page === p.pages ? " disabled" : ""}>Siguiente »</button>
+    </nav>`;
+}
+
+function filtersHtml(options, state) {
+  const opt = (v, label, sel) => `<option value="${escapeHtml(v)}"${sel ? " selected" : ""}>${escapeHtml(label)}</option>`;
+  return `
+    <form class="news-filters" role="search" aria-label="Filtrar noticias">
+      <label>Año <select name="anio">${opt("", "Todos los años", !state.year)}${options.years.map(y => opt(y, y, y === state.year)).join("")}</select></label>
+      <label>Mes <select name="mes">${opt("", "Todos los meses", !state.month)}${options.months.map(m => opt(m.value, m.label, m.value === state.month)).join("")}</select></label>
+    </form>`;
+}
+
+// Una página del historial filtrado: grupos abiertos, y la noticia más reciente abierta solo en la página 1
+function historyPageHtml(items, state) {
+  const filtered = filterItems(items, state);
+  if (!filtered.length) return "<p>No hay noticias para ese filtro.</p>";
+  const p = paginate(filtered, state.page);
+  return groupsHtml(p.items, "all", p.page === 1) + pagerHtml(p);
+}
+
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { escapeHtml, isActive, pendingCritical, briefOf, popupHtml, historyHtml, groupByYearMonth, anchorId };
+  module.exports = {
+    escapeHtml, isActive, pendingCritical, briefOf, popupHtml, historyHtml, groupByYearMonth, anchorId,
+    filterItems, filterOptions, paginate, pageOf, filtersHtml, historyPageHtml,
+  };
 }
 
 if (typeof document !== "undefined") {
@@ -174,12 +245,54 @@ if (typeof document !== "undefined") {
     }
   }
 
+  // Estado del historial en la URL: ?anio=2026&mes=11&pagina=2 (se puede compartir y volver atrás)
+  function readState() {
+    const q = new URLSearchParams(location.search);
+    return { year: q.get("anio") || "", month: q.get("mes") || "", page: Number(q.get("pagina")) || 1 };
+  }
+
+  function writeState(state) {
+    const q = new URLSearchParams();
+    if (state.year) q.set("anio", state.year);
+    if (state.month) q.set("mes", state.month);
+    if (state.page > 1) q.set("pagina", state.page);
+    const qs = q.toString();
+    history.pushState(null, "", location.pathname + (qs ? "?" + qs : ""));
+  }
+
+  function renderHistory(container, items, state) {
+    container.innerHTML = filtersHtml(filterOptions(items, state), state)
+      + `<div class="news-list">${historyPageHtml(items, state)}</div>`;
+
+    container.querySelectorAll(".news-filters select").forEach(sel => sel.addEventListener("change", () => {
+      const next = { ...state, page: 1, [sel.name === "anio" ? "year" : "month"]: sel.value };
+      // Si el mes elegido no tiene noticias en el año nuevo, se quita el filtro de mes
+      if (next.month && !filterOptions(items, next).months.some(m => m.value === next.month)) next.month = "";
+      writeState(next);
+      renderHistory(container, items, next);
+    }));
+
+    container.querySelectorAll(".news-pager button[data-page]").forEach(btn => btn.addEventListener("click", () => {
+      const next = { ...state, page: Number(btn.dataset.page) };
+      writeState(next);
+      renderHistory(container, items, next);
+      container.scrollIntoView();
+    }));
+  }
+
   async function loadHistory() {
     const container = document.getElementById(HISTORY_CONTAINER_ID);
     if (!container) return; // solo la página de noticias tiene historial
     try {
       const data = await fetchJson(HISTORY_URL);
-      container.innerHTML = historyHtml(data.history || data);
+      const items = data.history || data;
+      const hashId = decodeURIComponent(location.hash.slice(1)).replace(/^noticia-/, "");
+      // Desde el popup (#noticia-N): sin filtros, en la página donde está esa noticia
+      const state = location.hash.startsWith("#noticia-")
+        ? { year: "", month: "", page: pageOf(items, hashId) }
+        : readState();
+      renderHistory(container, items, state);
+      window.addEventListener("popstate", () => renderHistory(container, items, readState()));
       openFromHash();
     } catch (e) {
       console.warn("No se pudo cargar el historial:", e.message);

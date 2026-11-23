@@ -129,3 +129,76 @@ test("cada noticia queda dentro de su mes", () => {
   assert.match(oct, /id="noticia-c"/);
   assert.doesNotMatch(oct, /id="noticia-(a|b|d)"/);
 });
+
+// ---- Filtros y paginación ----
+// 23 noticias: 2026-11 (8), 2026-10 (7), 2025-11 (5), 2025-03 (3)
+const muchas = [
+  ...Array.from({ length: 8 }, (_, i) => ({ id: "n" + i, title: "N" + i, date: `2026-11-${String(28 - i).padStart(2, "0")}` })),
+  ...Array.from({ length: 7 }, (_, i) => ({ id: "o" + i, title: "O" + i, date: `2026-10-${String(28 - i).padStart(2, "0")}` })),
+  ...Array.from({ length: 5 }, (_, i) => ({ id: "p" + i, title: "P" + i, date: `2025-11-${String(28 - i).padStart(2, "0")}` })),
+  ...Array.from({ length: 3 }, (_, i) => ({ id: "q" + i, title: "Q" + i, date: `2025-03-${String(28 - i).padStart(2, "0")}` })),
+];
+
+test("filtrar por año, por mes, por ambos o sin filtro", () => {
+  assert.equal(news.filterItems(muchas, {}).length, 23);
+  assert.equal(news.filterItems(muchas, { year: "2025" }).length, 8);
+  assert.equal(news.filterItems(muchas, { month: "11" }).length, 13); // noviembre de todos los años
+  assert.deepEqual(news.filterItems(muchas, { year: "2026", month: "10" }).map(n => n.id), ["o0", "o1", "o2", "o3", "o4", "o5", "o6"]);
+});
+
+test("opciones de filtro: años de más reciente a más antiguo y meses con noticias", () => {
+  const o = news.filterOptions(muchas, {});
+  assert.deepEqual(o.years, ["2026", "2025"]);
+  assert.deepEqual(o.months.map(m => m.label), ["Noviembre", "Octubre", "Marzo"]);
+  assert.deepEqual(news.filterOptions(muchas, { year: "2025" }).months.map(m => m.value), ["11", "03"]);
+});
+
+test("paginar de a 10: 23 noticias son 3 páginas y la última tiene 3", () => {
+  const p1 = news.paginate(muchas, 1);
+  assert.equal(p1.pages, 3);
+  assert.equal(p1.items.length, 10);
+  assert.equal(news.paginate(muchas, 3).items.length, 3);
+  assert.equal(news.paginate(muchas, 99).page, 3); // fuera de rango: se acota
+  assert.equal(news.paginate(muchas, 0).page, 1);
+  assert.equal(news.paginate([], 1).pages, 1);
+});
+
+test("la página de historial muestra solo sus 10 noticias, con sus grupos abiertos", () => {
+  const html = news.historyPageHtml(muchas, { page: 2 });
+  assert.equal((html.match(/<details class="news-item\b/g) || []).length, 10);
+  assert.ok(!/<details class="news-(year|month)"(?![^>]*\bopen\b)/.test(html), "todos los grupos de la página abiertos");
+  assert.match(html, /Página 2 de 3/);
+});
+
+test("solo en la página 1 viene abierta la noticia más reciente", () => {
+  const abiertas = h => [...h.matchAll(/<details class="news-item[^"]*" id="([^"]+)"([^>]*)>/g)].filter(m => /\bopen\b/.test(m[2])).map(m => m[1]);
+  assert.deepEqual(abiertas(news.historyPageHtml(muchas, { page: 1 })), ["noticia-n0"]);
+  assert.deepEqual(abiertas(news.historyPageHtml(muchas, { page: 2 })), []);
+});
+
+test("paginador: anterior desactivado en la primera, siguiente en la última", () => {
+  const p1 = news.historyPageHtml(muchas, { page: 1 });
+  assert.match(p1, /<button[^>]*data-page="0"[^>]*disabled/);
+  assert.match(p1, /<button[^>]*data-page="2"(?![^>]*disabled)/);
+  const p3 = news.historyPageHtml(muchas, { page: 3 });
+  assert.match(p3, /<button[^>]*data-page="4"[^>]*disabled/);
+});
+
+test("con un solo resultado de página no hay paginador; sin resultados, un mensaje", () => {
+  assert.doesNotMatch(news.historyPageHtml(muchas, { year: "2025", month: "03" }), /Página \d+ de/);
+  assert.match(news.historyPageHtml(muchas, { year: "2024" }), /No hay noticias para ese filtro/);
+});
+
+test("pageOf: en qué página (sin filtros) está una noticia", () => {
+  assert.equal(news.pageOf(muchas, "n0"), 1);
+  assert.equal(news.pageOf(muchas, "o5"), 2);
+  assert.equal(news.pageOf(muchas, "q2"), 3);
+  assert.equal(news.pageOf(muchas, "no-existe"), 1);
+});
+
+test("selectores de filtro: 'Todos' más las opciones, con la elegida marcada", () => {
+  const html = news.filtersHtml(news.filterOptions(muchas, { year: "2025" }), { year: "2025", month: "11" });
+  assert.match(html, /<select[^>]*name="anio"[\s\S]*<option value="">Todos los años<\/option>[\s\S]*<option value="2025" selected>2025<\/option>/);
+  assert.match(html, /<select[^>]*name="mes"[\s\S]*<option value="">Todos los meses<\/option>[\s\S]*<option value="11" selected>Noviembre<\/option>/);
+  assert.doesNotMatch(html, /value="10"/); // octubre no tiene noticias en 2025
+});
