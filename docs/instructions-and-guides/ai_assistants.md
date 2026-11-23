@@ -11,12 +11,19 @@ El asistente se usa **dentro de un trabajo de SLURM**, no directamente en Kraken
     ```bash
     srun --account=default-account --partition=ialab-low --qos=regular --time=02:00:00 \
          --cpus-per-task=2 --mem=8G --comment="Sesión con asistente para <tu proyecto>" --pty bash
+    ```
+
+    Cuando la sesión se abra (el prompt cambia al nombre del nodo), inicia el asistente:
+
+    ```bash
     claude
     ```
 
-    Si usas VS Code, conéctalo a un nodo de cómputo dentro de un trabajo, como se explica en la [FAQ](../faq.md).
+    Si usas VS Code, conéctalo a un nodo de cómputo como se explica en la [FAQ](../faq.md) y abre el asistente directamente en esa terminal. Si ya estás en un nodo, no abras otro `srun`: los comandos se ejecutan directamente ahí.
 
-2. **No pidas GPU para la sesión** si solo vas a escribir código, revisar logs o preparar scripts. Si necesitas probar algo con GPU, agrega `--gres=gpu:1` y cierra la sesión apenas termines.
+    En `ialab-low`, los 4 CPU y 20 GB por GPU que menciona [Políticas de SLURM](slurm_policies.md) son **valores por defecto**: una sesión sin GPU funciona si pides `--cpus-per-task` y `--mem` explícitamente (máximo 80 GB por nodo).
+
+2. **No pidas GPU para la sesión** si solo vas a escribir código, revisar logs o preparar scripts. Si necesitas probar algo con GPU, cierra la sesión (`exit`) y abre una nueva con `--gres=gpu:1`; no mantengas dos sesiones a la vez.
 3. Los entrenamientos y procesos largos se envían con `sbatch` (ver [SLURM](slurm.md)); no los corras dentro de la sesión interactiva.
 4. Al terminar, cierra la sesión con `exit` para liberar los recursos.
 
@@ -32,7 +39,7 @@ Las filas marcadas con **(política)** son reglas del clúster y su incumplimien
 | Pedir GPU para la sesión "por si acaso" o dejar la sesión abierta sin uso | Reserva recursos que otros usuarios están esperando | Sesión sin `--gres`, con `--time` acotado, y `exit` al terminar |
 | Correr un entrenamiento largo dentro de la sesión interactiva | Se corta al cerrar la sesión y bloquea recursos mientras conversas con el asistente | Envíalo con `sbatch` |
 | Enviar trabajos sin `--comment` **(política)** | SLURM rechaza el trabajo | `--comment="<qué hace el experimento>"`, breve y sin datos sensibles |
-| Mostrarle al asistente datos personales, sensibles o de convenios (pacientes, RUT, encuestas…) | Todo lo que el asistente lee se envía a un proveedor externo, fuera del clúster | Trabaja con el código, con el esquema o con muestras sintéticas; ante la duda, consulta a tu supervisor |
+| Dejar que el asistente lea, o pegarle, datos personales, sensibles o de convenios (pacientes, RUT, encuestas…) | Todo lo que el asistente lee se envía a un proveedor externo, fuera del clúster. Los asistentes abren archivos por su cuenta, sin que se los muestres | No le pidas que abra esos archivos y rechaza el permiso si intenta leerlos. Trabaja con el código, el esquema o muestras pequeñas y sintéticas; ante la duda, consulta a tu supervisor |
 | Pegar contraseñas, tokens o claves en la conversación, en nombres de trabajos o en `--comment` | Salen del clúster, o los ven otros usuarios con `squeue`, `sacct` y `ps` | Variables de entorno o archivos con permisos `600` |
 | Usar el asistente para buscar vulnerabilidades, escalar privilegios o sondear el sistema | Pone en riesgo el clúster y los datos de todos | No lo hagas. Si encuentras un problema de seguridad, avisa a soporte |
 | Dejar que el asistente borre o mueva archivos sin revisar antes | Workspace no tiene respaldo, y recuperar el resto depende de soporte | Revisa qué va a borrar antes de aceptar |
