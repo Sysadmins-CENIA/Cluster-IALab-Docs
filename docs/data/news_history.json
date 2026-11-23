@@ -20,7 +20,7 @@
       "id": "3",
       "severity": "info",
       "title": "La FAQ ahora es una guía de solución de problemas",
-      "summary": "La FAQ se reorganizó por error: busca el mensaje que te aparece y encuentra causa y solución.",
+      "summary": "La FAQ ahora está ordenada por mensaje de error: busca el que te aparece y encuentra la causa y la solución.",
       "body": "Reescribimos la FAQ como una guía de solución de problemas, organizada por el mensaje de error que ves (conexión SSH, trabajos de SLURM, almacenamiento y permisos, GPU, y contenedores). Cada entrada explica la causa probable y los pasos para resolverlo.",
       "date": "2026-08-19"
     }
