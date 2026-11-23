@@ -96,6 +96,14 @@
 .news-item .news-body { margin-top: .6rem; font-weight: normal; }
 .news-item .news-brief { display: block; font-weight: normal; opacity: .85; margin-top: .2rem; }
 .news-popup-list .news-brief { margin: .15rem 0 0; font-size: .9rem; }
+.news-popup-more { margin: 0 0 .5rem; font-style: italic; }
+
+/* Historial agrupado: año > mes > noticia */
+.news-year > summary, .news-month > summary { cursor: pointer; font-weight: 700; padding: .3rem 0; }
+.news-year > summary { font-size: 1.15rem; }
+.news-month { margin-left: 1rem; }
+.news-month > summary { font-size: 1rem; }
+.news-month > .news-item { margin-left: 1rem; }
 
 /* ===== Popup de avisos críticos ===== */
 .news-popup-backdrop {
@@ -115,6 +123,8 @@
   padding: 1.5rem;
   max-width: 480px;
   width: calc(100% - 2rem);
+  max-height: 85vh;  /* con muchos avisos, scroll interno: el botón no queda fuera de pantalla */
+  overflow-y: auto;
   box-shadow: 0 10px 40px rgba(0,0,0,.3);
 }
 .news-popup-list { margin: 0 0 .75rem 1.2rem; padding: 0; }

@@ -35,7 +35,7 @@ test("el popup remite al historial, con enlace a cada noticia", () => {
 
 test("el historial muestra cada noticia como desplegable con el detalle dentro", () => {
   const html = news.historyHtml(items);
-  assert.equal((html.match(/<details\b/g) || []).length, 4);
+  assert.equal((html.match(/<details class="news-item\b/g) || []).length, 4);
   assert.match(html, /<details[^>]*id="noticia-1"[\s\S]*<summary[\s\S]*Nueva cola long[\s\S]*<\/summary>[\s\S]*Detalle largo de la cola long/);
 });
 
@@ -72,7 +72,7 @@ test("sin summary, el popup usa la primera oración del detalle, acotada", () =>
 
 test("el historial abre por defecto solo la noticia más reciente", () => {
   const html = news.historyHtml(items);
-  const abiertos = [...html.matchAll(/<details([^>]*)>/g)].filter(m => /\bopen\b/.test(m[1]));
+  const abiertos = [...html.matchAll(/<details( class="news-item[^>]*)>/g)].filter(m => /\bopen\b/.test(m[1]));
   assert.equal(abiertos.length, 1);
   assert.match(abiertos[0][1], /id="noticia-4"/); // 2026-11-20, la más reciente
 });
@@ -80,4 +80,52 @@ test("el historial abre por defecto solo la noticia más reciente", () => {
 test("el historial muestra la descripción breve en el encabezado del desplegable", () => {
   const html = news.historyHtml([{ id: "9", severity: "info", title: "T", summary: "Resumen corto.", body: "Detalle.", date: "2026-11-21" }]);
   assert.match(html, /<summary>[\s\S]*Resumen corto\.[\s\S]*<\/summary>/);
+});
+
+// ---- Tope del popup ----
+const criticas = n => Array.from({ length: n }, (_, i) => ({
+  id: "c" + i, severity: "critical", title: "Crítica " + i, summary: "Resumen " + i,
+  date: `2026-11-${String(10 + i).padStart(2, "0")}`,
+}));
+
+test("el popup muestra como máximo 3 críticas, las más recientes primero", () => {
+  const html = news.popupHtml(criticas(5), "/novedades/");
+  const titulos = [...html.matchAll(/class="news-popup-item"[^>]*>([^<]+)</g)].map(m => m[1]);
+  assert.deepEqual(titulos, ["Crítica 4", "Crítica 3", "Crítica 2"]);
+});
+
+test("si hay más de 3, el popup avisa cuántas faltan y remite al historial", () => {
+  const html = news.popupHtml(criticas(5), "/novedades/");
+  assert.match(html, /y 2 avisos más/);
+  assert.doesNotMatch(news.popupHtml(criticas(3), "/novedades/"), /avisos? más/);
+  assert.match(news.popupHtml(criticas(4), "/novedades/"), /y 1 aviso más/);
+});
+
+// ---- Historial agrupado por año y mes ----
+const variadas = [
+  { id: "a", severity: "info", title: "A", date: "2026-11-20" },
+  { id: "b", severity: "info", title: "B", date: "2026-11-02" },
+  { id: "c", severity: "info", title: "C", date: "2026-10-22" },
+  { id: "d", severity: "info", title: "D", date: "2025-12-05" },
+  { id: "e", severity: "info", title: "E" },
+];
+
+test("el historial agrupa por año y, dentro, por mes, de lo más reciente a lo más antiguo", () => {
+  const html = news.historyHtml(variadas);
+  const grupos = [...html.matchAll(/<details class="news-(year|month)"[^>]*>\s*<summary>([^<]+)/g)].map(m => m[1] + ":" + m[2].trim());
+  assert.deepEqual(grupos, ["year:2026 (3)", "month:Noviembre (2)", "month:Octubre (1)", "year:2025 (1)", "month:Diciembre (1)", "year:Sin fecha (1)"]);
+});
+
+test("solo el año y el mes más recientes vienen abiertos", () => {
+  const html = news.historyHtml(variadas);
+  const abiertos = [...html.matchAll(/<details class="news-(year|month)"([^>]*)>\s*<summary>([^<]+)/g)]
+    .filter(m => /\bopen\b/.test(m[2])).map(m => m[3].trim());
+  assert.deepEqual(abiertos, ["2026 (3)", "Noviembre (2)"]);
+});
+
+test("cada noticia queda dentro de su mes", () => {
+  const html = news.historyHtml(variadas);
+  const oct = html.slice(html.indexOf("Octubre"), html.indexOf("2025 ("));
+  assert.match(oct, /id="noticia-c"/);
+  assert.doesNotMatch(oct, /id="noticia-(a|b|d)"/);
 });

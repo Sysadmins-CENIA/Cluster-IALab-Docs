@@ -31,18 +31,32 @@ function briefOf(n) {
   return text.length > BRIEF_MAX ? text.slice(0, BRIEF_MAX - 1).trimEnd() + "…" : text;
 }
 
-// Encabezado (título, fecha y descripción breve); el detalle está en el historial
+const POPUP_MAX = 3;
+const MONTHS = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio",
+  "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+
+function byDateDesc(items) {
+  return [...items].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
+}
+
+// Encabezado (título, fecha y descripción breve) de las POPUP_MAX críticas más recientes;
+// el resto se cuenta y se remite al historial
 function popupHtml(pending, newsPage) {
+  const shown = byDateDesc(pending).slice(0, POPUP_MAX);
+  const extra = pending.length - shown.length;
   const title = pending.length > 1 ? "Avisos críticos" : "Aviso crítico";
-  const list = pending.map(n => `
+  const list = shown.map(n => `
         <li><a class="news-popup-item" href="${escapeHtml(newsPage)}#${anchorId(n)}">${escapeHtml(n.title)}</a>
           <small>${escapeHtml(n.date || "")}</small>
           <p class="news-brief">${escapeHtml(briefOf(n))}</p></li>`).join("");
+  const more = extra > 0
+    ? `<p class="news-popup-more">y ${extra} ${extra === 1 ? "aviso más" : "avisos más"} en el historial.</p>`
+    : "";
   return `
     <div class="news-popup" role="dialog" aria-modal="true" aria-labelledby="news-popup-title">
       <h3 id="news-popup-title">⚠️ ${title}</h3>
       <ul class="news-popup-list">${list}
-      </ul>
+      </ul>${more}
       <p>Para leer los detalles, revisa el <a class="news-popup-link" href="${escapeHtml(newsPage)}">Historial de Noticias</a>.</p>
       <div class="news-popup-actions">
         <button type="button">Entendido</button>
@@ -50,20 +64,53 @@ function popupHtml(pending, newsPage) {
     </div>`;
 }
 
-// Un desplegable (<details>) por noticia, de la más reciente a la más antigua;
-// la más reciente viene abierta
+function itemHtml(n, open) {
+  return `
+        <details class="news-item ${escapeHtml(n.severity || "info")}" id="${anchorId(n)}"${open ? " open" : ""}>
+          <summary><span class="news-title">${escapeHtml(n.title)}</span> <small>${escapeHtml(n.date || "")}</small>
+            <span class="news-brief">${escapeHtml(briefOf(n))}</span></summary>
+          <div class="news-body">${escapeHtml(n.body || "")}</div>
+        </details>`;
+}
+
+// Agrupa en orden: [{ year, months: [{ month, items }] }]; sin fecha va al final
+function groupByYearMonth(items) {
+  const years = [];
+  for (const n of byDateDesc(items)) {
+    const m = /^(\d{4})-(\d{2})/.exec(n.date || "");
+    const year = m ? m[1] : "Sin fecha";
+    const month = m ? MONTHS[Number(m[2]) - 1] : null;
+    let y = years.find(g => g.year === year);
+    if (!y) years.push(y = { year, months: [] });
+    let mo = y.months.find(g => g.month === month);
+    if (!mo) y.months.push(mo = { month, items: [] });
+    mo.items.push(n);
+  }
+  return years;
+}
+
+// Historial: año > mes > noticia, todos desplegables; abiertos solo el año, el mes y la noticia más recientes
 function historyHtml(items) {
-  const sorted = [...items].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-  return sorted.map((n, i) => `
-    <details class="news-item ${escapeHtml(n.severity || "info")}" id="${anchorId(n)}"${i === 0 ? " open" : ""}>
-      <summary><span class="news-title">${escapeHtml(n.title)}</span> <small>${escapeHtml(n.date || "")}</small>
-        <span class="news-brief">${escapeHtml(briefOf(n))}</span></summary>
-      <div class="news-body">${escapeHtml(n.body || "")}</div>
-    </details>`).join("") || "<p>Aún no hay avisos publicados.</p>";
+  if (!items.length) return "<p>Aún no hay avisos publicados.</p>";
+  return groupByYearMonth(items).map((y, yi) => {
+    const count = y.months.reduce((s, m) => s + m.items.length, 0);
+    const body = y.months.map((mo, mi) => {
+      const list = mo.items.map((n, ni) => itemHtml(n, yi === 0 && mi === 0 && ni === 0)).join("");
+      if (mo.month === null) return list; // sin fecha: sin nivel de mes
+      return `
+      <details class="news-month"${yi === 0 && mi === 0 ? " open" : ""}>
+        <summary>${mo.month} (${mo.items.length})</summary>${list}
+      </details>`;
+    }).join("");
+    return `
+    <details class="news-year"${yi === 0 ? " open" : ""}>
+      <summary>${escapeHtml(y.year)} (${count})</summary>${body}
+    </details>`;
+  }).join("");
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { escapeHtml, isActive, pendingCritical, briefOf, popupHtml, historyHtml, anchorId };
+  module.exports = { escapeHtml, isActive, pendingCritical, briefOf, popupHtml, historyHtml, groupByYearMonth, anchorId };
 }
 
 if (typeof document !== "undefined") {
@@ -107,7 +154,9 @@ if (typeof document !== "undefined") {
   function openFromHash() {
     const id = decodeURIComponent(location.hash.slice(1));
     const el = id && document.getElementById(id);
-    if (el && el.tagName === "DETAILS") { el.open = true; el.scrollIntoView(); }
+    if (!el || el.tagName !== "DETAILS") return;
+    for (let d = el; d; d = d.parentElement && d.parentElement.closest("details")) d.open = true;
+    el.scrollIntoView();
   }
 
   async function fetchJson(url) {
