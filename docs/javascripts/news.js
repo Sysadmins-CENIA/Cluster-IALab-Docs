@@ -129,26 +129,20 @@ function filterOptions(items, state) {
   return { years, months };
 }
 
-function paginate(items, page, size = PAGE_SIZE) {
-  const pages = Math.max(1, Math.ceil(items.length / size));
-  const p = Math.min(Math.max(1, Number(page) || 1), pages);
-  return { page: p, pages, items: items.slice((p - 1) * size, p * size) };
-}
-
-// Página (1, 2, …) donde está una noticia en la lista sin filtros
-function pageOf(items, id, size = PAGE_SIZE) {
+// Cuántas mostrar para que se vea una noticia (al llegar desde el popup), en tandas de PAGE_SIZE
+function limitFor(items, id, size = PAGE_SIZE) {
   const i = byDateDesc(items).findIndex(n => String(n.id) === String(id));
-  return i < 0 ? 1 : Math.floor(i / size) + 1;
+  return i < 0 ? size : (Math.floor(i / size) + 1) * size;
 }
 
-function pagerHtml(p) {
-  if (p.pages <= 1) return "";
+function moreHtml(shown, total) {
+  if (shown >= total) return "";
+  const next = Math.min(PAGE_SIZE, total - shown);
   return `
-    <nav class="news-pager" aria-label="Páginas del historial">
-      <button type="button" data-page="${p.page - 1}"${p.page === 1 ? " disabled" : ""}>« Anterior</button>
-      <span>Página ${p.page} de ${p.pages}</span>
-      <button type="button" data-page="${p.page + 1}"${p.page === p.pages ? " disabled" : ""}>Siguiente »</button>
-    </nav>`;
+    <div class="news-more-bar">
+      <button type="button" class="news-more">Mostrar ${next} más</button>
+      <span class="news-count">${shown} de ${total} noticias</span>
+    </div>`;
 }
 
 function filtersHtml(options, state) {
@@ -160,19 +154,19 @@ function filtersHtml(options, state) {
     </form>`;
 }
 
-// Una página del historial filtrado; la noticia más reciente abierta solo en la página 1
+// Historial filtrado: las primeras state.limit noticias (10 por defecto) y un botón para mostrar más
 function historyPageHtml(items, state) {
   if (!items.length) return "<p>Aún no hay avisos publicados.</p>";
   const filtered = filterItems(items, state);
   if (!filtered.length) return "<p>No hay noticias para ese filtro.</p>";
-  const p = paginate(filtered, state.page);
-  return `<div class="news-list">${listHtml(p.items, p.page === 1)}</div>` + pagerHtml(p);
+  const shown = filtered.slice(0, Math.max(PAGE_SIZE, Number(state.limit) || PAGE_SIZE));
+  return `<div class="news-list">${listHtml(shown, true)}</div>` + moreHtml(shown.length, filtered.length);
 }
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
     escapeHtml, isActive, pendingCritical, briefOf, popupHtml, anchorId, shortDate,
-    filterItems, filterOptions, paginate, pageOf, filtersHtml, historyPageHtml,
+    filterItems, filterOptions, limitFor, filtersHtml, historyPageHtml,
   };
 }
 
@@ -237,17 +231,16 @@ if (typeof document !== "undefined") {
     }
   }
 
-  // Estado del historial en la URL: ?anio=2026&mes=11&pagina=2 (se puede compartir y volver atrás)
+  // Filtros en la URL: ?anio=2026&mes=11 (se puede compartir y volver atrás); "Mostrar más" no cambia la URL
   function readState() {
     const q = new URLSearchParams(location.search);
-    return { year: q.get("anio") || "", month: q.get("mes") || "", page: Number(q.get("pagina")) || 1 };
+    return { year: q.get("anio") || "", month: q.get("mes") || "" };
   }
 
   function writeState(state) {
     const q = new URLSearchParams();
     if (state.year) q.set("anio", state.year);
     if (state.month) q.set("mes", state.month);
-    if (state.page > 1) q.set("pagina", state.page);
     const qs = q.toString();
     history.pushState(null, "", location.pathname + (qs ? "?" + qs : ""));
   }
@@ -257,19 +250,21 @@ if (typeof document !== "undefined") {
       + historyPageHtml(items, state);
 
     container.querySelectorAll(".news-filters select").forEach(sel => sel.addEventListener("change", () => {
-      const next = { ...state, page: 1, [sel.name === "anio" ? "year" : "month"]: sel.value };
+      const next = { ...state, limit: 0, [sel.name === "anio" ? "year" : "month"]: sel.value };
       // Si el mes elegido no tiene noticias en el año nuevo, se quita el filtro de mes
       if (next.month && !filterOptions(items, next).months.some(m => m.value === next.month)) next.month = "";
       writeState(next);
       renderHistory(container, items, next);
     }));
 
-    container.querySelectorAll(".news-pager button[data-page]").forEach(btn => btn.addEventListener("click", () => {
-      const next = { ...state, page: Number(btn.dataset.page) };
-      writeState(next);
-      renderHistory(container, items, next);
-      container.scrollIntoView();
-    }));
+    const more = container.querySelector(".news-more");
+    if (more) more.addEventListener("click", () => {
+      const shown = container.querySelectorAll(".news-item").length;
+      renderHistory(container, items, { ...state, limit: shown + PAGE_SIZE });
+      // El foco pasa a la primera noticia nueva para seguir leyendo desde ahí
+      const first = container.querySelectorAll(".news-item summary")[shown];
+      if (first) first.focus();
+    });
   }
 
   async function loadHistory() {
@@ -279,9 +274,9 @@ if (typeof document !== "undefined") {
       const data = await fetchJson(HISTORY_URL);
       const items = data.history || data;
       const hashId = decodeURIComponent(location.hash.slice(1)).replace(/^noticia-/, "");
-      // Desde el popup (#noticia-N): sin filtros, en la página donde está esa noticia
+      // Desde el popup (#noticia-N): sin filtros y mostrando hasta esa noticia
       const state = location.hash.startsWith("#noticia-")
-        ? { year: "", month: "", page: pageOf(items, hashId) }
+        ? { year: "", month: "", limit: limitFor(items, hashId) }
         : readState();
       renderHistory(container, items, state);
       window.addEventListener("popstate", () => renderHistory(container, items, readState()));

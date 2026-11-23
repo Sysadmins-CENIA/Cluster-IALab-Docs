@@ -124,46 +124,48 @@ test("opciones de filtro: años de más reciente a más antiguo y meses con noti
   assert.deepEqual(news.filterOptions(muchas, { year: "2025" }).months.map(m => m.value), ["11", "03"]);
 });
 
-test("paginar de a 10: 23 noticias son 3 páginas y la última tiene 3", () => {
-  const p1 = news.paginate(muchas, 1);
-  assert.equal(p1.pages, 3);
-  assert.equal(p1.items.length, 10);
-  assert.equal(news.paginate(muchas, 3).items.length, 3);
-  assert.equal(news.paginate(muchas, 99).page, 3); // fuera de rango: se acota
-  assert.equal(news.paginate(muchas, 0).page, 1);
-  assert.equal(news.paginate([], 1).pages, 1);
+// ---- "Mostrar más" (en lugar de páginas) ----
+const visibles = h => (h.match(/<details class="news-item\b/g) || []).length;
+
+test("primero se ven 10 noticias y un botón para mostrar 10 más, con el conteo", () => {
+  const html = news.historyPageHtml(muchas, {});
+  assert.equal(visibles(html), 10);
+  assert.match(html, /<button[^>]*class="news-more"[^>]*>Mostrar 10 más<\/button>/);
+  assert.match(html, /10 de 23 noticias/);
 });
 
-test("la página de historial muestra solo sus 10 noticias", () => {
-  const html = news.historyPageHtml(muchas, { page: 2 });
-  assert.equal((html.match(/<details class="news-item\b/g) || []).length, 10);
-  assert.match(html, /Página 2 de 3/);
+test("con un límite mayor se ven más en la misma lista; el botón ofrece solo las que faltan", () => {
+  const html = news.historyPageHtml(muchas, { limit: 20 });
+  assert.equal(visibles(html), 20);
+  assert.match(html, />Mostrar 3 más</);
 });
 
-test("solo en la página 1 viene abierta la noticia más reciente", () => {
+test("cuando ya se ven todas no hay botón", () => {
+  const html = news.historyPageHtml(muchas, { limit: 30 });
+  assert.equal(visibles(html), 23);
+  assert.doesNotMatch(html, /news-more/);
+  assert.doesNotMatch(news.historyPageHtml(muchas, { year: "2025", month: "03" }), /news-more/);
+});
+
+test("no hay páginas: nada de 'Página X de Y'", () => {
+  assert.doesNotMatch(news.historyPageHtml(muchas, {}), /Página \d+ de/);
+});
+
+test("la noticia más reciente viene abierta, también al mostrar más", () => {
   const abiertas = h => [...h.matchAll(/<details class="news-item[^"]*" id="([^"]+)"([^>]*)>/g)].filter(m => /\bopen\b/.test(m[2])).map(m => m[1]);
-  assert.deepEqual(abiertas(news.historyPageHtml(muchas, { page: 1 })), ["noticia-n0"]);
-  assert.deepEqual(abiertas(news.historyPageHtml(muchas, { page: 2 })), []);
+  assert.deepEqual(abiertas(news.historyPageHtml(muchas, {})), ["noticia-n0"]);
+  assert.deepEqual(abiertas(news.historyPageHtml(muchas, { limit: 20 })), ["noticia-n0"]);
 });
 
-test("paginador: anterior desactivado en la primera, siguiente en la última", () => {
-  const p1 = news.historyPageHtml(muchas, { page: 1 });
-  assert.match(p1, /<button[^>]*data-page="0"[^>]*disabled/);
-  assert.match(p1, /<button[^>]*data-page="2"(?![^>]*disabled)/);
-  const p3 = news.historyPageHtml(muchas, { page: 3 });
-  assert.match(p3, /<button[^>]*data-page="4"[^>]*disabled/);
+test("el conteo respeta el filtro", () => {
+  assert.match(news.historyPageHtml(muchas, { month: "11" }), /10 de 13 noticias/);
 });
 
-test("con un solo resultado de página no hay paginador; sin resultados, un mensaje", () => {
-  assert.doesNotMatch(news.historyPageHtml(muchas, { year: "2025", month: "03" }), /Página \d+ de/);
-  assert.match(news.historyPageHtml(muchas, { year: "2024" }), /No hay noticias para ese filtro/);
-});
-
-test("pageOf: en qué página (sin filtros) está una noticia", () => {
-  assert.equal(news.pageOf(muchas, "n0"), 1);
-  assert.equal(news.pageOf(muchas, "o5"), 2);
-  assert.equal(news.pageOf(muchas, "q2"), 3);
-  assert.equal(news.pageOf(muchas, "no-existe"), 1);
+test("limitFor: cuántas mostrar para que se vea una noticia (desde el popup)", () => {
+  assert.equal(news.limitFor(muchas, "n0"), 10);
+  assert.equal(news.limitFor(muchas, "o5"), 20);
+  assert.equal(news.limitFor(muchas, "q2"), 30);
+  assert.equal(news.limitFor(muchas, "no-existe"), 10);
 });
 
 test("selectores de filtro: 'Todos' más las opciones, con la elegida marcada", () => {
