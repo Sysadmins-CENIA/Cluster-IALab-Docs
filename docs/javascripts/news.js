@@ -47,7 +47,7 @@ function popupHtml(pending, newsPage) {
   const title = pending.length > 1 ? "Avisos críticos" : "Aviso crítico";
   const list = shown.map(n => `
         <li><a class="news-popup-item" href="${escapeHtml(newsPage)}#${anchorId(n)}">${escapeHtml(n.title)}</a>
-          <small>${escapeHtml(n.date || "")}</small>
+          ${dateHtml(n)}
           <p class="news-brief">${escapeHtml(briefOf(n))}</p></li>`).join("");
   const more = extra > 0
     ? `<p class="news-popup-more">y ${extra} ${extra === 1 ? "aviso más" : "avisos más"} en el historial.</p>`
@@ -64,57 +64,48 @@ function popupHtml(pending, newsPage) {
     </div>`;
 }
 
+const MONTHS_SHORT = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+const TAGS = { critical: "Crítico", warning: "Aviso", info: "Info" };
+
+// "2026-11-20" → "20 nov 2026"
+function shortDate(date) {
+  const m = /^(\d{4})-(\d{2})-(\d{2})/.exec(date || "");
+  return m ? `${Number(m[3])} ${MONTHS_SHORT[Number(m[2]) - 1]} ${m[1]}` : "";
+}
+
+function dateHtml(n) {
+  return n.date ? `<time datetime="${escapeHtml(n.date)}">${escapeHtml(shortDate(n.date))}</time>` : "";
+}
+
+// Una línea para recorrer con la vista: tipo, título y fecha; debajo la descripción breve; el detalle al desplegar
 function itemHtml(n, open) {
+  const sev = TAGS[n.severity] ? n.severity : "info";
   return `
-        <details class="news-item ${escapeHtml(n.severity || "info")}" id="${anchorId(n)}"${open ? " open" : ""}>
-          <summary><span class="news-title">${escapeHtml(n.title)}</span> <small>${escapeHtml(n.date || "")}</small>
-            <span class="news-brief">${escapeHtml(briefOf(n))}</span></summary>
-          <div class="news-body">${escapeHtml(n.body || "")}</div>
-        </details>`;
-}
-
-// Agrupa en orden: [{ year, months: [{ month, items }] }]; sin fecha va al final
-function groupByYearMonth(items) {
-  const years = [];
-  for (const n of byDateDesc(items)) {
-    const m = /^(\d{4})-(\d{2})/.exec(n.date || "");
-    const year = m ? m[1] : "Sin fecha";
-    const month = m ? MONTHS[Number(m[2]) - 1] : null;
-    let y = years.find(g => g.year === year);
-    if (!y) years.push(y = { year, months: [] });
-    let mo = y.months.find(g => g.month === month);
-    if (!mo) y.months.push(mo = { month, items: [] });
-    mo.items.push(n);
-  }
-  return years;
-}
-
-// Grupos año > mes > noticia. openGroups: "latest" (solo los más recientes) o "all";
-// openFirst: la primera noticia viene abierta; totals (opcional): Map "AAAA" / "AAAA|Mes" → total a mostrar
-function groupsHtml(items, openGroups, openFirst, totals) {
-  return groupByYearMonth(items).map((y, yi) => {
-    const count = (totals && totals.get(y.year)) || y.months.reduce((s, m) => s + m.items.length, 0);
-    const body = y.months.map((mo, mi) => {
-      const list = mo.items.map((n, ni) => itemHtml(n, openFirst && yi === 0 && mi === 0 && ni === 0)).join("");
-      if (mo.month === null) return list; // sin fecha: sin nivel de mes
-      const open = openGroups === "all" || (yi === 0 && mi === 0);
-      return `
-      <details class="news-month"${open ? " open" : ""}>
-        <summary>${mo.month} (${(totals && totals.get(y.year + "|" + mo.month)) || mo.items.length})</summary>${list}
+      <details class="news-item ${sev}" id="${anchorId(n)}"${open ? " open" : ""}>
+        <summary>
+          <span class="news-line"><span class="news-tag ${sev}">${TAGS[sev]}</span>
+            <span class="news-title">${escapeHtml(n.title)}</span>${dateHtml(n)}</span>
+          <span class="news-brief">${escapeHtml(briefOf(n))}</span>
+        </summary>
+        <div class="news-body">${escapeHtml(n.body || "")}</div>
       </details>`;
-    }).join("");
-    const open = openGroups === "all" || yi === 0;
-    return `
-    <details class="news-year"${open ? " open" : ""}>
-      <summary>${escapeHtml(y.year)} (${count})</summary>${body}
-    </details>`;
-  }).join("");
 }
 
-// Historial completo: abiertos solo el año, el mes y la noticia más recientes
-function historyHtml(items) {
-  if (!items.length) return "<p>Aún no hay avisos publicados.</p>";
-  return groupsHtml(items, "latest", true);
+function monthTitle(n) {
+  const m = /^(\d{4})-(\d{2})/.exec(n.date || "");
+  return m ? `${MONTHS[Number(m[2]) - 1]} ${m[1]}` : "Sin fecha";
+}
+
+// Lista simple: un título fijo por mes y las noticias debajo; firstOpen abre la primera
+function listHtml(items, firstOpen) {
+  let current = null;
+  return items.map((n, i) => {
+    const title = monthTitle(n);
+    const header = title !== current ? `
+      <h3 class="news-month-title">${title}</h3>` : "";
+    current = title;
+    return header + itemHtml(n, firstOpen && i === 0);
+  }).join("");
 }
 
 const PAGE_SIZE = 10;
@@ -169,23 +160,18 @@ function filtersHtml(options, state) {
     </form>`;
 }
 
-// Una página del historial filtrado: grupos abiertos, y la noticia más reciente abierta solo en la página 1
+// Una página del historial filtrado; la noticia más reciente abierta solo en la página 1
 function historyPageHtml(items, state) {
+  if (!items.length) return "<p>Aún no hay avisos publicados.</p>";
   const filtered = filterItems(items, state);
   if (!filtered.length) return "<p>No hay noticias para ese filtro.</p>";
   const p = paginate(filtered, state.page);
-  // Totales de cada año y mes en todo el resultado filtrado, no solo en esta página
-  const totals = new Map();
-  for (const y of groupByYearMonth(filtered)) {
-    totals.set(y.year, y.months.reduce((s, m) => s + m.items.length, 0));
-    y.months.forEach(m => totals.set(y.year + "|" + m.month, m.items.length));
-  }
-  return groupsHtml(p.items, "all", p.page === 1, totals) + pagerHtml(p);
+  return `<div class="news-list">${listHtml(p.items, p.page === 1)}</div>` + pagerHtml(p);
 }
 
 if (typeof module !== "undefined" && module.exports) {
   module.exports = {
-    escapeHtml, isActive, pendingCritical, briefOf, popupHtml, historyHtml, groupByYearMonth, anchorId,
+    escapeHtml, isActive, pendingCritical, briefOf, popupHtml, anchorId, shortDate,
     filterItems, filterOptions, paginate, pageOf, filtersHtml, historyPageHtml,
   };
 }
@@ -268,7 +254,7 @@ if (typeof document !== "undefined") {
 
   function renderHistory(container, items, state) {
     container.innerHTML = filtersHtml(filterOptions(items, state), state)
-      + `<div class="news-list">${historyPageHtml(items, state)}</div>`;
+      + historyPageHtml(items, state);
 
     container.querySelectorAll(".news-filters select").forEach(sel => sel.addEventListener("change", () => {
       const next = { ...state, page: 1, [sel.name === "anio" ? "year" : "month"]: sel.value };
