@@ -5,7 +5,7 @@ const news = require("../docs/javascripts/news.js");
 
 const NOW = new Date("2026-11-23T12:00:00");
 const items = [
-  { id: "1", severity: "critical", title: "Nueva cola long", body: "Detalle largo de la cola long.", date: "2026-11-10", expires: "2026-12-10" },
+  { id: "1", severity: "critical", title: "Nueva cola long", body: "Detalle largo de la cola long. Segunda oración con más detalle.", date: "2026-11-10", expires: "2026-12-10" },
   { id: "2", severity: "info", title: "Mantención menor", body: "Detalle info.", date: "2026-11-12" },
   { id: "3", severity: "critical", title: "Caída de hydra", body: "Detalle de hydra.", date: "2026-11-01", expires: "2026-11-05" },
   { id: "4", severity: "critical", title: "Corte <eléctrico>", body: "Detalle del corte.", date: "2026-11-20" },
@@ -20,11 +20,11 @@ test("sin críticas nuevas no hay popup", () => {
   assert.deepEqual(news.pendingCritical(items, new Set(["1", "4"]), NOW), []);
 });
 
-test("el popup muestra el encabezado y no el detalle", () => {
+test("el popup muestra el encabezado y no el detalle completo", () => {
   const html = news.popupHtml(news.pendingCritical(items, new Set(), NOW), "/novedades/");
   assert.match(html, /Nueva cola long/);
   assert.match(html, /Corte &lt;eléctrico&gt;/); // escapado
-  assert.doesNotMatch(html, /Detalle/); // sin el cuerpo de la noticia
+  assert.doesNotMatch(html, /Segunda oración con más detalle/); // solo la descripción breve
 });
 
 test("el popup remite al historial, con enlace a cada noticia", () => {
@@ -52,4 +52,32 @@ test("el historial escapa el HTML de título y detalle", () => {
 
 test("historial vacío muestra un mensaje", () => {
   assert.match(news.historyHtml([]), /Aún no hay avisos publicados/);
+});
+
+test("el popup muestra la descripción breve (summary) bajo cada encabezado, no el detalle", () => {
+  const n = { id: "9", severity: "critical", title: "Corte", summary: "Kraken sin acceso el sábado 9-13 h.", body: "Detalle completo del corte.", date: "2026-11-21" };
+  const html = news.popupHtml([n], "/novedades/");
+  assert.match(html, /Kraken sin acceso el sábado 9-13 h\./);
+  assert.doesNotMatch(html, /Detalle completo/);
+});
+
+test("sin summary, el popup usa la primera oración del detalle, acotada", () => {
+  const n = { id: "8", severity: "critical", title: "T", body: "Primera oración corta. Segunda oración que no va.", date: "2026-11-21" };
+  const html = news.popupHtml([n], "/novedades/");
+  assert.match(html, /Primera oración corta\./);
+  assert.doesNotMatch(html, /Segunda oración/);
+  const largo = { ...n, body: "x".repeat(400) };
+  assert.ok(news.briefOf(largo).length <= 160);
+});
+
+test("el historial abre por defecto solo la noticia más reciente", () => {
+  const html = news.historyHtml(items);
+  const abiertos = [...html.matchAll(/<details([^>]*)>/g)].filter(m => /\bopen\b/.test(m[1]));
+  assert.equal(abiertos.length, 1);
+  assert.match(abiertos[0][1], /id="noticia-4"/); // 2026-11-20, la más reciente
+});
+
+test("el historial muestra la descripción breve en el encabezado del desplegable", () => {
+  const html = news.historyHtml([{ id: "9", severity: "info", title: "T", summary: "Resumen corto.", body: "Detalle.", date: "2026-11-21" }]);
+  assert.match(html, /<summary>[\s\S]*Resumen corto\.[\s\S]*<\/summary>/);
 });

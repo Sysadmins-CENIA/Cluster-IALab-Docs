@@ -23,12 +23,21 @@ function anchorId(n) {
   return "noticia-" + String(n.id).replace(/[^\w-]/g, "");
 }
 
-// Solo el encabezado (título y fecha); el detalle está en el historial
+const BRIEF_MAX = 160;
+
+// Descripción breve: el campo "summary" o, si no hay, la primera oración del detalle (acotada)
+function briefOf(n) {
+  const text = String(n.summary || (n.body || "").split(/(?<=[.!?])\s/)[0] || "").trim();
+  return text.length > BRIEF_MAX ? text.slice(0, BRIEF_MAX - 1).trimEnd() + "…" : text;
+}
+
+// Encabezado (título, fecha y descripción breve); el detalle está en el historial
 function popupHtml(pending, newsPage) {
   const title = pending.length > 1 ? "Avisos críticos" : "Aviso crítico";
   const list = pending.map(n => `
         <li><a class="news-popup-item" href="${escapeHtml(newsPage)}#${anchorId(n)}">${escapeHtml(n.title)}</a>
-          <small>${escapeHtml(n.date || "")}</small></li>`).join("");
+          <small>${escapeHtml(n.date || "")}</small>
+          <p class="news-brief">${escapeHtml(briefOf(n))}</p></li>`).join("");
   return `
     <div class="news-popup" role="dialog" aria-modal="true" aria-labelledby="news-popup-title">
       <h3 id="news-popup-title">⚠️ ${title}</h3>
@@ -41,18 +50,20 @@ function popupHtml(pending, newsPage) {
     </div>`;
 }
 
-// Un desplegable (<details>) por noticia, de la más reciente a la más antigua
+// Un desplegable (<details>) por noticia, de la más reciente a la más antigua;
+// la más reciente viene abierta
 function historyHtml(items) {
   const sorted = [...items].sort((a, b) => (b.date || "").localeCompare(a.date || ""));
-  return sorted.map(n => `
-    <details class="news-item ${escapeHtml(n.severity || "info")}" id="${anchorId(n)}">
-      <summary><span class="news-title">${escapeHtml(n.title)}</span> <small>${escapeHtml(n.date || "")}</small></summary>
+  return sorted.map((n, i) => `
+    <details class="news-item ${escapeHtml(n.severity || "info")}" id="${anchorId(n)}"${i === 0 ? " open" : ""}>
+      <summary><span class="news-title">${escapeHtml(n.title)}</span> <small>${escapeHtml(n.date || "")}</small>
+        <span class="news-brief">${escapeHtml(briefOf(n))}</span></summary>
       <div class="news-body">${escapeHtml(n.body || "")}</div>
     </details>`).join("") || "<p>Aún no hay avisos publicados.</p>";
 }
 
 if (typeof module !== "undefined" && module.exports) {
-  module.exports = { escapeHtml, isActive, pendingCritical, popupHtml, historyHtml, anchorId };
+  module.exports = { escapeHtml, isActive, pendingCritical, briefOf, popupHtml, historyHtml, anchorId };
 }
 
 if (typeof document !== "undefined") {

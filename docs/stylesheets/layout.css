@@ -94,6 +94,8 @@
 .news-item summary { cursor: pointer; font-weight: 600; }
 .news-item summary:focus-visible { outline: 2px solid #2980b9; outline-offset: 2px; }
 .news-item .news-body { margin-top: .6rem; font-weight: normal; }
+.news-item .news-brief { display: block; font-weight: normal; opacity: .85; margin-top: .2rem; }
+.news-popup-list .news-brief { margin: .15rem 0 0; font-size: .9rem; }
 
 /* ===== Popup de avisos críticos ===== */
 .news-popup-backdrop {
