@@ -14,6 +14,7 @@ nav:
     - SLURM: instructions-and-guides/slurm.md
     - Ejemplos de SLURM: instructions-and-guides/slurm_examples.md
     - Monitoreo y eficiencia de trabajos: instructions-and-guides/job_monitoring.md
+    - Asistentes de IA (Claude, Codex…): instructions-and-guides/ai_assistants.md
     - Servidor de Notebooks (Jupyter): instructions-and-guides/notebook.md
     - Compartir datos usando ACL: instructions-and-guides/acl.md
   - Solicitudes:
