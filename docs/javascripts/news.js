@@ -90,17 +90,17 @@ function groupByYearMonth(items) {
 }
 
 // Grupos año > mes > noticia. openGroups: "latest" (solo los más recientes) o "all";
-// openFirst: la primera noticia viene abierta
-function groupsHtml(items, openGroups, openFirst) {
+// openFirst: la primera noticia viene abierta; totals (opcional): Map "AAAA" / "AAAA|Mes" → total a mostrar
+function groupsHtml(items, openGroups, openFirst, totals) {
   return groupByYearMonth(items).map((y, yi) => {
-    const count = y.months.reduce((s, m) => s + m.items.length, 0);
+    const count = (totals && totals.get(y.year)) || y.months.reduce((s, m) => s + m.items.length, 0);
     const body = y.months.map((mo, mi) => {
       const list = mo.items.map((n, ni) => itemHtml(n, openFirst && yi === 0 && mi === 0 && ni === 0)).join("");
       if (mo.month === null) return list; // sin fecha: sin nivel de mes
       const open = openGroups === "all" || (yi === 0 && mi === 0);
       return `
       <details class="news-month"${open ? " open" : ""}>
-        <summary>${mo.month} (${mo.items.length})</summary>${list}
+        <summary>${mo.month} (${(totals && totals.get(y.year + "|" + mo.month)) || mo.items.length})</summary>${list}
       </details>`;
     }).join("");
     const open = openGroups === "all" || yi === 0;
@@ -174,7 +174,13 @@ function historyPageHtml(items, state) {
   const filtered = filterItems(items, state);
   if (!filtered.length) return "<p>No hay noticias para ese filtro.</p>";
   const p = paginate(filtered, state.page);
-  return groupsHtml(p.items, "all", p.page === 1) + pagerHtml(p);
+  // Totales de cada año y mes en todo el resultado filtrado, no solo en esta página
+  const totals = new Map();
+  for (const y of groupByYearMonth(filtered)) {
+    totals.set(y.year, y.months.reduce((s, m) => s + m.items.length, 0));
+    y.months.forEach(m => totals.set(y.year + "|" + m.month, m.items.length));
+  }
+  return groupsHtml(p.items, "all", p.page === 1, totals) + pagerHtml(p);
 }
 
 if (typeof module !== "undefined" && module.exports) {

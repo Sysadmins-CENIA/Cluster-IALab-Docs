@@ -202,3 +202,10 @@ test("selectores de filtro: 'Todos' más las opciones, con la elegida marcada", 
   assert.match(html, /<select[^>]*name="mes"[\s\S]*<option value="">Todos los meses<\/option>[\s\S]*<option value="11" selected>Noviembre<\/option>/);
   assert.doesNotMatch(html, /value="10"/); // octubre no tiene noticias en 2025
 });
+
+test("con paginación, los grupos muestran el total del año y del mes, no solo los de la página", () => {
+  // página 1: 8 de nov-2026 + 2 de oct-2026; 2026 tiene 15 en total y octubre 7
+  const html = news.historyPageHtml(muchas, { page: 1 });
+  assert.match(html, /<summary>2026 \(15\)<\/summary>/);
+  assert.match(html, /<summary>Octubre \(7\)<\/summary>/);
+});

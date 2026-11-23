@@ -6,26 +6,28 @@ Puedes usar asistentes de programación con IA, como Claude Code u OpenAI Codex,
 
 El asistente se usa **dentro de un trabajo de SLURM**, no directamente en Kraken. Kraken es el nodo de entrada: sirve para editar, enviar trabajos y revisar su estado, no para ejecutar procesos (ver [Política de Uso](../usage_policy.md)).
 
-1. Desde Kraken, abre una sesión interactiva acotada y lanza el asistente ahí:
+**1. Abre una sesión.** Desde Kraken, abre una sesión interactiva acotada:
 
-    ```bash
-    srun --account=default-account --partition=ialab-low --qos=regular --time=02:00:00 \
-         --cpus-per-task=2 --mem=8G --comment="Sesión con asistente para <tu proyecto>" --pty bash
-    ```
+```bash
+srun --account=default-account --partition=ialab-low --qos=regular --time=02:00:00 \
+     --cpus-per-task=2 --mem=8G --comment="Sesión con asistente para <tu proyecto>" --pty bash
+```
 
-    Cuando la sesión se abra (el prompt cambia al nombre del nodo), inicia el asistente:
+Cuando la sesión se abra (el prompt cambia al nombre del nodo), inicia el asistente:
 
-    ```bash
-    claude
-    ```
+```bash
+claude
+```
 
-    Si usas VS Code, conéctalo a un nodo de cómputo como se explica en la [FAQ](../faq.md) y abre el asistente directamente en esa terminal. Si ya estás en un nodo, no abras otro `srun`: los comandos se ejecutan directamente ahí.
+Si usas VS Code, conéctalo a un nodo de cómputo como se explica en la [FAQ](../faq.md) y abre el asistente directamente en esa terminal. Si ya estás en un nodo, no abras otro `srun`: los comandos se ejecutan directamente ahí.
 
-    En `ialab-low`, los 4 CPU y 20 GB por GPU que menciona [Políticas de SLURM](slurm_policies.md) son **valores por defecto**: una sesión sin GPU funciona si pides `--cpus-per-task` y `--mem` explícitamente (máximo 80 GB por nodo).
+En `ialab-low`, los 4 CPU y 20 GB por GPU que menciona [Políticas de SLURM](slurm_policies.md) son **valores por defecto**: una sesión sin GPU funciona si pides `--cpus-per-task` y `--mem` explícitamente (máximo 80 GB por nodo).
 
-2. **No pidas GPU para la sesión** si solo vas a escribir código, revisar logs o preparar scripts. Si necesitas probar algo con GPU, cierra la sesión (`exit`) y abre una nueva con `--gres=gpu:1`; no mantengas dos sesiones a la vez.
-3. Los entrenamientos y procesos largos se envían con `sbatch` (ver [SLURM](slurm.md)); no los corras dentro de la sesión interactiva.
-4. Al terminar, cierra la sesión con `exit` para liberar los recursos.
+**2. No pidas GPU para la sesión** si solo vas a escribir código, revisar logs o preparar scripts. Si necesitas probar algo con GPU, cierra la sesión (`exit`) y abre una nueva con `--gres=gpu:1`; no mantengas dos sesiones a la vez.
+
+**3. Envía los procesos largos con `sbatch`** (ver [SLURM](slurm.md)); no los corras dentro de la sesión interactiva.
+
+**4. Al terminar, cierra la sesión** con `exit` para liberar los recursos.
 
 Todo trabajo, ya sea `srun` o `sbatch`, debe llevar `--comment` con una breve descripción de su propósito; si no, SLURM lo rechaza. Revisa las [Políticas de SLURM](slurm_policies.md) para elegir partición, QoS y tiempo.
 
@@ -59,16 +61,17 @@ La skill estará disponible preinstalada en el clúster. Para comprobar si ya es
 
 ## Instalar Claude Code
 
-1. Dentro de una sesión `srun` (ver [Cómo usarlo](#como-usarlo)), instala Claude Code en tu home:
+**1. Instala Claude Code** en tu home, dentro de una sesión `srun` (ver [Cómo usarlo](#como-usarlo)):
 
-    ```bash
-    curl -fsSL https://claude.ai/install.sh | bash
-    ```
+```bash
+curl -fsSL https://claude.ai/install.sh | bash
+```
 
-    Queda en `~/.local/bin/claude`. Como tu home es el mismo en todos los nodos, basta con instalarlo una vez.
+Queda en `~/.local/bin/claude`. Como tu home es el mismo en todos los nodos, basta con instalarlo una vez.
 
-2. Ejecuta `claude` y, cuando te pida iniciar sesión, abre el enlace que muestra en el navegador de tu computador y pega el código de vuelta en la terminal. Cada usuario usa su propia cuenta.
-3. Claude Code guarda su configuración y su historial en `~/.claude`, que cuenta para tu cuota de 50 GB.
+**2. Inicia sesión.** Ejecuta `claude` y, cuando te pida iniciar sesión, abre el enlace que muestra en el navegador de tu computador y pega el código de vuelta en la terminal. Cada usuario usa su propia cuenta.
+
+**3. Ten en cuenta la cuota.** Claude Code guarda su configuración y su historial en `~/.claude`, que cuenta para tu cuota de 50 GB.
 
 ## Enlaces
 
